@@ -1,7 +1,3 @@
 export default function Home() {
-  return (
-    <main>
-       SD DEVx
-    </main>
-  );
+	return <main>SD DEVx</main>
 }

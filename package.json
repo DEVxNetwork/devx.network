@@ -1,25 +1,27 @@
 {
-  "name": "site",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "next": "14.2.4",
-    "react": "^18",
-    "react-dom": "^18"
-  },
-  "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "daisyui": "^4.12.10",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.4",
-    "typescript": "^5"
-  }
+	"name": "site",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"lint": "next lint",
+		"format": "prettier --write ."
+	},
+	"dependencies": {
+		"next": "14.2.4",
+		"react": "^18",
+		"react-dom": "^18"
+	},
+	"devDependencies": {
+		"@types/node": "^20",
+		"@types/react": "^18",
+		"@types/react-dom": "^18",
+		"daisyui": "^4.12.10",
+		"eslint": "^8",
+		"eslint-config-next": "14.2.4",
+		"prettier": "^3.3.3",
+		"typescript": "^5"
+	}
 }
