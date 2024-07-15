@@ -4,7 +4,7 @@
 
 ```sh
 # Install dependencies
-npm i 
+npm i
 
 # Run development server locally
 npm run dev
