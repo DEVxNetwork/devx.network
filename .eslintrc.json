@@ -1,6 +1,12 @@
 {
 	"extends": "next/core-web-vitals",
 	"rules": {
-		"@next/next/no-img-element": "off"
+		"@next/next/no-img-element": "off",
+		"import/no-anonymous-default-export": [
+			"warn",
+			{
+				"allowObject": true
+			}
+		]
 	}
 }
