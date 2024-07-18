@@ -1,7 +1,7 @@
 export default function Home() {
 	return (
 		<main>
-			<img className="hero h-96 object-cover" src="/images/devx-hero.jpg" />
+			<img className="hero h-96 object-cover" src="/images/devx-hero.jpg" alt="" />
 			<div className="hero py-12">
 				<div className="hero-content text-neutral-content text-center">
 					<div className="max-w-md">
