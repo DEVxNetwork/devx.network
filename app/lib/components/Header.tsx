@@ -39,7 +39,7 @@ const Header = () => {
 						</ul>
 					</div>
 					<a className="btn btn-ghost inline p-0" href="/">
-						<img src="/images/logo.jpeg" className="w-12 rounded" />
+						<img src="/images/logo.jpeg" alt="SD DEVx logo" className="w-12 rounded" />
 					</a>
 				</div>
 				<div className="navbar-center hidden lg:flex">
