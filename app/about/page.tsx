@@ -55,10 +55,10 @@ export default function About() {
 					<div className="bg-gray-700 p-6 rounded-lg text-center">
 						<img
 							src="/images/trystan-about.jpeg"
-							alt="Trystan Perry"
+							alt="Tryston Perry"
 							className="w-40 h-40 object-cover  mx-auto mb-4"
 						/>
-						<h3 className="text-xl font-bold">Trystan Perry</h3>
+						<h3 className="text-xl font-bold">Tryston Perry</h3>
 						<a
 							href="https://www.linkedin.com/in/trystonperry/"
 							target="_blank"
