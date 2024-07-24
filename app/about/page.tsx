@@ -17,7 +17,7 @@ export default function About() {
 				<div className="w-full flex justify-center">
 					<p className="mt-2 text-xl text-center max-w-screen-lg">
 						{" "}
-						We're a community of developers of all skill levels, dedicated to fostering a fun and
+						{`We're a community of developers of all skill levels, dedicated to fostering a fun and
 						educational environment. Hosted by Sam Holmes and a team of passionate organizers, our
 						monthly meetups offer an opportunity to network, learn, and showcase your projects. At
 						each event, you'll enjoy complimentary food and drinks during our networking lunch,
@@ -26,7 +26,7 @@ export default function About() {
 						and coding help. Whether you're a seasoned developer or just starting out, there's
 						something for everyone. Be sure to bring your laptop if you'd like to share your latest
 						project or give a presentation. We look forward to meeting you and seeing what you're
-						excited about!
+						excited about!`}
 					</p>
 				</div>
 			</section>
