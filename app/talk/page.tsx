@@ -1,8 +1,8 @@
-import { getTalks } from "../api/talk-requests/route";
-import "./page.css";
+import { getTalks } from "../api/talk-requests/route"
+import "./page.css"
 
 export default async function Talk() {
-	const data = await getTalks();
+	const data = await getTalks()
 	return (
 		<main>
 			Current talks: {JSON.stringify(data)} <br />
