@@ -6,7 +6,7 @@ const Footer = () => {
 				<p>© Copyright {new Date().getFullYear()}. All rights reserved</p>
 			</aside>
 			<nav className="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
-				<a>
+				<a href="https://www.youtube.com/@sddevx" aria-label="Youtube">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="24"
@@ -18,7 +18,7 @@ const Footer = () => {
 					</svg>
 				</a>
 
-				<a>
+				<a href="https://lu.ma/DEVxSD" aria-label="Luma">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
@@ -34,7 +34,7 @@ const Footer = () => {
 					</svg>
 				</a>
 
-				<a>
+				<a href="https://www.meetup.com/san-diego-devx/" aria-label="Meetup">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="24"
@@ -49,7 +49,7 @@ const Footer = () => {
 					</svg>
 				</a>
 
-				<a>
+				<a href="https://discord.gg/J3YrrErwjc" aria-label="Discord">
 					<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
 						<path
 							fill="currentColor"
