@@ -37,8 +37,8 @@ const Header = () => {
 					</ul>
 				</div>
 				<div className="navbar-end">
-					<a className="btn" href="/join">
-						Join Us
+					<a className="btn" href="https://discord.gg/J3YrrErwjc">
+						Join Us on Discord
 					</a>
 				</div>
 			</nav>
