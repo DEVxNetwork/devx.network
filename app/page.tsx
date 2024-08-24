@@ -4,8 +4,8 @@ import { PotionBackground } from "./components/PotionBackground"
 const Home: React.FC = () => {
 	return (
 		<>
-			<PotionBackground />
-			<main className="p-8 min-h-screen text-white flex flex-col items-center justify-center">
+			<main className="p-8 text-white flex flex-col items-center justify-center">
+				<PotionBackground />
 				<section className="relative">
 					<img
 						src="/images/sd-devx-brand.png"

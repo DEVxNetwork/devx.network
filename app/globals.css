@@ -8,13 +8,21 @@
 	}
 }
 
-header {
-	position: relative;
-	z-index: 10;
+body {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
 }
 
-footer,
+header {
+	position: relative;
+}
+
 main {
 	position: relative;
-	z-index: 1;
+	flex: 1;
+}
+
+footer {
+	position: relative;
 }
