@@ -56,7 +56,7 @@ const NavLinks = () => {
 				<a href="/about">About</a>
 			</li>
 			<li>
-				<a href="/join">Join</a>
+				<a href="/events">Events</a>
 			</li>
 			<li>
 				<a target="_blank" href="https://forms.gle/6gtGEuL7XExHvc6c9">
