@@ -7,3 +7,14 @@
 		color-scheme: dark;
 	}
 }
+
+header {
+	position: relative;
+	z-index: 10;
+}
+
+footer,
+main {
+	position: relative;
+	z-index: 1;
+}
