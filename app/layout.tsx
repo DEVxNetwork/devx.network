@@ -1,7 +1,8 @@
 import { ReactNode } from "react"
 import type { Metadata } from "next"
-import { Header, Footer } from "@/app/lib/components"
 import "./globals.css"
+import Header from "./lib/components/Header"
+import Footer from "./lib/components/Footer"
 
 export const metadata: Metadata = {
 	title: "San Diego DEVx",
