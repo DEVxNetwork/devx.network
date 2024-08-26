@@ -57,12 +57,7 @@ const NavLinks = () => {
 			</li>
 			<li>
 				<a target="_blank" href="https://lu.ma/DEVxSD">
-					DEVx on Luma
-				</a>
-			</li>
-			<li>
-				<a target="_blank" href="https://meetup.com/san-diego-devx">
-					DEVx on Meetup
+					Event Calendar
 				</a>
 			</li>
 			{/* Hide Events until the page design is ready and finalized */}
