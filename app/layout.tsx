@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 		url: "https://devx.network",
 		title: "San Diego DEVx",
 		description: "Fostering developer community through events and open-source projects.",
-		images: "/images/DEVxCover.png"
+		images: "https://devx.network/images/devx-og-image.png"
 	}
 }
 
