@@ -3,16 +3,18 @@ import type { Metadata } from "next"
 import "./globals.css"
 import Header from "./components/Header"
 import Footer from "./components/Footer"
+import { siteConfig } from "./siteConfig"
+import GiveATalkCTA from "./components/GiveATalkCTA"
 
 export const metadata: Metadata = {
-	title: "San Diego DEVx",
-	description: "Fostering developer community through events and open-source projects.",
+	title: siteConfig.title,
+	description: siteConfig.description,
 	openGraph: {
 		type: "website",
-		url: "https://devx.network",
-		title: "San Diego DEVx",
-		description: "Fostering developer community through events and open-source projects.",
-		images: "https://devx.network/images/devx-og-image.png"
+		url: siteConfig.url,
+		title: siteConfig.title,
+		description: siteConfig.description,
+		images: siteConfig.ogImage
 	}
 }
 
@@ -27,6 +29,7 @@ export default function RootLayout({
 				<Header />
 				{children}
 				<Footer />
+				<GiveATalkCTA />
 			</body>
 		</html>
 	)
