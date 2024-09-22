@@ -23,6 +23,32 @@ main {
 	flex: 1;
 }
 
-footer {
+.footer {
+	column-gap: unset;
+	row-gap: unset;
+	line-height: unset;
+	flex-direction: column-reverse;
+	place-items: unset;
 	position: relative;
+	grid-auto-flow: unset;
+	width: unset;
+}
+
+.devx-logo-copyright {
+	margin-top: 2.313rem;
+}
+
+.footer > * {
+	place-items: center;
+	gap: unset;
+}
+
+@media (min-width: 768px) {
+	.footer {
+		flex-direction: row;
+	}
+
+	.devx-logo-copyright {
+		margin-top: 0;
+	}
 }
