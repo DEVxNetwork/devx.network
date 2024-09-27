@@ -1,3 +1,5 @@
+import { links } from "../siteConfig"
+
 const Header = () => {
 	return (
 		<header>
@@ -7,7 +9,7 @@ const Header = () => {
 						<div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
-								className="h-5 w-5"
+								className="w-5 h-5"
 								fill="none"
 								viewBox="0 0 24 24"
 								stroke="currentColor"
@@ -27,17 +29,17 @@ const Header = () => {
 							<NavLinks />
 						</ul>
 					</div>
-					<a className="btn btn-ghost inline p-0" href="/">
+					<a className="inline p-0 btn btn-ghost" href="/">
 						<img src="/images/logo.jpeg" className="w-12 rounded" />
 					</a>
 				</div>
-				<div className="navbar-center hidden lg:flex">
-					<ul className="menu menu-horizontal px-1">
+				<div className="hidden navbar-center lg:flex">
+					<ul className="px-1 menu menu-horizontal">
 						<NavLinks />
 					</ul>
 				</div>
 				<div className="navbar-end">
-					<a className="btn" href="https://discord.gg/J3YrrErwjc">
+					<a className="btn" href={links.discord}>
 						Join Us on Discord
 					</a>
 				</div>
@@ -56,7 +58,7 @@ const NavLinks = () => {
 				<a href="/about">About</a>
 			</li>
 			<li>
-				<a target="_blank" href="https://lu.ma/DEVxSD">
+				<a target="_blank" href={links.lumaUrl}>
 					Event Calendar
 				</a>
 			</li>
@@ -65,8 +67,8 @@ const NavLinks = () => {
 				<a href="/events">Events</a>
 			</li> */}
 			<li>
-				<a target="_blank" href="https://forms.gle/6gtGEuL7XExHvc6c9">
-					Submit Your Talk
+				<a target="_blank" href={links.talkSubmissionUrl}>
+					Give a Talk!
 				</a>
 			</li>
 		</>

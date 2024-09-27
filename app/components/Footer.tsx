@@ -1,19 +1,16 @@
+import { links } from "../siteConfig"
+
 const Footer = () => {
 	return (
-		<footer className="footer flex justify-between bg-neutral text-neutral-content p-4">
-			<aside className="flex devx-logo-copyright">
+		<footer className="footer flex items-center p-4  justify-between bg-neutral text-neutral-content p-4">
+			<aside className="flex items-center devx-logo-copyright">
 				<img src="/images/logo.jpeg" className="w-8 rounded mr-2" />
 				<p className="flex items-center">
 					© Copyright {new Date().getFullYear()}. All rights reserved
 				</p>
 			</aside>
-			<nav className="flex">
-				<a
-					href="https://www.youtube.com/@sddevx"
-					aria-label="Youtube"
-					className="mr-4"
-					target="_blank"
-				>
+			<nav className="flex grid-flow-col gap-4 md:place-self-center md:justify-self-end">
+				<a href={links.youtube} aria-label="Youtube" className="mr-4" target="_blank">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="24"
@@ -25,7 +22,7 @@ const Footer = () => {
 					</svg>
 				</a>
 
-				<a href="https://lu.ma/DEVxSD" aria-label="Luma" className="mr-4" target="_blank">
+				<a href={links.lumaUrl} aria-label="Luma" className="mr-4" target="_blank">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
@@ -41,12 +38,7 @@ const Footer = () => {
 					</svg>
 				</a>
 
-				<a
-					href="https://www.meetup.com/san-diego-devx/"
-					aria-label="Meetup"
-					className="mr-4"
-					target="_blank"
-				>
+				<a href={links.meetupUrl} aria-label="Meetup" className="mr-4" target="_blank">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="24"
@@ -61,12 +53,7 @@ const Footer = () => {
 					</svg>
 				</a>
 
-				<a
-					href="https://discord.gg/J3YrrErwjc"
-					aria-label="Discord"
-					className="mr-4"
-					target="_blank"
-				>
+				<a href={links.discord} aria-label="Discord" className="mr-4" target="_blank">
 					<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
 						<path
 							fill="currentColor"
@@ -75,7 +62,7 @@ const Footer = () => {
 					</svg>
 				</a>
 
-				<a href="https://github.com/sddevx" aria-label="Github" target="_blank">
+				<a href={links.github} aria-label="Github" target="_blank">
 					<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
 						<path
 							fill="currentColor"
