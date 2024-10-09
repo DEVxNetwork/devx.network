@@ -1,4 +1,12 @@
+"use client"
+
 import { links } from "../siteConfig"
+import styled from "styled-components"
+
+const LogoImage = styled.img`
+	border-radius: 0.25rem;
+	width: 3rem;
+`
 
 const Header = () => {
 	return (
@@ -30,7 +38,7 @@ const Header = () => {
 						</ul>
 					</div>
 					<a className="inline p-0 btn btn-ghost" href="/">
-						<img src="/images/logo.jpeg" className="w-12 rounded" />
+						<LogoImage src="/images/logo.jpeg" />
 					</a>
 				</div>
 				<div className="hidden navbar-center lg:flex">
