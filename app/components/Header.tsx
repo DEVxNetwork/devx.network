@@ -1,38 +1,78 @@
 "use client"
 
 import { links } from "../siteConfig"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 
 const LogoImage = styled.img`
 	border-radius: 0.25rem;
 	width: 3rem;
 `
 
-const Anchor = styled.a`
+const Anchor = styled.a<{
+	ghost?: boolean
+}>`
 	display: inline-flex;
-	justifiy-content: center;
+	justify-content: center;
 	align-items: center;
-	color: #a7adba;
-	background: #1a1e23;
-	border: 1px solid #1a1e23;
-	height: 3rem;
-	border-radius: 0.5rem;
-	padding: 0 1rem;
-	text-align: center;
+
 	font-size: 0.875rem;
-	line-height: 1em;
+	text-align: center;
+	border-radius: 0.5rem;
+	transition: background 200ms ease-in-out;
+
+	color: #a7adba;
+
+	height: 3rem;
+	padding: 0 1rem;
 	font-weight: 600;
-	transition:
-		color 0.2s cubic-bezier(0, 0, 0.2, 1) 0s,
-		background-color 0s,
-		border-color 0s,
-		opacity 0s,
-		box-shadow 0s,
-		transform 0s;
+	line-height: 1em;
+
+	${(props) => {
+		const backgroundColor = props.ghost ? "transparent" : "#1a1e23"
+
+		return css`
+			background: ${backgroundColor};
+			border: 1px solid ${backgroundColor};
+		`
+	}}
 
 	&:hover {
-		background: #15181d;
-		border: 1px solid #15181d;
+		${(props) => {
+			if (props.ghost)
+				return css`
+					background: color-mix(in srgb, white 5%, transparent 100%);
+					border: 1px solid transparent;
+				`
+			else
+				return css`
+					background: #15181d;
+					border: 1px solid #15181d;
+				`
+		}}
+	}
+`
+
+const NavLink = styled.a`
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+
+	font-size: 0.875rem;
+	text-align: center;
+	border-radius: 0.5rem;
+	transition: background 200ms ease-in-out;
+
+	color: #a7adba;
+
+	padding: 0.5rem 1rem;
+	line-height: 1.4em;
+
+	background: transparent;
+	border: 1px solid transparent;
+
+	&:hover {
+		background: color-mix(in srgb, white 5%, transparent 100%);
+		border: 1px solid transparent;
 	}
 `
 
@@ -86,24 +126,20 @@ const NavLinks = () => {
 	return (
 		<>
 			<li>
-				<a href="/">Home</a>
+				<NavLink href="/">Home</NavLink>
 			</li>
 			<li>
-				<a href="/about">About</a>
+				<NavLink href="/about">About</NavLink>
 			</li>
 			<li>
-				<a target="_blank" href={links.lumaUrl}>
+				<NavLink target="_blank" href={links.lumaUrl}>
 					Event Calendar
-				</a>
+				</NavLink>
 			</li>
-			{/* Hide Events until the page design is ready and finalized */}
-			{/* <li>
-				<a href="/events">Events</a>
-			</li> */}
 			<li>
-				<a target="_blank" href={links.talkSubmissionUrl}>
+				<NavLink target="_blank" href={links.talkSubmissionUrl}>
 					Give a Talk!
-				</a>
+				</NavLink>
 			</li>
 		</>
 	)
