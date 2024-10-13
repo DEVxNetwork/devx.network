@@ -8,8 +8,8 @@ export const siteConfig = {
 export const links = {
 	talkSubmissionUrl: "https://forms.gle/6gtGEuL7XExHvc6c9",
 	meetupUrl: "https://meetup.com/san-diego-devx",
-	lumaUrl: "https://lu.ma/DEVxSD",
+	lumaUrl: "https://lu.ma/DEVxNetwork",
 	discord: "https://discord.gg/J3YrrErwjc",
-	github: "https://github.com/sddevx",
-	youtube: "https://www.youtube.com/@sddevx"
+	github: "https://github.com/DEVxNetwork",
+	youtube: "https://www.youtube.com/@DEVxNetwork"
 }
