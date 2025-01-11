@@ -18,7 +18,7 @@ export const PotionBackground = () => {
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="0 0 100 100"
 				preserveAspectRatio="none"
-				style={{ width: "100%", height: "100%" }}
+				style={{ aspectRatio: 1, minWidth: "100%", minHeight: "100%" }}
 			>
 				<defs>
 					<filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
