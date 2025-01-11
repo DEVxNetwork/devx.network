@@ -2,9 +2,8 @@ import { links } from "../siteConfig"
 
 const Footer = () => {
 	return (
-		<footer className="footer flex items-center p-4  justify-between bg-neutral text-neutral-content p-4">
+		<footer className="footer flex items-center p-4 justify-between text-neutral-content p-4">
 			<aside className="flex items-center devx-logo-copyright">
-				<img src="/images/logo.jpeg" className="w-8 rounded mr-2" />
 				<p className="flex items-center">
 					© Copyright {new Date().getFullYear()}. All rights reserved
 				</p>

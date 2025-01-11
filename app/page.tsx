@@ -12,13 +12,13 @@ const Home: React.FC = () => {
 						alt="Developer meetup hero"
 						style={{
 							width: "100%",
-							maxWidth: "512px",
+							maxWidth: "688px",
 							margin: "0 auto"
 						}}
 					/>
 				</section>
 
-				<section className="p-12 rounded-lg mb-12">
+				<section className="p-12 rounded-lg">
 					<p className="text-xl text-center max-w-screen-lg">
 						Fostering developer community through events and open-source projects in San Diego,
 						California.

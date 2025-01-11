@@ -24,13 +24,13 @@ const Header = () => {
 						</div>
 						<ul
 							tabIndex={0}
-							className="menu menu-lg dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+							className="menu menu-lg dropdown-content bg-neutral rounded-box z-[1] mt-3 w-52 p-2 shadow"
 						>
 							<NavLinks />
 						</ul>
 					</div>
-					<a className="inline p-0 btn btn-ghost" href="/">
-						<img src="/images/logo.jpeg" className="w-12 rounded" />
+					<a className="inline p-0" href="/">
+						<img src="/images/logo-header.png" className="h-12 rounded" />
 					</a>
 				</div>
 				<div className="hidden navbar-center lg:flex">

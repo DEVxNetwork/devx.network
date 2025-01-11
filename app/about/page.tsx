@@ -4,7 +4,7 @@ import { organizers } from "./info"
 
 export default function About() {
 	return (
-		<main className="p-8 bg-gray-900 min-h-screen text-white">
+		<main className="p-8 min-h-screen text-white" style={{ backgroundColor: "black" }}>
 			<section className="relative mb-12">
 				<img
 					src="/images/crowd.jpg"
@@ -12,7 +12,7 @@ export default function About() {
 					className="w-full h-[40rem] object-cover rounded-lg shadow-md opacity-75"
 				/>
 			</section>
-			<section className="bg-gray-800 p-8 rounded-lg shadow-md mb-12">
+			<section className="bg-neutral-950 p-8 rounded-lg shadow-md mb-12">
 				<h2 className="text-3xl font-bold mb-4 text-center">About us</h2>
 				<div className="w-full flex justify-center">
 					<p className="mt-2 text-xl text-center max-w-screen-lg">
@@ -31,7 +31,7 @@ export default function About() {
 				</div>
 			</section>
 
-			<section className="bg-gray-800 p-8 rounded-lg shadow-md">
+			<section className="bg-neutral-950 p-8 rounded-lg shadow-md">
 				<h2 className="text-2xl font-bold mb-6 text-center">Organizers</h2>
 				<div className="flex flex-wrap justify-center gap-6">
 					{organizers.map((organizer) => (
