@@ -3,7 +3,7 @@ export const OrganizerCard = ({
 }: {
 	organizer: { name: string; imageSrc: string; linkedIn: string }
 }) => (
-	<div className="bg-gray-700 p-6 rounded-lg text-center">
+	<div className="bg-neutral-900 p-6 rounded-lg text-center">
 		<img src={imageSrc} alt={name} className="w-40 h-40 object-cover mx-auto mb-4" />
 		<h3 className="text-xl font-bold">{name}</h3>
 		<a

@@ -4,7 +4,7 @@ import { organizers } from "./info"
 
 export default function About() {
 	return (
-		<main className="p-8 bg-gray-900 min-h-screen text-white">
+		<main className="p-8 min-h-screen text-white" style={{ backgroundColor: "black" }}>
 			<section className="relative mb-12">
 				<img
 					src="/images/crowd.jpg"
@@ -12,14 +12,14 @@ export default function About() {
 					className="w-full h-[40rem] object-cover rounded-lg shadow-md opacity-75"
 				/>
 			</section>
-			<section className="bg-gray-800 p-8 rounded-lg shadow-md mb-12">
+			<section className="bg-neutral-950 p-8 rounded-lg shadow-md mb-12">
 				<h2 className="text-3xl font-bold mb-4 text-center">About us</h2>
 				<div className="w-full flex justify-center">
 					<p className="mt-2 text-xl text-center max-w-screen-lg">
 						{" "}
 						{`We're a community of developers of all skill levels, dedicated to fostering a fun and
-						educational environment. Hosted by Sam Holmes and a team of passionate organizers, our
-						monthly meetups offer an opportunity to network, learn, and showcase your projects. At
+						educational environment. Hosted by a team of passionate organizers, our
+						monthly meetups offer an opportunity to network, learn, and showcase community projects. At
 						each event, you'll enjoy complimentary food and drinks during our networking lunch,
 						followed by a series of engaging presentations on various developer and engineering
 						topics. After the talks, we break into groups for casual networking, project showcases,
@@ -31,7 +31,7 @@ export default function About() {
 				</div>
 			</section>
 
-			<section className="bg-gray-800 p-8 rounded-lg shadow-md">
+			<section className="bg-neutral-950 p-8 rounded-lg shadow-md">
 				<h2 className="text-2xl font-bold mb-6 text-center">Organizers</h2>
 				<div className="flex flex-wrap justify-center gap-6">
 					{organizers.map((organizer) => (
