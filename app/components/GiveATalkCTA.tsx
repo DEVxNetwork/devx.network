@@ -7,7 +7,7 @@ const GiveATalkCTA: React.FC = () => {
 			href={links.talkSubmissionUrl}
 			target="_blank"
 			rel="noopener noreferrer"
-			className="fixed flex items-center px-6 py-3 space-x-2 font-bold text-white transition-all duration-300 ease-in-out transform -translate-x-1/2 rounded-full shadow-lg bg-gradient-to-r from-blue-500 to-purple-600 sm:bottom-12 bottom-6 left-1/2 hover:from-blue-600 hover:to-purple-700 hover:scale-105 animate-pulse"
+			className="fixed flex items-center px-6 py-3 space-x-2 font-bold text-white transition-all duration-300 ease-in-out transform -translate-x-1/2 rounded-full shadow-lg bg-gradient-to-r from-purple-500 to-purple-600 sm:bottom-12 bottom-6 left-1/2 hover:from-purple-600 hover:to-purple-700 hover:scale-105 animate-pulse"
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
