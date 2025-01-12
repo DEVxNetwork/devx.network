@@ -18,8 +18,8 @@ export default function About() {
 					<p className="mt-2 text-xl text-center max-w-screen-lg">
 						{" "}
 						{`We're a community of developers of all skill levels, dedicated to fostering a fun and
-						educational environment. Hosted by Sam Holmes and a team of passionate organizers, our
-						monthly meetups offer an opportunity to network, learn, and showcase your projects. At
+						educational environment. Hosted by a team of passionate organizers, our
+						monthly meetups offer an opportunity to network, learn, and showcase community projects. At
 						each event, you'll enjoy complimentary food and drinks during our networking lunch,
 						followed by a series of engaging presentations on various developer and engineering
 						topics. After the talks, we break into groups for casual networking, project showcases,
