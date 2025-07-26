@@ -30,6 +30,7 @@ export default function TalkRootLayout({
 			</head>
 			<body>
 				<StyledComponentsRegistry>
+					<Header opacity={0} />
 					<Header />
 					{children}
 				</StyledComponentsRegistry>

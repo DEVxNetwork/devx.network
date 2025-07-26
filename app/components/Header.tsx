@@ -3,15 +3,16 @@ import { links } from "../siteConfig"
 import styled from "styled-components"
 import { useState } from "react"
 
-export const Header = () => {
+export const Header = (props: any) => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
+	const opacity = props.opacity ?? 1
 
 	const toggleMenu = () => {
 		setIsMenuOpen(!isMenuOpen)
 	}
 
 	return (
-		<Container>
+		<Container $opacity={opacity}>
 			<Nav>
 				<NavStart>
 					<MenuButton onClick={toggleMenu}>
@@ -46,9 +47,11 @@ export const Header = () => {
 	)
 }
 
-const Container = styled.header`
+const Container = styled.header<{ $opacity: number }>`
 	width: 100%;
-	position: fixed;
+	opacity: ${(props) => props.$opacity};
+	position: ${(props) => (props.$opacity === 1 ? "fixed" : "static")};
+	pointer-events: ${(props) => (props.$opacity === 1 ? "auto" : "none")};
 	background-color: rgba(0, 0, 0, 0.05);
 	backdrop-filter: blur(38px);
 	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
