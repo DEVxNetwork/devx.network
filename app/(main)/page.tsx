@@ -2,9 +2,9 @@
 import { useRef } from "react"
 import styled from "styled-components"
 import { motion, useInView } from "framer-motion"
-import { PotionBackground } from "./components/PotionBackground"
-import { organizers } from "./info/organizers"
-import { links } from "./siteConfig"
+import { PotionBackground } from "../components/PotionBackground"
+import { organizers } from "../info/organizers"
+import { links } from "../siteConfig"
 
 export default function Home() {
 	// Add refs for each animated section

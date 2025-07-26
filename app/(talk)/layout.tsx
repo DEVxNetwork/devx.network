@@ -1,10 +1,9 @@
 import { ReactNode } from "react"
 import type { Metadata } from "next"
-import "./globals.css"
-import { Header } from "./components/Header"
-import { Footer } from "./components/Footer"
-import { siteConfig } from "./siteConfig"
-import StyledComponentsRegistry from "./StyledComponentsRegistry"
+import "../globals.css"
+import { Header } from "../components/Header"
+import { siteConfig } from "../siteConfig"
+import StyledComponentsRegistry from "../StyledComponentsRegistry"
 
 export const metadata: Metadata = {
 	title: siteConfig.title,
@@ -18,7 +17,7 @@ export const metadata: Metadata = {
 	}
 }
 
-export default function RootLayout({
+export default function TalkRootLayout({
 	children
 }: Readonly<{
 	children: ReactNode
@@ -33,7 +32,6 @@ export default function RootLayout({
 				<StyledComponentsRegistry>
 					<Header />
 					{children}
-					<Footer />
 				</StyledComponentsRegistry>
 			</body>
 		</html>
