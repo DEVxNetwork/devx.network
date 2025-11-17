@@ -12,6 +12,7 @@ export default function Doorbell() {
 	const [isRinging, setIsRinging] = useState(false)
 
 	const handleDoorbellClick = () => {
+		playDoorbellSound()
 		setIsRinging(true)
 	}
 
@@ -146,3 +147,82 @@ const ButtonSection = styled.section`
 const AnimatedButtonContent = styled(motion.span)`
 	display: inline-block;
 `
+
+// Constants //
+
+const playDoorbellSound = () => {
+	try {
+		const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
+		const now = audioContext.currentTime
+
+		const scheduleBellTone = ({
+			baseFrequency,
+			startTime,
+			duration
+		}: {
+			baseFrequency: number
+			startTime: number
+			duration: number
+		}) => {
+			const masterGain = audioContext.createGain()
+			const shimmerFilter = audioContext.createBiquadFilter()
+			const resonanceFilter = audioContext.createBiquadFilter()
+			const delayNode = audioContext.createDelay()
+			const feedbackGain = audioContext.createGain()
+
+			shimmerFilter.type = "highpass"
+			shimmerFilter.frequency.value = 180
+
+			resonanceFilter.type = "bandpass"
+			resonanceFilter.frequency.value = baseFrequency * 1.3
+			resonanceFilter.Q.value = 6
+
+			delayNode.delayTime.value = 0.42
+			feedbackGain.gain.value = 0.38
+
+			masterGain.connect(shimmerFilter)
+			shimmerFilter.connect(resonanceFilter)
+			resonanceFilter.connect(audioContext.destination)
+			resonanceFilter.connect(delayNode)
+			delayNode.connect(feedbackGain)
+			feedbackGain.connect(resonanceFilter)
+
+			masterGain.gain.setValueAtTime(0, startTime)
+			masterGain.gain.linearRampToValueAtTime(0.95, startTime + 0.015)
+			masterGain.gain.setValueAtTime(0.92, startTime + 0.18)
+			masterGain.gain.exponentialRampToValueAtTime(0.000005, startTime + duration)
+
+			const partials = [
+				{ ratio: 1, gain: 1 },
+				{ ratio: 1.99, gain: 0.42 },
+				{ ratio: 2.54, gain: 0.3 },
+				{ ratio: 3.01, gain: 0.2 },
+				{ ratio: 3.96, gain: 0.14 },
+				{ ratio: 5.43, gain: 0.08 }
+			]
+
+			partials.forEach(({ ratio, gain }) => {
+				const osc = audioContext.createOscillator()
+				const partialGain = audioContext.createGain()
+
+				osc.type = "sine"
+				osc.frequency.value = baseFrequency * ratio
+				osc.detune.value = (Math.random() - 0.5) * 6
+				partialGain.gain.value = gain
+
+				osc.connect(partialGain)
+				partialGain.connect(masterGain)
+
+				osc.start(startTime)
+				osc.stop(startTime + duration + 0.8)
+			})
+		}
+
+		// Ding (higher chime) followed by Dong (lower chime) with longer resonance
+		scheduleBellTone({ baseFrequency: 659, startTime: now, duration: 4 })
+		scheduleBellTone({ baseFrequency: 415, startTime: now + 0.45, duration: 4.8 })
+	} catch (error) {
+		// Fallback: silently fail if audio context is not available
+		console.warn("Could not play doorbell sound:", error)
+	}
+}
