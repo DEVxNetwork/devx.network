@@ -18,6 +18,7 @@
 	},
 	"dependencies": {
 		"@babel/runtime": "^7.27.1",
+		"@supabase/supabase-js": "^2.81.1",
 		"@types/gtag.js": "^0.0.20",
 		"better-sqlite3": "^11.1.2",
 		"framer-motion": "^12.15.0",

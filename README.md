@@ -35,6 +35,17 @@ bun run dev
 
 The site will be running at http://localhost:3000.
 
+### Environment Variables
+
+Realtime doorbell interactions rely on Supabase Realtime. Create a Supabase project (free tier is fine) and add the following to `.env.local`:
+
+```sh
+NEXT_PUBLIC_SUPABASE_URL=<your-supabase-project-url>
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-public-anon-key>
+```
+
+These keys are safe to expose to the browser but should be scoped to the realtime channel only via Supabase RLS/policies.
+
 **Note: This project is being refactored to use styled-components exclusively. Please do not add new Tailwind classes. See [styling guidelines](./docs/conventions/styling-guidelines.md) for details.**
 
 ## Contributing

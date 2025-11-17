@@ -1,20 +1,78 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
+import type { RealtimeChannel } from "@supabase/supabase-js"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { PotionBackground } from "../components/PotionBackground"
 import { ErrorBoundary } from "../components/ErrorBoundary"
 import { Button } from "../components/Button"
+import { supabaseClient } from "@/lib/supabaseClient"
 
 // Components //
 
 export default function Doorbell() {
 	const [isRinging, setIsRinging] = useState(false)
+	const channelRef = useRef<RealtimeChannel | null>(null)
+	const lastRingIdRef = useRef<string | null>(null)
 
-	const handleDoorbellClick = () => {
+	const triggerLocalRing = useCallback(() => {
 		playDoorbellSound()
 		setIsRinging(true)
+	}, [])
+
+	const broadcastRing = useCallback(async (ringId: string) => {
+		if (!channelRef.current) {
+			return
+		}
+
+		try {
+			const status = await channelRef.current.send({
+				type: "broadcast",
+				event: "ring",
+				payload: { ringId }
+			})
+
+			if (status !== "ok") {
+				console.error("Failed to broadcast doorbell ring:", status)
+			}
+		} catch (error) {
+			console.error("Failed to broadcast doorbell ring:", error)
+		}
+	}, [])
+
+	const handleDoorbellClick = () => {
+		const ringId = createRingIdentifier()
+		lastRingIdRef.current = ringId
+		triggerLocalRing()
+		void broadcastRing(ringId)
 	}
+
+	useEffect(() => {
+		const client = supabaseClient
+		if (!client) {
+			return
+		}
+
+		const channel = client
+			.channel("doorbell")
+			.on("broadcast", { event: "ring" }, ({ payload }) => {
+				const ringPayload = payload as RingPayload | undefined
+				if (ringPayload?.ringId && ringPayload.ringId === lastRingIdRef.current) {
+					return
+				}
+
+				triggerLocalRing()
+			})
+			.subscribe()
+
+		channelRef.current = channel
+
+		return () => {
+			void channel.unsubscribe()
+			client.removeChannel(channel)
+			channelRef.current = null
+		}
+	}, [triggerLocalRing])
 
 	useEffect(() => {
 		if (isRinging) {
@@ -149,6 +207,18 @@ const AnimatedButtonContent = styled(motion.span)`
 `
 
 // Constants //
+
+type RingPayload = {
+	ringId?: string
+}
+
+const createRingIdentifier = () => {
+	if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+		return crypto.randomUUID()
+	}
+
+	return `${Date.now()}-${Math.random().toString(16).slice(2)}`
+}
 
 const playDoorbellSound = () => {
 	try {
