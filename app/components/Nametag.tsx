@@ -42,6 +42,8 @@ export const Nametag = ({
 	const fileInputRef = useRef<HTMLInputElement>(null)
 	const containerRef = useRef<HTMLDivElement>(null)
 	const tooltipRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
+	const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null)
+	const isTiltingRef = useRef(false)
 
 	// In forced edit mode, always keep editing enabled (unless readOnly)
 	// In readOnly mode, never allow editing
@@ -125,6 +127,67 @@ export const Nametag = ({
 		setRotation({ x: 0, y: 0 })
 	}
 
+	const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+		if (!containerRef.current) return
+
+		const touch = e.touches[0]
+		const rect = containerRef.current.getBoundingClientRect()
+		const x = touch.clientX - rect.left
+		const y = touch.clientY - rect.top
+
+		touchStartRef.current = {
+			x: touch.clientX,
+			y: touch.clientY,
+			time: Date.now()
+		}
+		isTiltingRef.current = false
+	}
+
+	const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+		if (!containerRef.current || !touchStartRef.current) return
+
+		const touch = e.touches[0]
+		const deltaX = Math.abs(touch.clientX - touchStartRef.current.x)
+		const deltaY = Math.abs(touch.clientY - touchStartRef.current.y)
+		const deltaTime = Date.now() - touchStartRef.current.time
+		const totalDelta = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+
+		// Detect scroll gesture:
+		// - Significant vertical movement (> 15px) that's primarily vertical
+		// - Fast movement (indicates scroll intent)
+		// - If already determined to be scrolling, continue scrolling
+		const isVerticalScroll = deltaY > 15 && deltaY > deltaX * 2
+		const isFastMovement = deltaTime < 150 && totalDelta > 20
+
+		if (isVerticalScroll || (isFastMovement && deltaY > deltaX)) {
+			// This is a scroll gesture, don't interfere
+			isTiltingRef.current = false
+			return
+		}
+
+		// This is a tilt gesture - apply tilt effect
+		isTiltingRef.current = true
+		const rect = containerRef.current.getBoundingClientRect()
+		const x = touch.clientX - rect.left
+		const y = touch.clientY - rect.top
+		const centerX = rect.width / 2
+		const centerY = rect.height / 2
+
+		// Calculate rotation based on touch position
+		const rotateX = ((y - centerY) / centerY) * 10 // Max 10 degrees
+		const rotateY = ((x - centerX) / centerX) * -10 // Max 10 degrees
+
+		setRotation({ x: rotateX, y: rotateY })
+	}
+
+	const handleTouchEnd = () => {
+		if (isTiltingRef.current) {
+			setRotation({ x: 0, y: 0 })
+		}
+		touchStartRef.current = null
+		isTiltingRef.current = false
+	}
+
 	const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (!e.target.files || e.target.files.length === 0) return
 
@@ -169,6 +232,9 @@ export const Nametag = ({
 					ref={containerRef}
 					onMouseMove={handleMouseMove}
 					onMouseLeave={handleMouseLeave}
+					onTouchStart={handleTouchStart}
+					onTouchMove={handleTouchMove}
+					onTouchEnd={handleTouchEnd}
 					style={{
 						transform: `perspective(1000px) rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`
 					}}
@@ -403,6 +469,7 @@ const NametagContainer = styled.div`
 	transform-style: preserve-3d;
 	transition: transform 0.1s ease-out;
 	will-change: transform;
+	touch-action: pan-y pan-x;
 	/* Create see-through rectangular hole using mask - matches hole exactly */
 	/* Hole is 60px wide x 8px tall, positioned at top: 12px, centered horizontally */
 	/* Create see-through rounded rectangular hole using mask */
