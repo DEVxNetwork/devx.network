@@ -34,11 +34,18 @@ export default function Events() {
 		}
 	}
 
-	const filteredEvents = events.filter((event) => {
-		const eventDate = new Date(event.start_at)
-		const now = new Date()
-		return filter === "upcoming" ? eventDate >= now : eventDate < now
-	})
+	const filteredEvents = events
+		.filter((event) => {
+			const eventDate = new Date(event.start_at)
+			const now = new Date()
+			return filter === "upcoming" ? eventDate >= now : eventDate < now
+		})
+		.sort((a, b) => {
+			const dateA = new Date(a.start_at).getTime()
+			const dateB = new Date(b.start_at).getTime()
+			// Ascending for upcoming (oldest first), descending for past (newest first)
+			return filter === "upcoming" ? dateA - dateB : dateB - dateA
+		})
 
 	return (
 		<>
