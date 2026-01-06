@@ -23,6 +23,11 @@ type NametagProps = {
 	forcedEditMode?: boolean
 	onDataChange?: (data: NametagData) => void
 	readOnly?: boolean
+	validationErrors?: {
+		profilePhoto?: boolean
+		fullName?: boolean
+	}
+	showRequiredAsterisks?: boolean
 }
 
 export const Nametag = ({
@@ -34,7 +39,9 @@ export const Nametag = ({
 	initialEditing = false,
 	forcedEditMode = false,
 	onDataChange,
-	readOnly = false
+	readOnly = false,
+	validationErrors = {},
+	showRequiredAsterisks = false
 }: NametagProps) => {
 	const [isEditing, setIsEditing] = useState(initialEditing || forcedEditMode)
 	const [formData, setFormData] = useState<NametagData>(data)
@@ -137,6 +144,10 @@ export const Nametag = ({
 		setIsEditing(false)
 	}
 
+	const handlePhotoFrameClick = () => {
+		if (!readOnly) fileInputRef.current?.click()
+	}
+
 	// Read-only mode (skip if forced edit mode)
 	if (!effectiveEditing) {
 		return (
@@ -212,7 +223,10 @@ export const Nametag = ({
 				</SaveButtonWrapper>
 			)}
 			<NametagLeft>
-				<PhotoFrame onClick={readOnly ? undefined : () => fileInputRef.current?.click()}>
+				<PhotoFrame
+					onClick={readOnly ? undefined : handlePhotoFrameClick}
+					$error={validationErrors.profilePhoto}
+				>
 					{uploading ? (
 						<PlaceholderAvatar>Loading...</PlaceholderAvatar>
 					) : formData.profilePhoto ? (
@@ -228,6 +242,12 @@ export const Nametag = ({
 						</PhotoOverlay>
 					)}
 				</PhotoFrame>
+				{showRequiredAsterisks && (
+					<PhotoRequiredLabel>
+						Profile Photo <RequiredAsterisk>*</RequiredAsterisk>
+					</PhotoRequiredLabel>
+				)}
+				{validationErrors.profilePhoto && <FieldError>Please upload a profile photo</FieldError>}
 				{!readOnly && (
 					<input
 						type="file"
@@ -241,9 +261,16 @@ export const Nametag = ({
 
 			<NametagRight>
 				<NametagInputGroup>
-					<NametagLabel>HELLO my name is</NametagLabel>
+					<NametagLabel>
+						HELLO my name is
+						{showRequiredAsterisks && <RequiredAsterisk> *</RequiredAsterisk>}
+					</NametagLabel>
 					<InputWithHelpContainer>
-						<NametagInputWrapper $fontSize="1.5rem" $fontWeight="700">
+						<NametagInputWrapper
+							$fontSize="1.5rem"
+							$fontWeight="700"
+							$error={validationErrors.fullName}
+						>
 							<TextInput
 								variant="secondary"
 								size="default"
@@ -256,10 +283,11 @@ export const Nametag = ({
 									}
 								}}
 								placeholder="Your Name"
-								required
+								error={validationErrors.fullName}
 							/>
 						</NametagInputWrapper>
 					</InputWithHelpContainer>
+					{validationErrors.fullName && <FieldError>Please enter your name</FieldError>}
 				</NametagInputGroup>
 
 				<NametagInputGroup>
@@ -277,7 +305,6 @@ export const Nametag = ({
 									}
 								}}
 								placeholder="Title"
-								required
 							/>
 						</NametagInputWrapper>
 						<HelpInfoButton>Your job title or role.</HelpInfoButton>
@@ -299,7 +326,6 @@ export const Nametag = ({
 									}
 								}}
 								placeholder="Affiliation"
-								required
 							/>
 						</NametagInputWrapper>
 						<HelpInfoButton>Your company, organization, or school name.</HelpInfoButton>
@@ -533,16 +559,17 @@ const PhotoOverlay = styled.div`
 	pointer-events: none;
 `
 
-const PhotoFrame = styled.div`
+const PhotoFrame = styled.div<{ $error?: boolean }>`
 	width: 120px;
 	height: 120px;
 	border-radius: 8px;
 	overflow: hidden;
 	background-color: rgba(255, 255, 255, 0.1);
-	border: 2px solid rgba(255, 255, 255, 0.3);
+	border: 2px solid ${(props) => (props.$error ? "var(--error-color)" : "rgba(255, 255, 255, 0.3)")};
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 	cursor: pointer;
 	position: relative;
+	transition: border-color 0.2s ease;
 
 	&:hover ${PhotoOverlay} {
 		opacity: 1;
@@ -600,19 +627,25 @@ const InputWithHelpContainer = styled.div`
 	position: relative;
 `
 
-const NametagInputWrapper = styled.div<{ $fontSize?: string; $fontWeight?: string }>`
+const NametagInputWrapper = styled.div<{
+	$fontSize?: string
+	$fontWeight?: string
+	$error?: boolean
+}>`
 	flex: 1;
 	width: 100%;
 
 	input {
 		background: transparent;
 		border: none;
-		border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+		border-bottom: 2px solid
+			${(props) => (props.$error ? "var(--error-color)" : "rgba(255, 255, 255, 0.2)")};
 		padding: 0.25rem 0;
 		font-size: ${(props) => props.$fontSize || "1rem"};
 		font-weight: ${(props) => props.$fontWeight || "normal"};
 		color: rgba(255, 255, 255, 0.95);
 		width: 100%;
+		transition: border-bottom-color 0.2s ease;
 
 		&::placeholder {
 			color: rgba(255, 255, 255, 0.5);
@@ -620,7 +653,8 @@ const NametagInputWrapper = styled.div<{ $fontSize?: string; $fontWeight?: strin
 
 		&:focus {
 			outline: none;
-			border-bottom-color: rgba(156, 163, 255, 0.8);
+			border-bottom-color: ${(props) =>
+				props.$error ? "var(--error-color)" : "rgba(156, 163, 255, 0.8)"};
 			background: rgba(255, 255, 255, 0.05);
 		}
 	}
@@ -631,4 +665,24 @@ const NametagDisplayText = styled.div<{ $fontSize?: string; $fontWeight?: string
 	font-weight: ${(props) => props.$fontWeight || "normal"};
 	color: rgba(255, 255, 255, 0.95);
 	padding: 0.25rem 0;
+`
+
+const RequiredAsterisk = styled.span`
+	color: var(--error-color);
+	font-weight: 700;
+`
+
+const PhotoRequiredLabel = styled.div`
+	color: rgba(255, 255, 255, 0.7);
+	font-size: 0.75rem;
+	font-weight: 500;
+	text-align: center;
+	margin-top: 0.5rem;
+`
+
+const FieldError = styled.p`
+	color: var(--error-color);
+	font-size: 1.1rem;
+	font-weight: 500;
+	margin-top: 0.5rem;
 `
