@@ -120,7 +120,24 @@ export default function Doorbell() {
 					<ParagraphSection>
 						<Paragraph>Ring the doorbell to enter the event.</Paragraph>
 					</ParagraphSection>
-					<ButtonSection>
+					{nearestEvent && (
+						<ButtonSection>
+							<Button
+								href={nearestEvent.url}
+								variant="primary"
+								size="default"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								Get Your Ticket
+							</Button>
+						</ButtonSection>
+					)}
+					<DoorbellSection>
+						<DoorbellMessage>
+							Is no one available at the door to check you in? Ring the doorbell and someone will
+							with you soon.
+						</DoorbellMessage>
 						{isRinging ? (
 							<AnimatedButtonContent
 								animate={{
@@ -136,22 +153,11 @@ export default function Doorbell() {
 								🛎️
 							</AnimatedButtonContent>
 						) : (
-							<Button size="default" onClick={handleDoorbellClick}>
+							<Button size="default" variant="tertiary" onClick={handleDoorbellClick}>
 								Ring Doorbell
 							</Button>
 						)}
-						{nearestEvent && (
-							<Button
-								href={nearestEvent.url}
-								variant="tertiary"
-								size="default"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								Get Your Ticket
-							</Button>
-						)}
-					</ButtonSection>
+					</DoorbellSection>
 					{ringCount >= 3 && (
 						<CallSection>
 							<CallMessage>No one answered?</CallMessage>
@@ -239,6 +245,24 @@ const ButtonSection = styled.section`
 	justify-content: center;
 	align-items: center;
 	gap: 1rem;
+`
+
+const DoorbellSection = styled.section`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	padding: 0 3rem;
+	margin-top: 1rem;
+`
+
+const DoorbellMessage = styled.p`
+	font-size: 1rem;
+	text-align: center;
+	max-width: 420px;
+	margin: 0;
+	color: rgba(255, 255, 255, 0.7);
 `
 
 const AnimatedButtonContent = styled(motion.span)`
