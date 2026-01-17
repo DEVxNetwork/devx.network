@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect, useRef, useCallback } from "react"
+import { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import type { RealtimeChannel } from "@supabase/supabase-js"
 import styled from "styled-components"
 import { motion } from "framer-motion"
@@ -7,6 +7,8 @@ import { PotionBackground } from "../components/PotionBackground"
 import { ErrorBoundary } from "../components/ErrorBoundary"
 import { Button } from "../components/Button"
 import { supabaseClient } from "@/lib/supabaseClient"
+import eventsData from "../data/events.json"
+import type { LumaEvent } from "../services/luma"
 
 // Components //
 
@@ -15,6 +17,21 @@ export default function Doorbell() {
 	const [ringCount, setRingCount] = useState(0)
 	const channelRef = useRef<RealtimeChannel | null>(null)
 	const lastRingIdRef = useRef<string | null>(null)
+
+	const nearestEvent = useMemo(() => {
+		const events = eventsData as LumaEvent[]
+		const now = new Date()
+
+		return events.reduce<LumaEvent | null>((nearest, event) => {
+			const eventDate = new Date(event.start_at)
+			const diff = Math.abs(eventDate.getTime() - now.getTime())
+
+			if (!nearest) return event
+
+			const nearestDiff = Math.abs(new Date(nearest.start_at).getTime() - now.getTime())
+			return diff < nearestDiff ? event : nearest
+		}, null)
+	}, [])
 
 	const triggerLocalRing = useCallback(() => {
 		playDoorbellSound()
@@ -123,6 +140,17 @@ export default function Doorbell() {
 								Ring Doorbell
 							</Button>
 						)}
+						{nearestEvent && (
+							<Button
+								href={nearestEvent.url}
+								variant="tertiary"
+								size="default"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								Get Your Ticket
+							</Button>
+						)}
 					</ButtonSection>
 					{ringCount >= 3 && (
 						<CallSection>
@@ -207,8 +235,10 @@ const Paragraph = styled.p`
 
 const ButtonSection = styled.section`
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	gap: 1rem;
 `
 
 const AnimatedButtonContent = styled(motion.span)`
