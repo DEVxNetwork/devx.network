@@ -9,8 +9,13 @@
  * Events are deduplicated by api_id and sorted chronologically (newest first).
  *
  * Usage:
- *   bun run scripts/update-events.ts
+ *   bun run scripts/update-events.ts           # Only fetch new events
+ *   bun run scripts/update-events.ts --force   # Re-fetch all events
  */
+
+// CLI Flags //
+
+const FORCE_MODE = process.argv.includes("--force")
 
 import { readFileSync, writeFileSync } from "fs"
 import { join } from "path"
@@ -173,7 +178,10 @@ function transformApiEventToLumaEvent(apiEvent: LumaApiEvent): LumaEvent {
 	}
 }
 
-async function fetchAllEvents(apiKey: string): Promise<Map<string, LumaEvent>> {
+async function fetchAllEvents(
+	apiKey: string,
+	existingEventIds: Set<string>
+): Promise<Map<string, LumaEvent>> {
 	const eventMap = new Map<string, LumaEvent>()
 	const eventIds: string[] = []
 	let paginationCursor: string | undefined
@@ -225,26 +233,38 @@ async function fetchAllEvents(apiKey: string): Promise<Map<string, LumaEvent>> {
 		paginationCursor = data.has_more ? data.next_cursor : undefined
 	} while (paginationCursor)
 
-	// Now fetch full details for each event (includes description_html)
-	console.log(`\nFetching full details for ${eventIds.length} events...`)
+	// Filter out existing events unless force mode
+	const idsToFetch = FORCE_MODE ? eventIds : eventIds.filter((id) => !existingEventIds.has(id))
 
-	for (let i = 0; i < eventIds.length; i++) {
-		const eventId = eventIds[i]
-		process.stdout.write(`  Fetching event ${i + 1}/${eventIds.length}...\r`)
-
-		const eventDetails = await fetchEventDetails(apiKey, eventId)
-		if (eventDetails) {
-			const lumaEvent = transformApiEventToLumaEvent(eventDetails)
-			eventMap.set(eventId, lumaEvent)
-		}
-
-		// Small delay to avoid rate limiting
-		if (i < eventIds.length - 1) {
-			await new Promise((resolve) => setTimeout(resolve, 100))
-		}
+	const skippedCount = eventIds.length - idsToFetch.length
+	if (skippedCount > 0) {
+		console.log(`\nSkipping ${skippedCount} existing events (use --force to re-fetch)`)
 	}
 
-	console.log(`  Fetched details for ${eventMap.size} events                `)
+	// Now fetch full details for new events (includes description_md)
+	if (idsToFetch.length === 0) {
+		console.log("\nNo new events to fetch")
+	} else {
+		console.log(`\nFetching full details for ${idsToFetch.length} events...`)
+
+		for (let i = 0; i < idsToFetch.length; i++) {
+			const eventId = idsToFetch[i]
+			process.stdout.write(`  Fetching event ${i + 1}/${idsToFetch.length}...\r`)
+
+			const eventDetails = await fetchEventDetails(apiKey, eventId)
+			if (eventDetails) {
+				const lumaEvent = transformApiEventToLumaEvent(eventDetails)
+				eventMap.set(eventId, lumaEvent)
+			}
+
+			// Small delay to avoid rate limiting
+			if (i < idsToFetch.length - 1) {
+				await new Promise((resolve) => setTimeout(resolve, 100))
+			}
+		}
+
+		console.log(`  Fetched details for ${eventMap.size} events                `)
+	}
 
 	return eventMap
 }
@@ -289,6 +309,10 @@ function synchronizeEvents(
 async function main() {
 	console.log("=== Luma Events Sync ===\n")
 
+	if (FORCE_MODE) {
+		console.log("🔄 Force mode: re-fetching all events\n")
+	}
+
 	const apiKey = process.env.LUMA_API_KEY
 	if (!apiKey) {
 		console.error("❌ LUMA_API_KEY environment variable is required")
@@ -307,8 +331,11 @@ async function main() {
 			console.log("No existing events file, starting fresh\n")
 		}
 
+		// Build set of existing event IDs for quick lookup
+		const existingEventIds = new Set(existingEvents.map((e) => e.api_id))
+
 		// Fetch from API
-		const fetchedEvents = await fetchAllEvents(apiKey)
+		const fetchedEvents = await fetchAllEvents(apiKey, existingEventIds)
 		console.log(`\nFetched ${fetchedEvents.size} unique events from API`)
 
 		// Synchronize
