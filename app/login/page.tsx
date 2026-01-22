@@ -188,9 +188,18 @@ export default function Login() {
 
 			if (signUpError) throw signUpError
 
-			// Email confirmation required - show success message
-			setError(null)
-			setSignupSuccess(true)
+			// Check if email confirmation is required by checking if session exists
+			// Supabase only returns a session on signup if email confirmation is disabled
+			if (data.session) {
+				// No email confirmation required - redirect to setup
+				const setupUrl = redirectUrl
+					? `/setup?redirect=${encodeURIComponent(redirectUrl)}`
+					: "/setup"
+				router.push(setupUrl)
+			} else {
+				// Email confirmation required - show success message
+				setSignupSuccess(true)
+			}
 		} catch (err: any) {
 			setError(err.message)
 		} finally {
