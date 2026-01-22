@@ -101,8 +101,6 @@ For OAuth providers (GitHub, Google), see the [Local OAuth Setup Guide](./docs/l
 - **Docker daemon errors (`Cannot connect to the Docker daemon`)**  
   Make sure Docker Desktop is installed and running before you call `supabase start`.
 
-**Note: This project is being refactored to use styled-components exclusively. Please do not add new Tailwind classes. See [styling guidelines](./docs/conventions/styling-guidelines.md) for details.**
-
 ## Contributing
 
 We welcome contributions from the community! If you have suggestions or improvements, feel free to open an issue or submit a pull request.
@@ -141,3 +139,7 @@ For detailed code style and organization guidelines:
    git push origin feature-name
    ```
 5. **Open a pull request on Github**
+
+## Footnotes
+
+> **Note:** This project is being refactored to use styled-components exclusively. Please do not add new Tailwind classes. See [styling guidelines](./docs/conventions/styling-guidelines.md) for details.
