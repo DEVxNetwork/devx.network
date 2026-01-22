@@ -50,29 +50,8 @@ The repo includes a Supabase CLI project under `supabase/` with config and migra
 
 #### 1. Prerequisites
 
-- Docker Desktop
-  - **macOS**: https://docs.docker.com/desktop/install/mac-install/
-  - **Windows**: https://docs.docker.com/desktop/install/windows-install/
-  - After installing, start Docker Desktop and wait until it reports that Docker is running.
-- Supabase CLI
-
-  - **macOS (Homebrew)**:
-
-    ```sh
-    brew install supabase/tap/supabase
-    ```
-
-  - **Windows (npm)** – requires Node.js:
-
-    ```sh
-    npm install -g supabase
-    ```
-
-  - Verify install (all platforms):
-
-    ```sh
-    supabase --version
-    ```
+- **Docker Desktop** – [Install Docker Desktop](https://docs.docker.com/desktop/) and ensure it's running before starting Supabase.
+- **Supabase CLI** – [Install the Supabase CLI](https://supabase.com/docs/guides/local-development/cli/getting-started#installing-the-supabase-cli) for your platform.
 
 #### 2. GitHub OAuth (local-only)
 
