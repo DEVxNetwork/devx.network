@@ -3,9 +3,11 @@ import { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import type { RealtimeChannel } from "@supabase/supabase-js"
 import styled from "styled-components"
 import { motion } from "framer-motion"
+import Link from "next/link"
 import { PotionBackground } from "../components/PotionBackground"
 import { ErrorBoundary } from "../components/ErrorBoundary"
 import { Button } from "../components/Button"
+import { Modal } from "../components/Modal"
 import { supabaseClient } from "@/lib/supabaseClient"
 import eventsData from "../data/events.json"
 import type { LumaEvent } from "../services/luma"
@@ -15,6 +17,7 @@ import type { LumaEvent } from "../services/luma"
 export default function Doorbell() {
 	const [isRinging, setIsRinging] = useState(false)
 	const [ringCount, setRingCount] = useState(0)
+	const [isModalOpen, setIsModalOpen] = useState(false)
 	const channelRef = useRef<RealtimeChannel | null>(null)
 	const lastRingIdRef = useRef<string | null>(null)
 
@@ -64,6 +67,13 @@ export default function Doorbell() {
 		triggerLocalRing()
 		void broadcastRing(ringId)
 		setRingCount((prev) => prev + 1)
+	}
+
+	const handleAgree = () => {
+		if (nearestEvent?.url) {
+			window.open(nearestEvent.url, "_blank")
+		}
+		setIsModalOpen(false)
 	}
 
 	useEffect(() => {
@@ -122,14 +132,8 @@ export default function Doorbell() {
 					</ParagraphSection>
 					{nearestEvent && (
 						<ButtonSection>
-							<Button
-								href={nearestEvent.url}
-								variant="primary"
-								size="default"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								Get Your Ticket
+							<Button variant="primary" size="default" onClick={() => setIsModalOpen(true)}>
+								Check In
 							</Button>
 						</ButtonSection>
 					)}
@@ -168,6 +172,24 @@ export default function Doorbell() {
 					)}
 				</Hero>
 			</Main>
+			<Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+				<ModalTitle>Event Terms</ModalTitle>
+				<ModalText>
+					By checking in I agree to the{" "}
+					<TermsLink href="/event-terms" target="_blank" rel="noopener noreferrer">
+						Event Terms
+					</TermsLink>
+					.
+				</ModalText>
+				<ModalButtons>
+					<Button variant="secondary" size="default" onClick={() => setIsModalOpen(false)}>
+						Decline
+					</Button>
+					<Button variant="primary" size="default" onClick={handleAgree}>
+						I Agree
+					</Button>
+				</ModalButtons>
+			</Modal>
 		</>
 	)
 }
@@ -286,6 +308,40 @@ const CallMessage = styled.p`
 	text-align: center;
 	margin: 0;
 	color: white;
+`
+
+const ModalTitle = styled.h2`
+	font-size: 1.75rem;
+	font-weight: 700;
+	margin: 0 0 1.5rem 0;
+	color: white;
+	text-align: center;
+`
+
+const ModalText = styled.p`
+	font-size: 1rem;
+	line-height: 1.6;
+	margin: 0 0 2rem 0;
+	color: rgba(255, 255, 255, 0.9);
+	text-align: center;
+	font-style: italic;
+`
+
+const TermsLink = styled(Link)`
+	color: white;
+	text-decoration: underline;
+	transition: opacity 0.2s ease;
+
+	&:hover {
+		opacity: 0.7;
+	}
+`
+
+const ModalButtons = styled.div`
+	display: flex;
+	gap: 1rem;
+	justify-content: center;
+	flex-wrap: wrap;
 `
 
 // Constants //
