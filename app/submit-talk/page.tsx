@@ -9,6 +9,7 @@ import { Button } from "../components/Button"
 import { TextInput } from "../components/TextInput"
 import { TextareaInput } from "../components/TextareaInput"
 import { RadioInput } from "../components/RadioInput"
+import { CheckboxInput } from "../components/CheckboxInput"
 import { PageContainer } from "../components/PageContainer"
 import { SuccessMessage as SuccessMessageComponent } from "../components/SuccessMessage"
 import Link from "next/link"
@@ -26,6 +27,7 @@ export default function SubmitTalk() {
 	const [profileId, setProfileId] = useState<number | null>(null)
 	const [profilePhoneNumber, setProfilePhoneNumber] = useState<string | null>(null)
 	const [isEditingPhone, setIsEditingPhone] = useState(false)
+	const [agreedToTerms, setAgreedToTerms] = useState(false)
 	const [formData, setFormData] = useState({
 		phoneNumber: "",
 		talkTitle: "",
@@ -202,6 +204,12 @@ export default function SubmitTalk() {
 			}
 		}
 
+		// Terms agreement validation
+		if (!agreedToTerms) {
+			setError("You must agree to the terms to submit")
+			return
+		}
+
 		setSubmitting(true)
 		setError(null)
 
@@ -260,6 +268,7 @@ export default function SubmitTalk() {
 				slidesUrl: "",
 				slidesFile: null
 			})
+			setAgreedToTerms(false)
 			setIsEditingPhone(false)
 
 			// Scroll to top to show success message
@@ -473,6 +482,23 @@ export default function SubmitTalk() {
 									)}
 								</FormSection>
 
+								<CheckboxField>
+									<CheckboxInput
+										id="agreedToTerms"
+										variant="secondary"
+										size="default"
+										checked={agreedToTerms}
+										onChange={(e) => setAgreedToTerms(e.target.checked)}
+										required
+									/>
+									<CheckboxLabel htmlFor="agreedToTerms">
+										By submitting, I agree to these{" "}
+										<TermsLink href="/event-terms" target="_blank" rel="noopener noreferrer">
+											terms
+										</TermsLink>
+									</CheckboxLabel>
+								</CheckboxField>
+
 								<ButtonContainer>
 									<Button type="submit" variant="primary" disabled={submitting}>
 										{submitting ? "Submitting..." : "Submit Talk"}
@@ -674,4 +700,30 @@ const LoadingText = styled.div`
 	color: white;
 	font-size: 1.25rem;
 	text-align: center;
+`
+
+const CheckboxField = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	margin-top: 1rem;
+	padding-top: 1.5rem;
+	border-top: 1px solid rgba(255, 255, 255, 0.1);
+`
+
+const CheckboxLabel = styled.label`
+	font-size: 0.875rem;
+	color: rgba(255, 255, 255, 0.9);
+	cursor: pointer;
+	line-height: 1.5;
+`
+
+const TermsLink = styled(Link)`
+	color: rgba(156, 163, 255, 0.9);
+	text-decoration: underline;
+	transition: color 0.2s ease;
+
+	&:hover {
+		color: rgba(156, 163, 255, 1);
+	}
 `
