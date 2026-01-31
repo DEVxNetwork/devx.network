@@ -44,9 +44,62 @@ NEXT_PUBLIC_SUPABASE_URL=<your-supabase-project-url>
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-public-anon-key>
 ```
 
-These keys are safe to expose to the browser but should be scoped to the realtime channel only via Supabase RLS/policies.
+### Local Supabase Development
 
-**Note: This project is being refactored to use styled-components exclusively. Please do not add new Tailwind classes. See [styling guidelines](./docs/conventions/styling-guidelines.md) for details.**
+The repo includes a Supabase CLI project under `supabase/` with config and migrations, so you can run the full stack locally.
+
+#### 1. Prerequisites
+
+- **Docker Desktop** – [Install Docker Desktop](https://docs.docker.com/desktop/) and ensure it's running before starting Supabase.
+- **Supabase CLI** – [Install the Supabase CLI](https://supabase.com/docs/guides/local-development/cli/getting-started#installing-the-supabase-cli) for your platform.
+
+#### 2. Start the local Supabase stack
+
+From the repo root:
+
+```sh
+supabase start
+```
+
+On success, you should see output including:
+
+- **Project URL**: `http://127.0.0.1:54321`
+- **Studio**: `http://127.0.0.1:54323`
+- **Database**: `postgresql://postgres:postgres@127.0.0.1:54322/postgres`
+
+If you change migrations or want a clean slate:
+
+```sh
+supabase stop
+supabase db reset   # WARNING: destroys local data, reapplies migrations
+supabase start
+```
+
+#### 3. Point the Next.js app at local Supabase
+
+Update `.env.local` in the project root:
+
+```sh
+NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH
+```
+
+> Note: the `sb_publishable_...` key is printed in the `supabase start` output under “Authentication Keys → Publishable”.
+
+Restart the dev server after changing `.env.local`.
+
+#### 4. Authentication
+
+For local testing, **username/password authentication** works out of the box – just sign up with any email and password in the app.
+
+For OAuth providers (GitHub, Google), see the [Local OAuth Setup Guide](./docs/local-oauth-setup.md).
+
+#### 5. Common local issues
+
+- **`"no Route matched with those values"` at `127.0.0.1:54321`**  
+  This is normal for the bare API root. Use Studio (`http://127.0.0.1:54323`) or `http://localhost:3000` instead.
+- **Docker daemon errors (`Cannot connect to the Docker daemon`)**  
+  Make sure Docker Desktop is installed and running before you call `supabase start`.
 
 ## Contributing
 
@@ -86,3 +139,7 @@ For detailed code style and organization guidelines:
    git push origin feature-name
    ```
 5. **Open a pull request on Github**
+
+## Footnotes
+
+> **Note:** This project is being refactored to use styled-components exclusively. Please do not add new Tailwind classes. See [styling guidelines](./docs/conventions/styling-guidelines.md) for details.

@@ -1,76 +1,205 @@
 <!-- Wrapper Table -->
-<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #000000; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; font-size: 16px; line-height: 1.6; color: #ffffff; margin: 0; padding: 0;">
+<table
+	role="presentation"
+	cellspacing="0"
+	cellpadding="0"
+	border="0"
+	width="100%"
+	style="
+		background-color: #000000;
+		font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto,
+			&quot;Helvetica Neue&quot;, Arial, sans-serif;
+		font-size: 16px;
+		line-height: 1.6;
+		color: #ffffff;
+		margin: 0;
+		padding: 0;
+	"
+>
 	<tr>
-		<td align="center" style="padding: 40px 20px;">
+		<td align="center" style="padding: 40px 20px">
 			<!-- Main Container Table -->
-			<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width: 600px; background-color: rgba(21, 21, 28, 0.75); border-radius: 1rem; overflow: hidden; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);">
+			<table
+				role="presentation"
+				cellspacing="0"
+				cellpadding="0"
+				border="0"
+				width="100%"
+				style="
+					max-width: 600px;
+					background-color: rgba(21, 21, 28, 0.75);
+					border-radius: 1rem;
+					overflow: hidden;
+					box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+				"
+			>
 				<!-- Header with Logo -->
 				<tr>
-					<td align="center" style="padding: 40px 30px 30px 30px; background-color: rgba(0, 0, 0, 0.3);">
-						<img src="https://devx.network/images/sd-devx-brand.png" alt="San Diego DEVx" width="200" height="auto" style="max-width: 200px; height: auto; display: block;">
+					<td
+						align="center"
+						style="padding: 40px 30px 30px 30px; background-color: rgba(0, 0, 0, 0.3)"
+					>
+						<img
+							src="https://devx.network/images/sd-devx-brand.png"
+							alt="San Diego DEVx"
+							width="200"
+							height="auto"
+							style="max-width: 200px; height: auto; display: block"
+						/>
 					</td>
 				</tr>
 				<!-- Content -->
 				<tr>
-					<td style="padding: 40px 30px;">
+					<td style="padding: 40px 30px">
 						<!-- Heading -->
-						<h1 style="margin: 0 0 20px 0; font-size: 28px; font-weight: 700; line-height: 1.2; color: #ffffff; text-align: center;">
+						<h1
+							style="
+								margin: 0 0 20px 0;
+								font-size: 28px;
+								font-weight: 700;
+								line-height: 1.2;
+								color: #ffffff;
+								text-align: center;
+							"
+						>
 							Confirm your email
 						</h1>
 						<!-- Body Text -->
-						<p style="margin: 0 0 24px 0; font-size: 16px; line-height: 1.6; color: rgba(255, 255, 255, 0.9); text-align: center;">
-							Thanks for signing up! Please confirm your email address to complete your account setup.
+						<p
+							style="
+								margin: 0 0 24px 0;
+								font-size: 16px;
+								line-height: 1.6;
+								color: rgba(255, 255, 255, 0.9);
+								text-align: center;
+							"
+						>
+							Thanks for signing up! Please confirm your email address to complete your account
+							setup.
 						</p>
 						<!-- Confirmation Button -->
 						<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
 							<tr>
-								<td align="center" style="padding: 0 0 24px 0;">
-									<a href="{{ .ConfirmationURL }}" style="display: inline-block; padding: 14px 32px; background-color: #ffffff; color: #000000; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px; text-align: center; min-width: 200px;">
+								<td align="center" style="padding: 0 0 24px 0">
+									<a
+										href="{{ .ConfirmationURL }}"
+										style="
+											display: inline-block;
+											padding: 14px 32px;
+											background-color: #ffffff;
+											color: #000000;
+											text-decoration: none;
+											border-radius: 6px;
+											font-weight: 600;
+											font-size: 16px;
+											text-align: center;
+											min-width: 200px;
+										"
+									>
 										Confirm Email
 									</a>
 								</td>
 							</tr>
 						</table>
 						<!-- Alternative Link Text -->
-						<p style="margin: 0 0 8px 0; font-size: 14px; line-height: 1.5; color: rgba(255, 255, 255, 0.7); text-align: center;">
+						<p
+							style="
+								margin: 0 0 8px 0;
+								font-size: 14px;
+								line-height: 1.5;
+								color: rgba(255, 255, 255, 0.7);
+								text-align: center;
+							"
+						>
 							Or copy and paste this link into your browser:
 						</p>
-						<p style="margin: 0 0 24px 0; font-size: 12px; line-height: 1.5; color: rgba(255, 255, 255, 0.6); text-align: center; word-break: break-all;">
+						<p
+							style="
+								margin: 0 0 24px 0;
+								font-size: 12px;
+								line-height: 1.5;
+								color: rgba(255, 255, 255, 0.6);
+								text-align: center;
+								word-break: break-all;
+							"
+						>
 							{{ .ConfirmationURL }}
 						</p>
 						<!-- Divider -->
 						<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
 							<tr>
-								<td style="padding: 24px 0; border-top: 1px solid rgba(255, 255, 255, 0.1);"></td>
+								<td style="padding: 24px 0; border-top: 1px solid rgba(255, 255, 255, 0.1)"></td>
 							</tr>
 						</table>
 						<!-- Footer Text -->
-						<p style="margin: 0; font-size: 14px; line-height: 1.5; color: rgba(255, 255, 255, 0.6); text-align: center;">
+						<p
+							style="
+								margin: 0;
+								font-size: 14px;
+								line-height: 1.5;
+								color: rgba(255, 255, 255, 0.6);
+								text-align: center;
+							"
+						>
 							If you didn't create an account with San Diego DEVx, you can safely ignore this email.
 						</p>
 					</td>
 				</tr>
 				<!-- Footer -->
 				<tr>
-					<td style="padding: 30px; background-color: rgba(0, 0, 0, 0.3); border-top: 1px solid rgba(255, 255, 255, 0.1);">
+					<td
+						style="
+							padding: 30px;
+							background-color: rgba(0, 0, 0, 0.3);
+							border-top: 1px solid rgba(255, 255, 255, 0.1);
+						"
+					>
 						<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
 							<tr>
-								<td align="center" style="padding: 0 0 16px 0;">
-									<p style="margin: 0; font-size: 14px; line-height: 1.5; color: rgba(255, 255, 255, 0.8); text-align: center;">
-										<a href="https://devx.network" style="color: rgba(255, 255, 255, 0.9); text-decoration: none;">devx.network</a>
+								<td align="center" style="padding: 0 0 16px 0">
+									<p
+										style="
+											margin: 0;
+											font-size: 14px;
+											line-height: 1.5;
+											color: rgba(255, 255, 255, 0.8);
+											text-align: center;
+										"
+									>
+										<a
+											href="https://devx.network"
+											style="color: rgba(255, 255, 255, 0.9); text-decoration: none"
+											>devx.network</a
+										>
 									</p>
 								</td>
 							</tr>
 							<tr>
 								<td align="center">
-									<p style="margin: 0; font-size: 12px; line-height: 1.5; color: rgba(255, 255, 255, 0.5); text-align: center;">
+									<p
+										style="
+											margin: 0;
+											font-size: 12px;
+											line-height: 1.5;
+											color: rgba(255, 255, 255, 0.5);
+											text-align: center;
+										"
+									>
 										Fostering developer community through events and open-source projects.
 									</p>
 								</td>
 							</tr>
 							<tr>
-								<td align="center" style="padding-top: 20px;">
-									<p style="margin: 0; font-size: 11px; line-height: 1.5; color: rgba(255, 255, 255, 0.4); text-align: center;">
+								<td align="center" style="padding-top: 20px">
+									<p
+										style="
+											margin: 0;
+											font-size: 11px;
+											line-height: 1.5;
+											color: rgba(255, 255, 255, 0.4);
+											text-align: center;
+										"
+									>
 										© {{ .Year }} San Diego DEVx. All rights reserved.
 									</p>
 								</td>
@@ -82,4 +211,3 @@
 		</td>
 	</tr>
 </table>
-

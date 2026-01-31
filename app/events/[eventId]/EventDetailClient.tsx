@@ -280,8 +280,10 @@ export default function EventDetailClient() {
 
 // Utility Components //
 
-function MiniMap({ lat, lng, address }: { lat: number; lng: number; address?: string }) {
-	const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${lng - 0.01},${lat - 0.01},${lng + 0.01},${lat + 0.01}&layer=mapnik&marker=${lat},${lng}`
+function MiniMap({ lat, lng, address }: { lat: string; lng: string; address?: string }) {
+	const latNum = parseFloat(lat)
+	const lngNum = parseFloat(lng)
+	const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${lngNum - 0.01},${latNum - 0.01},${lngNum + 0.01},${latNum + 0.01}&layer=mapnik&marker=${lat},${lng}`
 
 	return <MapFrame src={mapUrl} title={`Map for ${address || "event location"}`} loading="lazy" />
 }

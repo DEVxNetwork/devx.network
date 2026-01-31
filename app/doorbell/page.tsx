@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect, useRef, useCallback } from "react"
+import { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import type { RealtimeChannel } from "@supabase/supabase-js"
 import styled from "styled-components"
 import { motion } from "framer-motion"
@@ -7,6 +7,8 @@ import { PotionBackground } from "../components/PotionBackground"
 import { ErrorBoundary } from "../components/ErrorBoundary"
 import { Button } from "../components/Button"
 import { supabaseClient } from "@/lib/supabaseClient"
+import eventsData from "../data/events.json"
+import type { LumaEvent } from "../services/luma"
 
 // Components //
 
@@ -15,6 +17,21 @@ export default function Doorbell() {
 	const [ringCount, setRingCount] = useState(0)
 	const channelRef = useRef<RealtimeChannel | null>(null)
 	const lastRingIdRef = useRef<string | null>(null)
+
+	const nearestEvent = useMemo(() => {
+		const events = eventsData as LumaEvent[]
+		const now = new Date()
+
+		return events.reduce<LumaEvent | null>((nearest, event) => {
+			const eventDate = new Date(event.start_at)
+			const diff = Math.abs(eventDate.getTime() - now.getTime())
+
+			if (!nearest) return event
+
+			const nearestDiff = Math.abs(new Date(nearest.start_at).getTime() - now.getTime())
+			return diff < nearestDiff ? event : nearest
+		}, null)
+	}, [])
 
 	const triggerLocalRing = useCallback(() => {
 		playDoorbellSound()
@@ -103,7 +120,24 @@ export default function Doorbell() {
 					<ParagraphSection>
 						<Paragraph>Ring the doorbell to enter the event.</Paragraph>
 					</ParagraphSection>
-					<ButtonSection>
+					{nearestEvent && (
+						<ButtonSection>
+							<Button
+								href={nearestEvent.url}
+								variant="primary"
+								size="default"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								Get Your Ticket
+							</Button>
+						</ButtonSection>
+					)}
+					<DoorbellSection>
+						<DoorbellMessage>
+							Is no one available at the door to check you in? Ring the doorbell and someone will
+							with you soon.
+						</DoorbellMessage>
 						{isRinging ? (
 							<AnimatedButtonContent
 								animate={{
@@ -119,11 +153,11 @@ export default function Doorbell() {
 								🛎️
 							</AnimatedButtonContent>
 						) : (
-							<Button size="default" onClick={handleDoorbellClick}>
+							<Button size="default" variant="tertiary" onClick={handleDoorbellClick}>
 								Ring Doorbell
 							</Button>
 						)}
-					</ButtonSection>
+					</DoorbellSection>
 					{ringCount >= 3 && (
 						<CallSection>
 							<CallMessage>No one answered?</CallMessage>
@@ -207,8 +241,28 @@ const Paragraph = styled.p`
 
 const ButtonSection = styled.section`
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	gap: 1rem;
+`
+
+const DoorbellSection = styled.section`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	padding: 0 3rem;
+	margin-top: 1rem;
+`
+
+const DoorbellMessage = styled.p`
+	font-size: 1rem;
+	text-align: center;
+	max-width: 420px;
+	margin: 0;
+	color: rgba(255, 255, 255, 0.7);
 `
 
 const AnimatedButtonContent = styled(motion.span)`

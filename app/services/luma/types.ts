@@ -6,8 +6,8 @@ export interface LumaLocation {
 	city?: string
 	state?: string
 	coordinates?: {
-		lat: number
-		lng: number
+		lat: string
+		lng: string
 	}
 }
 
@@ -15,7 +15,8 @@ export interface LumaEvent {
 	api_id: string
 	name: string
 	description: string
-	description_html?: string
+	description_md?: string // Markdown formatted description
+	description_html?: string // HTML converted from markdown
 	start_at: string
 	end_at: string
 	location?: LumaLocation

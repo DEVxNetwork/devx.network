@@ -17,6 +17,7 @@ export default function Login() {
 	const [signingIn, setSigningIn] = useState(false)
 	const [signingUp, setSigningUp] = useState(false)
 	const [signupSuccess, setSignupSuccess] = useState(false)
+	const [showEmailForm, setShowEmailForm] = useState(false)
 	const router = useRouter()
 
 	useEffect(() => {
@@ -81,7 +82,7 @@ export default function Login() {
 		checkAuth()
 	}, [router])
 
-	const handleLogin = async (provider: "google" | "github") => {
+	const handleLogin = (provider: "google" | "github") => async () => {
 		try {
 			setError(null)
 			// Get redirect URL from query params to preserve it through OAuth flow
@@ -188,14 +189,33 @@ export default function Login() {
 
 			if (signUpError) throw signUpError
 
-			// Email confirmation required - show success message
-			setError(null)
-			setSignupSuccess(true)
+			// Check if email confirmation is required by checking if session exists
+			// Supabase only returns a session on signup if email confirmation is disabled
+			if (data.session) {
+				// No email confirmation required - redirect to setup
+				const setupUrl = redirectUrl
+					? `/setup?redirect=${encodeURIComponent(redirectUrl)}`
+					: "/setup"
+				router.push(setupUrl)
+			} else {
+				// Email confirmation required - show success message
+				setSignupSuccess(true)
+			}
 		} catch (err: any) {
 			setError(err.message)
 		} finally {
 			setSigningUp(false)
 		}
+	}
+
+	const handleBackClick = () => {
+		setError(null)
+		setShowEmailForm(false)
+	}
+
+	const handleContinueEmailClick = () => {
+		setError(null)
+		setShowEmailForm(true)
 	}
 
 	return (
@@ -219,80 +239,83 @@ export default function Login() {
 
 							{error && <ErrorMessage>{error}</ErrorMessage>}
 
-							<ButtonContainer>
-								<Button onClick={() => handleLogin("google")} size="default" variant="primary">
-									Continue with Google
-								</Button>
-
-								<Button onClick={() => handleLogin("github")} size="default" variant="secondary">
-									Continue with GitHub
-								</Button>
-							</ButtonContainer>
-
-							<Divider />
-
-							<EmailForm
-								onSubmit={(e) => {
-									e.preventDefault()
-									handleEmailSignIn(e)
-								}}
-							>
-								<FormTitle>Sign In with Email</FormTitle>
-								<InputGroup>
-									<TextInput
-										type="email"
-										variant="secondary"
-										size="default"
-										value={email}
-										onChange={(e) => setEmail(e.target.value)}
-										placeholder="Email"
-										required
-										disabled={signingIn || signingUp}
-									/>
-								</InputGroup>
-								<InputGroup>
-									<TextInput
-										type="password"
-										variant="secondary"
-										size="default"
-										value={password}
-										onChange={(e) => setPassword(e.target.value)}
-										placeholder="Password"
-										required
-										minLength={6}
-										disabled={signingIn || signingUp}
-									/>
-									<PasswordHelpText>
-										Password must be at least 6 characters with lowercase, uppercase, digits, and
-										symbols
-									</PasswordHelpText>
-								</InputGroup>
-								<ButtonWrapper>
-									<Button
-										type="submit"
-										size="default"
-										variant="primary"
-										disabled={signingIn || signingUp || !email || !password}
-									>
-										{signingIn ? "Signing in..." : "Sign In"}
+							{showEmailForm ? (
+								<EmailForm
+									onSubmit={(e) => {
+										e.preventDefault()
+										handleEmailSignIn(e)
+									}}
+								>
+									<InputGroup>
+										<TextInput
+											type="email"
+											variant="secondary"
+											size="default"
+											value={email}
+											onChange={(e) => setEmail(e.target.value)}
+											placeholder="Email"
+											required
+											disabled={signingIn || signingUp}
+										/>
+									</InputGroup>
+									<InputGroup>
+										<TextInput
+											type="password"
+											variant="secondary"
+											size="default"
+											value={password}
+											onChange={(e) => setPassword(e.target.value)}
+											placeholder="Password"
+											required
+											minLength={6}
+											disabled={signingIn || signingUp}
+										/>
+										<PasswordHelpText>Password must be at least 6 characters</PasswordHelpText>
+									</InputGroup>
+									<ButtonWrapper>
+										<Button
+											type="submit"
+											size="default"
+											variant="primary"
+											disabled={signingIn || signingUp || !email || !password}
+										>
+											{signingIn ? "Signing in..." : "Sign In"}
+										</Button>
+										<Button
+											type="button"
+											size="default"
+											variant="secondary"
+											disabled={signingIn || signingUp || !email || !password}
+											onClick={(e) => {
+												if (e) {
+													e.preventDefault()
+													e.stopPropagation()
+												}
+												handleEmailSignUp(e!)
+											}}
+										>
+											{signingUp ? "Signing up..." : "Sign Up"}
+										</Button>
+									</ButtonWrapper>
+									<BackButton type="button" onClick={handleBackClick}>
+										← Back to sign in options
+									</BackButton>
+								</EmailForm>
+							) : (
+								<ButtonContainer>
+									<Button onClick={handleLogin("google")} size="default" variant="primary">
+										Continue with Google
 									</Button>
-									<Button
-										type="button"
-										size="default"
-										variant="secondary"
-										disabled={signingIn || signingUp || !email || !password}
-										onClick={(e) => {
-											if (e) {
-												e.preventDefault()
-												e.stopPropagation()
-											}
-											handleEmailSignUp(e!)
-										}}
-									>
-										{signingUp ? "Signing up..." : "Sign Up"}
+
+									<Button onClick={handleLogin("github")} size="default" variant="secondary">
+										Continue with GitHub
 									</Button>
-								</ButtonWrapper>
-							</EmailForm>
+
+									<Button onClick={handleContinueEmailClick} size="default" variant="tertiary">
+										Continue with Email
+									</Button>
+								</ButtonContainer>
+							)}
 						</>
 					)}
 				</PageContainer>
@@ -354,12 +377,6 @@ const ErrorMessage = styled.div`
 	width: 100%;
 `
 
-const Divider = styled.hr`
-	border: none;
-	border-top: 1px solid rgba(255, 255, 255, 0.2);
-	width: 100%;
-`
-
 const EmailForm = styled.form`
 	display: flex;
 	flex-direction: column;
@@ -381,14 +398,6 @@ const ButtonWrapper = styled.div`
 	}
 `
 
-const FormTitle = styled.h2`
-	font-size: 1.25rem;
-	font-weight: 600;
-	color: rgba(255, 255, 255, 0.9);
-	margin: 0;
-	text-align: center;
-`
-
 const InputGroup = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -405,4 +414,20 @@ const PasswordHelpText = styled.p`
 
 const SuccessContainer = styled.div`
 	width: 100%;
+`
+
+const BackButton = styled.button`
+	background: none;
+	border: none;
+	color: rgba(255, 255, 255, 0.6);
+	font-size: 0.875rem;
+	cursor: pointer;
+	padding: 0.5rem;
+	margin-top: 0.5rem;
+	transition: color 0.2s ease;
+	font-family: inherit;
+
+	&:hover {
+		color: rgba(255, 255, 255, 0.9);
+	}
 `
