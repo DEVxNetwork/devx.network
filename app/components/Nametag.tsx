@@ -682,7 +682,7 @@ const PhotoRequiredLabel = styled.div`
 
 const FieldError = styled.p`
 	color: var(--error-color);
-	font-size: 1.1rem;
+	font-size: 0.75rem;
 	font-weight: 500;
 	margin-top: 0.5rem;
 `

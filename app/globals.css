@@ -104,3 +104,9 @@ main {
 		margin-top: 0;
 	}
 }
+
+/* Hide standard header/footer when doorbell layout is present */
+body:has(.doorbell-footer) > header,
+body:has(.doorbell-footer) > footer:last-of-type:not(.doorbell-footer) {
+	display: none !important;
+}
