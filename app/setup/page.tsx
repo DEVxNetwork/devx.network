@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { supabaseClient } from "../../lib/supabaseClient"
 import { updateProfileCache } from "../../lib/profileCache"
+import { uploadProfilePhoto, getPhotoUrl } from "../../lib/photoService"
 import { PotionBackground } from "../components/PotionBackground"
 import { Nametag } from "../components/Nametag"
 import { TextInput } from "../components/TextInput"
@@ -155,25 +156,15 @@ export default function Setup() {
 		return () => clearTimeout(timeoutId)
 	}, [handle])
 
+	const [photoHash, setPhotoHash] = useState<string | null>(null)
+
 	const handleImageUpload = async (file: File): Promise<string> => {
 		setUploading(true)
 
 		try {
-			const fileExt = file.name.split(".").pop()
-			const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`
-			const filePath = `${fileName}`
-
-			const { error: uploadError } = await supabaseClient.storage
-				.from("avatars")
-				.upload(filePath, file)
-
-			if (uploadError) throw uploadError
-
-			const {
-				data: { publicUrl }
-			} = supabaseClient.storage.from("avatars").getPublicUrl(filePath)
-
-			return publicUrl
+			const result = await uploadProfilePhoto(file)
+			setPhotoHash(result.hash)
+			return result.url
 		} catch (error: any) {
 			console.error("Error uploading image:", error)
 			throw error
@@ -221,6 +212,7 @@ export default function Setup() {
 						handle: handleValue,
 						full_name: nametagData.fullName,
 						profile_photo: nametagData.profilePhoto,
+						photo_id: photoHash || null,
 						title: nametagData.title || null,
 						affiliation: nametagData.affiliation || null
 					})
@@ -240,6 +232,7 @@ export default function Setup() {
 						handle: handleValue,
 						full_name: nametagData.fullName,
 						profile_photo: nametagData.profilePhoto,
+						photo_id: photoHash || null,
 						title: nametagData.title || null,
 						affiliation: nametagData.affiliation || null
 					})

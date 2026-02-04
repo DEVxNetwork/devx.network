@@ -3,6 +3,7 @@ import styled from "styled-components"
 import { useState } from "react"
 import { supabaseClient } from "../../lib/supabaseClient"
 import { updateProfileCache } from "../../lib/profileCache"
+import { uploadProfilePhoto } from "../../lib/photoService"
 import { PotionBackground } from "../components/PotionBackground"
 import { Nametag } from "../components/Nametag"
 import { TagCloudSection } from "../components/TagCloudSection"
@@ -15,6 +16,7 @@ type ProfileData = {
 	title: string
 	affiliation: string
 	profilePhoto: string
+	photoHash: string | null
 	interests: Tag[]
 	skills: Tag[]
 	links: Link[]
@@ -37,6 +39,7 @@ type NametagData = {
 	title: string
 	affiliation: string
 	profilePhoto: string
+	photoHash?: string | null
 }
 
 type ProfileDisplayProps = {
@@ -56,26 +59,15 @@ export function ProfileDisplay({
 }: ProfileDisplayProps) {
 	const [saving, setSaving] = useState(false)
 	const [uploading, setUploading] = useState(false)
+	const [photoHash, setPhotoHash] = useState<string | null>(null)
 
 	const handleImageUpload = async (file: File): Promise<string> => {
 		setUploading(true)
 
 		try {
-			const fileExt = file.name.split(".").pop()
-			const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`
-			const filePath = `${fileName}`
-
-			const { error: uploadError } = await supabaseClient.storage
-				.from("avatars")
-				.upload(filePath, file)
-
-			if (uploadError) throw uploadError
-
-			const {
-				data: { publicUrl }
-			} = supabaseClient.storage.from("avatars").getPublicUrl(filePath)
-
-			return publicUrl
+			const result = await uploadProfilePhoto(file)
+			setPhotoHash(result.hash)
+			return result.url
 		} catch (error: any) {
 			console.error("Error uploading image:", error)
 			throw error
@@ -155,12 +147,17 @@ export function ProfileDisplay({
 
 			if (!user) throw new Error("User not authenticated")
 
-			const profileDataToSave = {
+			const profileDataToSave: Record<string, any> = {
 				email: email,
 				full_name: data.fullName,
 				profile_photo: data.profilePhoto,
 				title: data.title,
 				affiliation: data.affiliation
+			}
+
+			// If the user uploaded a new photo this session, link the hash
+			if (photoHash) {
+				profileDataToSave.photo_id = photoHash
 			}
 
 			if (profileId) {
@@ -249,6 +246,7 @@ export function ProfileDisplay({
 						title: profileData.title || "",
 						affiliation: profileData.affiliation || "",
 						profilePhoto: profileData.profile_photo || "",
+						photoHash: profileData.photo_id || null,
 						interests,
 						skills,
 						links
@@ -359,7 +357,8 @@ export function ProfileDisplay({
 		fullName: profile.fullName,
 		title: profile.title,
 		affiliation: profile.affiliation,
-		profilePhoto: profile.profilePhoto
+		profilePhoto: profile.profilePhoto,
+		photoHash: photoHash || profile.photoHash
 	}
 
 	return (
