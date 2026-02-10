@@ -11,6 +11,7 @@ import { TextareaInput } from "../components/TextareaInput"
 import { RadioInput } from "../components/RadioInput"
 import { PageContainer } from "../components/PageContainer"
 import { SuccessMessage as SuccessMessageComponent } from "../components/SuccessMessage"
+import { TalkThumbnail } from "../components/TalkThumbnail"
 import Link from "next/link"
 
 export default function SubmitTalk() {
@@ -23,6 +24,7 @@ export default function SubmitTalk() {
 	const [userEmail, setUserEmail] = useState("")
 	const [userFullName, setUserFullName] = useState("")
 	const [userHandle, setUserHandle] = useState<string | null>(null)
+	const [profilePhotoUrl, setProfilePhotoUrl] = useState<string | null>(null)
 	const [profileId, setProfileId] = useState<number | null>(null)
 	const [profilePhoneNumber, setProfilePhoneNumber] = useState<string | null>(null)
 	const [isEditingPhone, setIsEditingPhone] = useState(false)
@@ -63,15 +65,16 @@ export default function SubmitTalk() {
 			const { handle } = getProfileFromCache(user)
 			setUserHandle(handle)
 
-			// Load profile to get full name, profile_id, and phone number
+			// Load profile to get full name, profile_id, phone number, and profile photo (for thumbnail)
 			const { data: profile } = await supabaseClient
 				.from("profiles")
-				.select("id, full_name, phone_number")
+				.select("id, full_name, phone_number, profile_photo")
 				.eq("user_id", user.id)
 				.single()
 
 			if (profile) {
 				setUserFullName(profile.full_name)
+				setProfilePhotoUrl(profile.profile_photo || null)
 				setProfileId(profile.id)
 				setProfilePhoneNumber(profile.phone_number)
 				// If profile has phone number, use it; otherwise start with empty
@@ -400,6 +403,26 @@ export default function SubmitTalk() {
 											required
 										/>
 									</Field>
+									<Field>
+										<Label>Video thumbnail preview</Label>
+										<InfoNote>
+											This is how your talk could look as a YouTube thumbnail. Update your{" "}
+											{userHandle ? (
+												<InfoLink href={`/whois?${userHandle}`}>nametag</InfoLink>
+											) : (
+												<InfoLink href="/setup">nametag</InfoLink>
+											)}{" "}
+											to change your name and photo.
+										</InfoNote>
+										<ThumbnailPreviewWrap>
+											<TalkThumbnail
+												speakerName={userFullName || "Speaker name"}
+												talkTitle={formData.talkTitle || "Your talk title"}
+												profilePhotoUrl={profilePhotoUrl || undefined}
+												width={640}
+											/>
+										</ThumbnailPreviewWrap>
+									</Field>
 								</FormSection>
 
 								<FormSection>
@@ -577,6 +600,11 @@ const InfoLink = styled(Link)`
 	&:hover {
 		color: rgba(156, 163, 255, 1);
 	}
+`
+
+const ThumbnailPreviewWrap = styled.div`
+	max-width: 100%;
+	margin-top: 0.5rem;
 `
 
 const Label = styled.label`
