@@ -31,6 +31,7 @@ export default function SubmitTalk() {
 	const [formData, setFormData] = useState({
 		phoneNumber: "",
 		talkTitle: "",
+		hook: "",
 		talkSynopsis: "",
 		slidesType: "upload" as "url" | "upload",
 		slidesUrl: "",
@@ -242,6 +243,7 @@ export default function SubmitTalk() {
 				profile_id: profileId,
 				user_id: user.id,
 				talk_title: formData.talkTitle.trim(),
+				talk_hook: formData.hook.trim() || null,
 				talk_synopsis: formData.talkSynopsis.trim(),
 				slides_type: formData.slidesType,
 				slides_url: formData.slidesType === "url" ? formData.slidesUrl.trim() : null,
@@ -258,6 +260,7 @@ export default function SubmitTalk() {
 			setFormData({
 				phoneNumber: profilePhoneNumber || "",
 				talkTitle: "",
+				hook: "",
 				talkSynopsis: "",
 				slidesType: "upload",
 				slidesUrl: "",
@@ -404,6 +407,23 @@ export default function SubmitTalk() {
 										/>
 									</Field>
 									<Field>
+										<Label htmlFor="hook">Hook</Label>
+										<HookNote>
+											Short, punchy text for the video thumbnail. Defaults to your talk title if
+											left empty.
+										</HookNote>
+										<TextInput
+											id="hook"
+											type="text"
+											variant="secondary"
+											size="default"
+											value={formData.hook}
+											onChange={(e) => setFormData({ ...formData, hook: e.target.value })}
+											placeholder={formData.talkTitle || "Enter your talk title first"}
+											maxLength={50}
+										/>
+									</Field>
+									<Field>
 										<Label>Video thumbnail preview</Label>
 										<InfoNote>
 											This is how your talk could look as a YouTube thumbnail. Update your{" "}
@@ -417,7 +437,7 @@ export default function SubmitTalk() {
 										<ThumbnailPreviewWrap>
 											<TalkThumbnail
 												speakerName={userFullName || "Speaker name"}
-												talkTitle={formData.talkTitle || "Your talk title"}
+												hook={formData.hook || formData.talkTitle || "Your Hook"}
 												profilePhotoUrl={profilePhotoUrl || undefined}
 												width={640}
 											/>
@@ -590,6 +610,13 @@ const InfoNote = styled.p`
 	color: rgba(255, 255, 255, 0.6);
 	font-size: 0.875rem;
 	line-height: 1.5;
+`
+
+const HookNote = styled.p`
+	margin: 0;
+	color: rgba(255, 255, 255, 0.5);
+	font-size: 0.8125rem;
+	line-height: 1.4;
 `
 
 const InfoLink = styled(Link)`

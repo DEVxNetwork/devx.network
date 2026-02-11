@@ -8,7 +8,7 @@ import styled from "styled-components"
 
 export type TalkThumbnailData = {
 	speakerName: string
-	talkTitle: string
+	hook: string
 	profilePhotoUrl?: string
 }
 
@@ -33,14 +33,14 @@ const LOGO_IMAGE_PATH = "/images/sd-devx-brand.png"
 
 /**
  * Renders a DEVx-style talk video thumbnail matching the DEVxYouTubeThumbnail.svg
- * template layout: talk title on the left, circular speaker photo on the right,
+ * template layout: hook text on the left, circular speaker photo on the right,
  * DEVxSD branding at bottom-left, dark silk texture background.
  *
  * 16:9 aspect ratio (YouTube standard 1280x720).
  */
 export function TalkThumbnail({
 	speakerName,
-	talkTitle,
+	hook,
 	profilePhotoUrl,
 	width = DEFAULT_WIDTH,
 	className
@@ -65,7 +65,7 @@ export function TalkThumbnail({
 	const logoX = pad
 	const logoY = height - pad - logoHeight
 
-	const titleLines = wrapText(talkTitle || "Your Talk Title", titleMaxWidth, titleFontSize)
+	const titleLines = wrapText(hook || "Your Hook", titleMaxWidth, titleFontSize)
 
 	return (
 		<Wrapper className={className} $width={width} $height={height}>
@@ -76,7 +76,7 @@ export function TalkThumbnail({
 				width="100%"
 				height="100%"
 				preserveAspectRatio="xMidYMid meet"
-				aria-label={`Talk thumbnail: ${talkTitle} by ${speakerName}`}
+				aria-label={`Talk thumbnail: ${hook} by ${speakerName}`}
 			>
 				<defs>
 					{profilePhotoUrl ? (
@@ -126,7 +126,7 @@ export function TalkThumbnail({
 					/>
 				)}
 
-				{/* Talk title — large bold white, left side */}
+				{/* Hook text — large bold white, left side */}
 				<text
 					x={titleX}
 					y={titleY}
@@ -178,7 +178,7 @@ const Wrapper = styled.div<{ $width: number; $height: number }>`
 
 /** Wrap text into lines that fit within maxWidth, max 3 lines. */
 function wrapText(text: string, maxWidth: number, fontSize: number): string[] {
-	if (!text.trim()) return ["Your Talk Title"]
+	if (!text.trim()) return ["Your Hook"]
 	const words = text.trim().split(/\s+/)
 	const approxCharWidth = fontSize * 0.52
 	const maxLines = 3

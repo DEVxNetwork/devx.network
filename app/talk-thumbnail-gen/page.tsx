@@ -20,7 +20,7 @@ const THUMBNAIL_HEIGHT = 720
 //
 
 export default function TalkThumbnailGen() {
-	const [talkTitle, setTalkTitle] = useState("")
+	const [hook, setHook] = useState("")
 	const [handle, setHandle] = useState("")
 	const [photoUrl, setPhotoUrl] = useState<string | null>(null)
 	const [photoSource, setPhotoSource] = useState<"none" | "upload" | "handle">("none")
@@ -147,7 +147,7 @@ export default function TalkThumbnailGen() {
 						const url = URL.createObjectURL(blob)
 						const a = document.createElement("a")
 						a.href = url
-						a.download = makeFilename(talkTitle, format)
+						a.download = makeFilename(hook, format)
 						a.click()
 						URL.revokeObjectURL(url)
 					},
@@ -162,7 +162,7 @@ export default function TalkThumbnailGen() {
 
 			img.src = svgBlobUrl
 		},
-		[talkTitle]
+		[hook]
 	)
 
 	return (
@@ -177,15 +177,16 @@ export default function TalkThumbnailGen() {
 
 					<FormSection>
 						<Field>
-							<Label htmlFor="talkTitle">Talk Title</Label>
+							<Label htmlFor="hook">Hook</Label>
 							<TextInput
-								id="talkTitle"
+								id="hook"
 								type="text"
 								variant="secondary"
 								size="default"
-								value={talkTitle}
-								onChange={(e) => setTalkTitle(e.target.value)}
-								placeholder="Enter your talk title"
+								value={hook}
+								onChange={(e) => setHook(e.target.value)}
+								placeholder="Enter the thumbnail hook text"
+								maxLength={50}
 							/>
 						</Field>
 
@@ -251,7 +252,7 @@ export default function TalkThumbnailGen() {
 
 					<Preview ref={svgContainerRef}>
 						<TalkThumbnail
-							talkTitle={talkTitle || "Your Talk Title"}
+							hook={hook || "Your Hook"}
 							speakerName=""
 							profilePhotoUrl={photoUrl || undefined}
 							width={THUMBNAIL_WIDTH}
@@ -461,11 +462,12 @@ const SpecNote = styled.p`
 //
 
 function makeFilename(title: string, ext: string): string {
-	const slug = (title || "talk-thumbnail")
-		.toLowerCase()
-		.replace(/[^a-z0-9]+/g, "-")
-		.replace(/^-|-$/g, "")
-		.slice(0, 50)
+	const slug =
+		(title || "")
+			.toLowerCase()
+			.replace(/[^a-z0-9]+/g, "-")
+			.replace(/^-|-$/g, "")
+			.slice(0, 50) || "talk"
 	return `${slug}-thumbnail.${ext}`
 }
 
