@@ -174,7 +174,17 @@ export default function EventDetailClient() {
 							<Header>
 								<Title>{event.name}</Title>
 								<DateTime>{formatEventDateTime(event.start_at, event.end_at)}</DateTime>
-								<Button href="#registration-form">Attend This Event</Button>
+								<Button
+									onClick={() => {
+										nameInputRef.current?.scrollIntoView({
+											behavior: "smooth",
+											block: "center"
+										})
+										setTimeout(() => nameInputRef.current?.focus(), 400)
+									}}
+								>
+									Attend This Event
+								</Button>
 							</Header>
 
 							{event.location && event.location.type === "online" && (
@@ -185,7 +195,7 @@ export default function EventDetailClient() {
 							)}
 
 							<DescriptionSection>
-								<SectionTitle>About This Event</SectionTitle>
+								<SectionTitle>About Event</SectionTitle>
 								{event.description_html ? (
 									<Description dangerouslySetInnerHTML={{ __html: event.description_html }} />
 								) : (
@@ -429,8 +439,6 @@ const CoverImage = styled.img`
 
 const Header = styled.header`
 	margin-bottom: 2rem;
-	border-bottom: 1px solid #374151;
-	padding-bottom: 1.5rem;
 `
 
 const Title = styled.h1`
@@ -451,6 +459,8 @@ const SectionTitle = styled.h2`
 	font-weight: bold;
 	color: white;
 	margin-bottom: 1rem;
+	border-bottom: 1px solid #374151;
+	padding-bottom: 0.75rem;
 `
 
 const LocationSection = styled.section`
