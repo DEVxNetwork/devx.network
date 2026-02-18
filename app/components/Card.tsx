@@ -9,7 +9,7 @@ interface CardProps {
 	image?: string
 	imageAlt?: string
 	showPlayButton?: boolean
-	imageAspectRatio?: "16/9" | "auto"
+	imageAspectRatio?: "16/9" | "1/1" | "auto"
 	children: React.ReactNode
 	className?: string
 	target?: string
@@ -140,19 +140,20 @@ const StyledDiv = styled.div`
 	}
 `
 
-const ImageContainer = styled.div<{ $aspectRatio?: "16/9" | "auto" }>`
+const ImageContainer = styled.div<{ $aspectRatio?: "16/9" | "1/1" | "auto" }>`
 	width: 100%;
 	position: relative;
 	overflow: hidden;
 	${(props) => props.$aspectRatio === "16/9" && "aspect-ratio: 16/9;"}
+	${(props) => props.$aspectRatio === "1/1" && "aspect-ratio: 1/1;"}
 	background-color: ${(props) =>
-		props.$aspectRatio === "16/9" ? "rgba(0, 0, 0, 0.8)" : "transparent"};
-	border-radius: ${(props) => (props.$aspectRatio === "16/9" ? "0.5rem" : "0")};
+		props.$aspectRatio !== "auto" ? "rgba(0, 0, 0, 0.8)" : "transparent"};
+	border-radius: ${(props) => (props.$aspectRatio !== "auto" ? "0.5rem" : "0")};
 `
 
-const CardImage = styled.img<{ $aspectRatio?: "16/9" | "auto" }>`
+const CardImage = styled.img<{ $aspectRatio?: "16/9" | "1/1" | "auto" }>`
 	width: 100%;
-	height: ${(props) => (props.$aspectRatio === "16/9" ? "100%" : "200px")};
+	height: ${(props) => (props.$aspectRatio !== "auto" ? "100%" : "200px")};
 	object-fit: cover;
 	transition: opacity 0.2s ease;
 
