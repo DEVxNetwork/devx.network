@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import styled from "styled-components"
 import type { LumaEvent } from "@/app/services/luma"
@@ -21,6 +21,7 @@ export default function EventDetailClient() {
 	const [userInfo, setUserInfo] = useState<{ name: string; email: string }>({ name: "", email: "" })
 	const [registering, setRegistering] = useState(false)
 	const [hasStoredInfo, setHasStoredInfo] = useState(false)
+	const nameInputRef = useRef<HTMLInputElement>(null)
 
 	useEffect(() => {
 		loadEvent()
@@ -220,6 +221,7 @@ export default function EventDetailClient() {
 									) : (
 										<RegistrationForm onSubmit={handleRegister}>
 											<TextInput
+												ref={nameInputRef}
 												type="text"
 												placeholder="Enter your name"
 												value={userInfo.name}
@@ -245,9 +247,25 @@ export default function EventDetailClient() {
 								<AttendeeSection>
 									<SectionTitle>Attendees</SectionTitle>
 									{event.guest_count === -1 ? (
-										<AttendeeLink href={event.url} target="_blank" rel="noopener noreferrer">
-											Click to see attendees on Luma →
-										</AttendeeLink>
+										hasStoredInfo ? (
+											<AttendeeLink href={event.url} target="_blank" rel="noopener noreferrer">
+												Click to see attendees on Luma →
+											</AttendeeLink>
+										) : (
+											<AttendeeLink
+												href="#registration-form"
+												onClick={(e) => {
+													e.preventDefault()
+													nameInputRef.current?.scrollIntoView({
+														behavior: "smooth",
+														block: "center"
+													})
+													setTimeout(() => nameInputRef.current?.focus(), 400)
+												}}
+											>
+												Register to see attendees →
+											</AttendeeLink>
+										)
 									) : (
 										<AttendeeCount>{event.guest_count} people attending</AttendeeCount>
 									)}
@@ -599,6 +617,7 @@ const RegistrationForm = styled.form`
 const OneClickRSVPContainer = styled.div`
 	display: flex;
 	flex-direction: column;
+	align-items: center;
 	gap: 1rem;
 `
 
