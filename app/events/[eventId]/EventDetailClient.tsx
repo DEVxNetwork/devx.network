@@ -365,8 +365,8 @@ const BackgroundContainer = styled.section`
 const Main = styled.main`
 	position: relative;
 	z-index: 1;
-	padding-top: 8rem;
-	padding-bottom: 4rem;
+	padding-top: 2rem;
+	padding-bottom: 2rem;
 `
 
 const Container = styled.div`
