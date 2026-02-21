@@ -115,7 +115,7 @@ export default function Doorbell() {
 				<Hero>
 					<HeadingSection>
 						<Heading>Welcome to</Heading>
-						<Logo src="/images/sd-devx-brand.png" alt="DEVxClaw" />
+						<LogoText>DEVxClaw</LogoText>
 					</HeadingSection>
 					<ParagraphSection>
 						<Paragraph>Ring the doorbell to enter the event.</Paragraph>
@@ -222,10 +222,16 @@ const Heading = styled.h1`
 	text-align: center;
 `
 
-const Logo = styled.img`
-	width: 100%;
-	max-width: 688px;
-	margin: 0 auto;
+const LogoText = styled.h2`
+	font-size: clamp(3rem, 12vw, 8rem);
+	font-weight: 900;
+	margin: 0;
+	text-align: center;
+	background: linear-gradient(135deg, #00d4ff 0%, #7b2cbf 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	letter-spacing: -0.02em;
 `
 
 const ParagraphSection = styled.section`
