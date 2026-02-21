@@ -115,7 +115,7 @@ export default function Doorbell() {
 				<Hero>
 					<HeadingSection>
 						<Heading>Welcome to</Heading>
-						<Logo src="/images/sd-devx-brand.png" alt="DEVxSD" />
+						<Logo src="/images/sd-devx-brand.png" alt="DEVxClaw" />
 					</HeadingSection>
 					<ParagraphSection>
 						<Paragraph>Ring the doorbell to enter the event.</Paragraph>

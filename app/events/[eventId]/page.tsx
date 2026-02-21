@@ -25,7 +25,7 @@ export async function generateMetadata({
 	}
 
 	const date = formatOgDate(event.start_at)
-	const title = `${event.name} — ${date} | DEVxSD`
+	const title = `${event.name} — ${date} | DEVxClaw`
 	const description = sanitizeDescription(event.description) || siteConfig.description
 
 	return {
