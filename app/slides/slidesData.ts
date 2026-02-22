@@ -77,7 +77,25 @@ export function getSlideData(slug: string): SlideData | null {
 	}
 }
 
+export function compareSlides(a: SlideData, b: SlideData): number {
+	const aTime = Date.parse(a.metadata?.timestamp)
+	const bTime = Date.parse(b.metadata?.timestamp)
+	const aValid = !isNaN(aTime)
+	const bValid = !isNaN(bTime)
+
+	if (aValid && !bValid) return -1
+	if (!aValid && bValid) return 1
+	if (!aValid && !bValid) return (b.metadata?.title ?? "").localeCompare(a.metadata?.title ?? "")
+
+	if (aTime !== bTime) return bTime - aTime
+
+	return (b.metadata?.title ?? "").localeCompare(a.metadata?.title ?? "")
+}
+
 export function getAllSlides(): SlideData[] {
 	const slugs = getAllSlideSlugs()
-	return slugs.map((slug) => getSlideData(slug)).filter((data): data is SlideData => data !== null)
+	return slugs
+		.map((slug) => getSlideData(slug))
+		.filter((data): data is SlideData => data !== null)
+		.sort(compareSlides)
 }
