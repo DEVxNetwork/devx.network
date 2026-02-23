@@ -56,8 +56,9 @@ export default function EventTerms() {
 						<Paragraph>
 							Events may be photographed and/or recorded. These materials may capture your name,
 							voice, image, or likeness. By attending, you grant permission for your image to be
-							used in photos, videos, and other media without compensation. If you prefer not to be
-							photographed, please request an opt-out indicator at check-in.
+							used in photos, videos, and other media for marketing and promotional purposes. DEVx,
+							reserves the right to distribute all content and materials captured or produced during
+							the events.
 						</Paragraph>
 					</Section>
 
