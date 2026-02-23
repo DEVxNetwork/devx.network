@@ -101,6 +101,19 @@ For OAuth providers (GitHub, Google), see the [Local OAuth Setup Guide](./docs/l
 - **Docker daemon errors (`Cannot connect to the Docker daemon`)**  
   Make sure Docker Desktop is installed and running before you call `supabase start`.
 
+## Admin Access
+
+Certain features (e.g. reviewing talk submissions) are restricted to admin users.
+Admin status is stored as `is_admin` on the `profiles` table. To grant admin access,
+set `is_admin = true` for the relevant profile row in Supabase (via Studio or SQL).
+
+Admin-only pages:
+
+- `/admin/talks` — View and manage all talk submissions (filter by status, change status)
+
+Access is enforced at both the database level (RLS policies) and the frontend (redirect on
+non-admin access).
+
 ## Contributing
 
 We welcome contributions from the community! If you have suggestions or improvements, feel free to open an issue or submit a pull request.
