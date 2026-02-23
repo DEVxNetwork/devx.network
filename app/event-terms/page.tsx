@@ -39,7 +39,7 @@ export default function EventTerms() {
 						<SectionTitle>General Acknowledgments</SectionTitle>
 						<Paragraph>By registering for this event, you acknowledge and agree that:</Paragraph>
 						<List>
-							<ListItem>You are 18+ years old or have parental/guardian consent to attend</ListItem>
+							<ListItem>You are 18+ years old or have parental/guardian in attendance</ListItem>
 							<ListItem>You voluntarily assume all risks associated with attendance</ListItem>
 							<ListItem>You have read and understood these terms</ListItem>
 							<ListItem>This is a community-organized event run by volunteers</ListItem>
