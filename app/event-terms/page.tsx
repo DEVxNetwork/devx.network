@@ -130,8 +130,7 @@ export default function EventTerms() {
 						<SectionTitle>Data Collection</SectionTitle>
 						<Paragraph>
 							By registering, you provide certain personal information for event coordination
-							purposes. You may optionally consent to receive additional communications. Your data
-							will be processed in the United States.
+							purposes. You may optionally consent to receive additional communications.
 						</Paragraph>
 					</Section>
 
