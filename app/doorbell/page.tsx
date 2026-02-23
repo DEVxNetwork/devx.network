@@ -7,7 +7,6 @@ import Link from "next/link"
 import { PotionBackground } from "../components/PotionBackground"
 import { ErrorBoundary } from "../components/ErrorBoundary"
 import { Button } from "../components/Button"
-import { Modal } from "../components/Modal"
 import { supabaseClient } from "@/lib/supabaseClient"
 import eventsData from "../data/events.json"
 import type { LumaEvent } from "../services/luma"
@@ -17,7 +16,6 @@ import type { LumaEvent } from "../services/luma"
 export default function Doorbell() {
 	const [isRinging, setIsRinging] = useState(false)
 	const [ringCount, setRingCount] = useState(0)
-	const [isModalOpen, setIsModalOpen] = useState(false)
 	const channelRef = useRef<RealtimeChannel | null>(null)
 	const lastRingIdRef = useRef<string | null>(null)
 
@@ -69,11 +67,10 @@ export default function Doorbell() {
 		setRingCount((prev) => prev + 1)
 	}
 
-	const handleAgree = () => {
+	const handleCheckin = () => {
 		if (nearestEvent?.url) {
 			window.open(nearestEvent.url, "_blank")
 		}
-		setIsModalOpen(false)
 	}
 
 	useEffect(() => {
@@ -127,14 +124,18 @@ export default function Doorbell() {
 						<Heading>Welcome to</Heading>
 						<Logo src="/images/sd-devx-brand.png" alt="DEVxSD" />
 					</HeadingSection>
-					<ParagraphSection>
-						<Paragraph>Ring the doorbell to enter the event.</Paragraph>
-					</ParagraphSection>
 					{nearestEvent && (
 						<ButtonSection>
-							<Button variant="primary" size="default" onClick={() => setIsModalOpen(true)}>
+							<Button variant="primary" size="default" onClick={handleCheckin}>
 								Check In
 							</Button>
+							<TermsMessage>
+								By checking in I agree to the{" "}
+								<TermsLink href="/event-terms" target="_blank" rel="noopener noreferrer">
+									event terms and conditions
+								</TermsLink>
+								.
+							</TermsMessage>
 						</ButtonSection>
 					)}
 					<DoorbellSection>
@@ -172,24 +173,6 @@ export default function Doorbell() {
 					)}
 				</Hero>
 			</Main>
-			<Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-				<ModalTitle>Event Terms</ModalTitle>
-				<ModalText>
-					By checking in I agree to the{" "}
-					<TermsLink href="/event-terms" target="_blank" rel="noopener noreferrer">
-						Event Terms
-					</TermsLink>
-					.
-				</ModalText>
-				<ModalButtons>
-					<Button variant="secondary" size="default" onClick={() => setIsModalOpen(false)}>
-						Decline
-					</Button>
-					<Button variant="primary" size="default" onClick={handleAgree}>
-						I Agree
-					</Button>
-				</ModalButtons>
-			</Modal>
 		</>
 	)
 }
@@ -250,15 +233,12 @@ const Logo = styled.img`
 	margin: 0 auto;
 `
 
-const ParagraphSection = styled.section`
-	padding: 0 3rem;
-`
-
-const Paragraph = styled.p`
-	font-size: 1.25rem;
+const TermsMessage = styled.p`
+	font-size: 1rem;
 	text-align: center;
-	max-width: 1024px;
+	max-width: 420px;
 	margin: 0;
+	color: rgba(255, 255, 255, 0.7);
 `
 
 const ButtonSection = styled.section`
@@ -310,23 +290,6 @@ const CallMessage = styled.p`
 	color: white;
 `
 
-const ModalTitle = styled.h2`
-	font-size: 1.75rem;
-	font-weight: 700;
-	margin: 0 0 1.5rem 0;
-	color: white;
-	text-align: center;
-`
-
-const ModalText = styled.p`
-	font-size: 1rem;
-	line-height: 1.6;
-	margin: 0 0 2rem 0;
-	color: rgba(255, 255, 255, 0.9);
-	text-align: center;
-	font-style: italic;
-`
-
 const TermsLink = styled(Link)`
 	color: white;
 	text-decoration: underline;
@@ -335,13 +298,6 @@ const TermsLink = styled(Link)`
 	&:hover {
 		opacity: 0.7;
 	}
-`
-
-const ModalButtons = styled.div`
-	display: flex;
-	gap: 1rem;
-	justify-content: center;
-	flex-wrap: wrap;
 `
 
 // Constants //
