@@ -7,6 +7,7 @@ import { GiveATalkCTA } from "./GiveATalkCTA"
 import { Button } from "./Button"
 import { supabaseClient } from "../../lib/supabaseClient"
 import { getProfileFromCache } from "../../lib/profileCache"
+import { checkIsAdmin } from "../../lib/adminCheck"
 
 // Components //
 
@@ -18,6 +19,7 @@ export const Header = () => {
 	const [userHandle, setUserHandle] = useState<string | null>(null)
 	const [profilePhoto, setProfilePhoto] = useState<string | null>(null)
 	const [userLoading, setUserLoading] = useState(true)
+	const [isAdmin, setIsAdmin] = useState(false)
 
 	useEffect(() => {
 		// Check initial session and load handle and photo from cache
@@ -31,6 +33,7 @@ export const Header = () => {
 				const { handle, profilePhoto } = getProfileFromCache(user)
 				setUserHandle(handle)
 				setProfilePhoto(profilePhoto)
+				checkIsAdmin().then(setIsAdmin)
 			}
 
 			setUserLoading(false)
@@ -51,6 +54,7 @@ export const Header = () => {
 			} else {
 				setUserHandle(null)
 				setProfilePhoto(null)
+				setIsAdmin(false)
 			}
 
 			setUserLoading(false)
@@ -252,6 +256,16 @@ export const Header = () => {
 								Get Nametag
 							</AccountMenuLink>
 						</AccountMenuItem>
+					)}
+					{isAdmin && (
+						<>
+							<AccountMenuDivider />
+							<AccountMenuItem>
+								<AccountMenuLink href="/admin/talks" onClick={closeAccountMenu}>
+									Admin: Talks
+								</AccountMenuLink>
+							</AccountMenuItem>
+						</>
 					)}
 					<AccountMenuDivider />
 					{user && (
