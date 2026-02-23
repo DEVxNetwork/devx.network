@@ -492,10 +492,11 @@ export default function SubmitTalk() {
 										required
 									/>
 									<CheckboxLabel htmlFor="agreedToTerms">
-										By submitting, I agree to these{" "}
+										By submitting, I agree to the{" "}
 										<TermsLink href="/event-terms" target="_blank" rel="noopener noreferrer">
-											terms
+											event terms and conditions
 										</TermsLink>
+										.
 									</CheckboxLabel>
 								</CheckboxField>
 
