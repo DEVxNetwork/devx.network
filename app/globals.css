@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 :root {
+	--error-color: #f87171;
 	--b1: #000000;
 	--n: 21% 0.003 296.813;
 }

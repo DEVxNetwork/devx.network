@@ -17,6 +17,15 @@ type NametagData = {
 	profilePhoto: string
 }
 
+/** Same rules as the availability effect: empty, format, or not explicitly available. */
+function getHandleHasError(handle: string, handleAvailable: boolean | null): boolean {
+	const trimmed = handle.trim()
+	const handleRegex = /^(?:[a-z0-9_]|-)+$/
+	const formatInvalid =
+		!trimmed || !handleRegex.test(handle) || handle.length < 3 || handle.length > 30
+	return formatInvalid || handleAvailable !== true
+}
+
 export default function Setup() {
 	const [loading, setLoading] = useState(true)
 	const [saving, setSaving] = useState(false)
@@ -30,6 +39,12 @@ export default function Setup() {
 		affiliation: "",
 		profilePhoto: ""
 	})
+	const [validationErrors, setValidationErrors] = useState({
+		handle: false,
+		profilePhoto: false,
+		fullName: false
+	})
+	const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false)
 	const router = useRouter()
 
 	useEffect(() => {
@@ -173,6 +188,11 @@ export default function Setup() {
 				data: { publicUrl }
 			} = supabaseClient.storage.from("avatars").getPublicUrl(filePath)
 
+			// Clear photo error immediately when photo is uploaded
+			if (hasAttemptedSubmit && validationErrors.profilePhoto) {
+				setValidationErrors((prev) => ({ ...prev, profilePhoto: false }))
+			}
+
 			return publicUrl
 		} catch (error: any) {
 			console.error("Error uploading image:", error)
@@ -182,15 +202,49 @@ export default function Setup() {
 		}
 	}
 
+	const handleDataChange = (data: NametagData) => {
+		setNametagData(data)
+		// Clear errors when user provides valid data
+		if (hasAttemptedSubmit) {
+			setValidationErrors((prev) => ({
+				...prev,
+				profilePhoto: !data.profilePhoto,
+				fullName: !data.fullName.trim()
+			}))
+		}
+	}
+
+	const handleHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setHandle(e.target.value.toLowerCase())
+	}
+
+	// After first submit, recompute handle error from current value + availability (not unconditional clear on keystroke)
+	useEffect(() => {
+		if (!hasAttemptedSubmit) return
+
+		const handleError = getHandleHasError(handle, handleAvailable)
+
+		setValidationErrors((prev) => {
+			if (prev.handle === handleError) return prev
+			return { ...prev, handle: handleError }
+		})
+	}, [handle, handleAvailable, hasAttemptedSubmit])
+
 	const handleFinishSetup = async (e: React.FormEvent) => {
 		e.preventDefault()
+		setHasAttemptedSubmit(true)
 
-		// Validate form
-		if (!handle.trim() || !handleAvailable) {
-			return
+		// Validate form and set error states
+		const errors = {
+			handle: getHandleHasError(handle, handleAvailable),
+			profilePhoto: !nametagData.profilePhoto,
+			fullName: !nametagData.fullName.trim()
 		}
 
-		if (!nametagData.profilePhoto || !nametagData.fullName.trim()) {
+		setValidationErrors(errors)
+
+		// If there are any errors, don't proceed
+		if (errors.handle || errors.profilePhoto || errors.fullName) {
 			return
 		}
 
@@ -271,6 +325,8 @@ export default function Setup() {
 		}
 	}
 
+	const isHandleUnavailable = handleAvailable === false && !!handle.trim()
+
 	if (loading) {
 		return (
 			<>
@@ -295,21 +351,23 @@ export default function Setup() {
 						<Title>Welcome to DEVx</Title>
 					</HeaderRow>
 
-					<Form onSubmit={handleFinishSetup}>
+					<Form onSubmit={handleFinishSetup} noValidate>
 						<Section>
-							<SectionTitle>Choose a handle</SectionTitle>
+							<SectionTitle>
+								Choose a handle <RequiredAsterisk>*</RequiredAsterisk>
+							</SectionTitle>
 							<HandleInputWrapper>
 								<HandleInputRow>
 									<TextInput
 										variant="secondary"
 										size="default"
 										value={handle}
-										onChange={(e) => setHandle(e.target.value.toLowerCase())}
+										onChange={handleHandleChange}
 										placeholder="your-handle"
-										required
 										pattern="(?:[a-z0-9_]|-){3,30}"
 										minLength={3}
 										maxLength={30}
+										error={hasAttemptedSubmit && validationErrors.handle}
 									/>
 									<HelpInfoButton minWidth="220px" maxWidth="260px">
 										Your unique DEVx username, used for your nametag or public profile.
@@ -322,11 +380,14 @@ export default function Setup() {
 										) : handleAvailable === true ? (
 											<StatusText $color="#4ade80">✓ Available</StatusText>
 										) : handleAvailable === false ? (
-											<StatusText $color="#f87171">✗ Unavailable</StatusText>
+											<StatusText $color="var(--error-color)">✗ Unavailable</StatusText>
 										) : null}
 									</HandleStatus>
 								)}
 							</HandleInputWrapper>
+							{hasAttemptedSubmit && validationErrors.handle && !isHandleUnavailable && (
+								<FieldError>Please choose a valid handle</FieldError>
+							)}
 							<HelpText>
 								3-30 characters, lowercase letters, numbers, underscores, and hyphens only
 							</HelpText>
@@ -340,24 +401,17 @@ export default function Setup() {
 								onImageUpload={handleImageUpload}
 								uploading={uploading}
 								forcedEditMode={true}
-								onDataChange={setNametagData}
+								onDataChange={handleDataChange}
+								validationErrors={{
+									profilePhoto: hasAttemptedSubmit && validationErrors.profilePhoto,
+									fullName: hasAttemptedSubmit && validationErrors.fullName
+								}}
+								showRequiredAsterisks={true}
 							/>
 						</Section>
 
 						<ButtonWrapper>
-							<Button
-								type="submit"
-								variant="primary"
-								size="default"
-								disabled={
-									saving ||
-									uploading ||
-									!handle.trim() ||
-									!handleAvailable ||
-									!nametagData.profilePhoto ||
-									!nametagData.fullName.trim()
-								}
-							>
+							<Button type="submit" variant="primary" size="default" disabled={saving || uploading}>
 								{saving ? "Creating Profile..." : "Finish Setup"}
 							</Button>
 						</ButtonWrapper>
@@ -468,6 +522,19 @@ const HelpText = styled.p`
 	color: rgba(255, 255, 255, 0.6);
 	font-size: 0.875rem;
 	margin: 0;
+`
+
+const RequiredAsterisk = styled.span`
+	color: var(--error-color);
+	font-weight: 700;
+	margin-left: 0.25rem;
+`
+
+const FieldError = styled.p`
+	color: var(--error-color);
+	font-size: 1.1rem;
+	font-weight: 500;
+	margin: 0.5rem 0 0 0;
 `
 
 const ButtonWrapper = styled.div`
