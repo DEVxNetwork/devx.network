@@ -23,7 +23,7 @@ export const organizers = [
 	},
 	{
 		name: "Sam Holmes",
-		imageSrc: "/images/profile-photos/sam-2026.png",
+		imageSrc: "/images/profile-photos/sam-2026.jpg",
 		linkedIn: "https://www.linkedin.com/in/sammyholmes/"
 	}
 ]

@@ -91,6 +91,7 @@ export default function Events() {
 									href={`/events/${event.api_id}`}
 									image={event.cover_url}
 									imageAlt={event.name}
+									imageAspectRatio="1/1"
 								>
 									<CardContent>
 										<CardTitle>{event.name}</CardTitle>
