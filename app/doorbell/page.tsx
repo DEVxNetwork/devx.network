@@ -126,7 +126,7 @@ export default function Doorbell() {
 					</HeadingSection>
 					<TermsSection>
 						<TermsMessage>
-							By tapping “Check in,” you agree to the event’s
+							By attending the event, you agree to the event’s{" "}
 							<TermsLink href="/event-terms" target="_blank" rel="noopener noreferrer">
 								Terms of Service
 							</TermsLink>
