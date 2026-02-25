@@ -124,18 +124,20 @@ export default function Doorbell() {
 						<Heading>Welcome to</Heading>
 						<Logo src="/images/sd-devx-brand.png" alt="DEVxSD" />
 					</HeadingSection>
+					<TermsSection>
+						<TermsMessage>
+							By tapping “Check in,” you agree to the event’s
+							<TermsLink href="/event-terms" target="_blank" rel="noopener noreferrer">
+								Terms of Service
+							</TermsLink>
+							.
+						</TermsMessage>
+					</TermsSection>
 					{nearestEvent && (
 						<ButtonSection>
 							<Button variant="primary" size="default" onClick={handleCheckin}>
 								Check In
 							</Button>
-							<TermsMessage>
-								By checking in I agree to the{" "}
-								<TermsLink href="/event-terms" target="_blank" rel="noopener noreferrer">
-									event terms and conditions
-								</TermsLink>
-								.
-							</TermsMessage>
 						</ButtonSection>
 					)}
 					<DoorbellSection>
@@ -208,7 +210,7 @@ const Hero = styled.section`
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	gap: 3rem;
+	gap: 2rem;
 `
 
 const HeadingSection = styled.section`
@@ -231,6 +233,15 @@ const Logo = styled.img`
 	width: 100%;
 	max-width: 688px;
 	margin: 0 auto;
+`
+
+const TermsSection = styled.section`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	padding: 0 3rem;
 `
 
 const TermsMessage = styled.p`
@@ -280,7 +291,6 @@ const CallSection = styled.section`
 	justify-content: center;
 	gap: 1rem;
 	padding: 0 3rem;
-	margin-top: 2rem;
 `
 
 const CallMessage = styled.p`
