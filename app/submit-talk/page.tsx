@@ -491,7 +491,7 @@ export default function SubmitTalk() {
 										onChange={(e) => setAgreedToTerms(e.target.checked)}
 									/>
 									<CheckboxLabel htmlFor="agreedToTerms">
-										By submitting, I agree to the{" "}
+										By submitting your talk, you agree to the{" "}
 										<TermsLink href="/event-terms" target="_blank" rel="noopener noreferrer">
 											event terms and conditions
 										</TermsLink>
