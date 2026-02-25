@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import type { RealtimeChannel } from "@supabase/supabase-js"
 import styled from "styled-components"
 import { motion } from "framer-motion"
+import Link from "next/link"
 import { PotionBackground } from "../components/PotionBackground"
 import { ErrorBoundary } from "../components/ErrorBoundary"
 import { Button } from "../components/Button"
@@ -66,6 +67,12 @@ export default function Doorbell() {
 		setRingCount((prev) => prev + 1)
 	}
 
+	const handleCheckin = () => {
+		if (nearestEvent?.url) {
+			window.open(nearestEvent.url, "_blank")
+		}
+	}
+
 	useEffect(() => {
 		const client = supabaseClient
 		if (!client) {
@@ -117,19 +124,19 @@ export default function Doorbell() {
 						<Heading>Welcome to</Heading>
 						<Logo src="/images/sd-devx-brand.png" alt="DEVxSD" />
 					</HeadingSection>
-					<ParagraphSection>
-						<Paragraph>Ring the doorbell to enter the event.</Paragraph>
-					</ParagraphSection>
+					<TermsSection>
+						<TermsMessage>
+							By attending the event, you agree to the event’s{" "}
+							<TermsLink href="/event-terms" target="_blank" rel="noopener noreferrer">
+								Terms of Service
+							</TermsLink>
+							.
+						</TermsMessage>
+					</TermsSection>
 					{nearestEvent && (
 						<ButtonSection>
-							<Button
-								href={nearestEvent.url}
-								variant="primary"
-								size="default"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								Get Your Ticket
+							<Button variant="primary" size="default" onClick={handleCheckin}>
+								Check In
 							</Button>
 						</ButtonSection>
 					)}
@@ -203,7 +210,7 @@ const Hero = styled.section`
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	gap: 3rem;
+	gap: 2rem;
 `
 
 const HeadingSection = styled.section`
@@ -228,15 +235,21 @@ const Logo = styled.img`
 	margin: 0 auto;
 `
 
-const ParagraphSection = styled.section`
+const TermsSection = styled.section`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
 	padding: 0 3rem;
 `
 
-const Paragraph = styled.p`
-	font-size: 1.25rem;
+const TermsMessage = styled.p`
+	font-size: 1rem;
 	text-align: center;
-	max-width: 1024px;
+	max-width: 420px;
 	margin: 0;
+	color: rgba(255, 255, 255, 0.7);
 `
 
 const ButtonSection = styled.section`
@@ -278,7 +291,6 @@ const CallSection = styled.section`
 	justify-content: center;
 	gap: 1rem;
 	padding: 0 3rem;
-	margin-top: 2rem;
 `
 
 const CallMessage = styled.p`
@@ -286,6 +298,16 @@ const CallMessage = styled.p`
 	text-align: center;
 	margin: 0;
 	color: white;
+`
+
+const TermsLink = styled(Link)`
+	color: white;
+	text-decoration: underline;
+	transition: opacity 0.2s ease;
+
+	&:hover {
+		opacity: 0.7;
+	}
 `
 
 // Constants //
