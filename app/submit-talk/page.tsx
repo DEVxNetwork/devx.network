@@ -489,7 +489,6 @@ export default function SubmitTalk() {
 										size="default"
 										checked={agreedToTerms}
 										onChange={(e) => setAgreedToTerms(e.target.checked)}
-										required
 									/>
 									<CheckboxLabel htmlFor="agreedToTerms">
 										By submitting, I agree to the{" "}
