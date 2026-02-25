@@ -15,5 +15,6 @@ export const links = {
 	github: "https://github.com/DEVxNetwork",
 	youtube: "https://www.youtube.com/@DEVxNetwork",
 	x: "https://x.com/DEVxNetworking",
-	tiktok: "https://www.tiktok.com/@devx.network"
+	tiktok: "https://www.tiktok.com/@devx.network",
+	eventship: "https://eventship.com/host/devx"
 }
