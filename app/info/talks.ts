@@ -5,6 +5,25 @@ TODO: Fill in missing startTime/endTime values by watching videos
 */
 
 export const talks = [
+	// February 2026
+	{
+		videoId: "J0vc9F2_JYs",
+		speaker: "Keith Groves",
+		title: "Enact: The Skills Layer for AI Agents",
+		date: "2026-02-21",
+		year: 2026,
+		startTime: "7m0s",
+		endTime: "20m50s"
+	},
+	{
+		videoId: "J0vc9F2_JYs",
+		speaker: "Sam Holmes",
+		title: "Setting Up OpenClaw",
+		date: "2026-02-21",
+		year: 2026,
+		startTime: "31m22s",
+		endTime: "96m23s"
+	},
 	// January 2026,
 	{
 		videoId: "pNVnC2OiNDo",
