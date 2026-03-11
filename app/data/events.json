@@ -624,11 +624,35 @@
 		"timezone": "America/Los_Angeles"
 	},
 	{
-		"api_id": "evt-81hPDmSChL1Tp6v",
-		"name": "co routine(\"Moniker\")",
+		"api_id": "evt-7GoJ24lkoDkH1SY",
+		"name": "co routine(\"Ansir\")",
 		"description": "Join other developers for casual co-working. Bring your 💻 laptop, a project, idea, or questions about software, and a thirst for ☕ coffee!\nPlugs might be hard to come by, so make sure you charge your laptop before you come!\nWe host many types of meetups. This one in particular, is great for meeting new faces and picking each others brains for ideas / help on a problem.\nWe welcome people of all ages, backgrounds and skill levels! We just ask you remain respectful and considerate of peoples time.\nYou can find more information about our community at devx.network.",
 		"description_md": "Join other developers for casual co-working. Bring your 💻 laptop, a project, idea, or questions about software, and a thirst for ☕ coffee!\n\nPlugs might be hard to come by, so make sure you charge your laptop before you come!\n\nWe host many types of meetups. This one in particular, is great for meeting new faces and picking each others brains for ideas / help on a problem.\n\nWe welcome people of all ages, backgrounds and skill levels! We just ask you remain respectful and considerate of peoples time.\n\nYou can find more information about our community at [devx.network](https://devx.network).",
 		"description_html": "<p>Join other developers for casual co-working. Bring your 💻 laptop, a project, idea, or questions about software, and a thirst for ☕ coffee!</p>\n<p>Plugs might be hard to come by, so make sure you charge your laptop before you come!</p>\n<p>We host many types of meetups. This one in particular, is great for meeting new faces and picking each others brains for ideas / help on a problem.</p>\n<p>We welcome people of all ages, backgrounds and skill levels! We just ask you remain respectful and considerate of peoples time.</p>\n<p>You can find more information about our community at <a href=\"https://devx.network\">devx.network</a>.</p>\n",
+		"start_at": "2026-03-20T16:00:00.000Z",
+		"end_at": "2026-03-20T23:00:00.000Z",
+		"location": {
+			"type": "physical",
+			"address": "Ansir Innovation Center, 7670 Opportunity Rd #255, San Diego, CA 92111, USA",
+			"city": "San Diego",
+			"state": "California",
+			"coordinates": {
+				"lat": "32.8257641",
+				"lng": "-117.1569484"
+			}
+		},
+		"cover_url": "https://images.lumacdn.com/event-covers/0u/6adc3b39-3783-49d3-bbec-0034a7fdcc46.jpg",
+		"url": "https://luma.com/devx-co-routine-mar-20-2026",
+		"guest_count": -1,
+		"visibility": "public",
+		"timezone": "America/Los_Angeles"
+	},
+	{
+		"api_id": "evt-81hPDmSChL1Tp6v",
+		"name": "co routine(\"Moniker\")",
+		"description": "Join other developers for casual co-working. Bring your 💻 laptop, a project, idea, or questions about software, and a thirst for ☕ coffee!\nTips\nPlugs might be hard to come by, so make sure you charge your laptop before you come!\nPurpose\nWe host many types of meetups. This one in particular, is great for meeting new faces and picking each others brains for ideas / help on a problem.\nWho\nWe welcome people of all ages, backgrounds and skill levels! We just ask you remain respectful and considerate of peoples time.\nHeadphone Rule 🎧\nThere’s one rule or etiquette: if someone is wearing headphones or AirPods/in-ear headphones, then this is a signal to other that they are heads down in work and in Do Not Disturb mode. This is a polite way to keep the event a social but also productive co-working space.\nMore\nYou can find more information about our community at devx.network.",
+		"description_md": "Join other developers for casual co-working. Bring your 💻 laptop, a project, idea, or questions about software, and a thirst for ☕ coffee!\n\n## Tips\n\nPlugs might be hard to come by, so make sure you charge your laptop before you come!\n\n## Purpose\n\nWe host many types of meetups. This one in particular, is great for meeting new faces and picking each others brains for ideas / help on a problem.\n\n## Who\n\nWe welcome people of all ages, backgrounds and skill levels! We just ask you remain respectful and considerate of peoples time.\n\n## **Headphone Rule 🎧**\n\nThere’s one rule or etiquette: if someone is wearing headphones or AirPods/in-ear headphones, then this is a signal to other that they are heads down in work and in Do Not Disturb mode. This is a polite way to keep the event a social but also productive co-working space.\n\n## More\n\nYou can find more information about our community at [devx.network](https://devx.network).",
+		"description_html": "<p>Join other developers for casual co-working. Bring your 💻 laptop, a project, idea, or questions about software, and a thirst for ☕ coffee!</p>\n<h2>Tips</h2>\n<p>Plugs might be hard to come by, so make sure you charge your laptop before you come!</p>\n<h2>Purpose</h2>\n<p>We host many types of meetups. This one in particular, is great for meeting new faces and picking each others brains for ideas / help on a problem.</p>\n<h2>Who</h2>\n<p>We welcome people of all ages, backgrounds and skill levels! We just ask you remain respectful and considerate of peoples time.</p>\n<h2><strong>Headphone Rule 🎧</strong></h2>\n<p>There’s one rule or etiquette: if someone is wearing headphones or AirPods/in-ear headphones, then this is a signal to other that they are heads down in work and in Do Not Disturb mode. This is a polite way to keep the event a social but also productive co-working space.</p>\n<h2>More</h2>\n<p>You can find more information about our community at <a href=\"https://devx.network\">devx.network</a>.</p>\n",
 		"start_at": "2026-03-13T16:00:00.000Z",
 		"end_at": "2026-03-13T23:00:00.000Z",
 		"location": {
