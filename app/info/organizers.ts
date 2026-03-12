@@ -25,6 +25,11 @@ export const organizers = [
 		name: "Sam Holmes",
 		imageSrc: "/images/profile-photos/sam-2026.jpg",
 		linkedIn: "https://www.linkedin.com/in/sammyholmes/"
+	},
+	{
+		name: "Tryston Perry",
+		imageSrc: "/images/profile-photos/tryston-2026.png",
+		linkedIn: "https://www.linkedin.com/in/trystonperry/"
 	}
 ]
 
@@ -33,10 +38,5 @@ export const organizerEmeritus = [
 		name: "Zane Prunella",
 		imageSrc: "/images/profile-photos/zane-2026.png",
 		linkedIn: "https://www.linkedin.com/in/zprunella/"
-	},
-	{
-		name: "Tryston Perry",
-		imageSrc: "/images/profile-photos/tryston-2026.png",
-		linkedIn: "https://www.linkedin.com/in/trystonperry/"
 	}
 ]
