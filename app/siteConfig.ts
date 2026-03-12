@@ -9,7 +9,7 @@ export const siteConfig = {
 
 export const links = {
 	talkSubmissionUrl: "https://forms.gle/6gtGEuL7XExHvc6c9",
-	linkedInUrl: "https://www.linkedin.com/company/devxsd/",
+	linkedInUrl: "https://www.linkedin.com/company/devxnetworking",
 	lumaUrl: "https://lu.ma/DEVxNetwork",
 	discord: "https://discord.gg/J3YrrErwjc",
 	github: "https://github.com/DEVxNetwork",
