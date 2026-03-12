@@ -164,5 +164,4 @@ const SocialLink = styled.a`
 
 const SocialLinkLabel = styled.span`
 	font-size: 0.75rem;
-	white-space: nowrap;
 `

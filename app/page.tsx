@@ -416,7 +416,7 @@ const BackgroundContainer = styled.section`
 	background-color: #0a0a0a;
 	position: fixed;
 	height: 100vh;
-	width: 100vw;
+	width: 100%;
 	top: 0;
 	left: 0;
 	display: flex;
@@ -428,7 +428,7 @@ const BackgroundContainer = styled.section`
 const Hero = styled.section`
 	position: relative;
 	height: 100vh;
-	width: 100vw;
+	width: 100%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -444,6 +444,7 @@ const HeroSocialLinks = styled.div`
 	justify-content: center;
 	flex-wrap: wrap;
 	padding: 0 1rem;
+	max-width: 100%;
 
 	@media (max-width: 768px) {
 		bottom: 3rem;
@@ -473,7 +474,6 @@ const HeroSocialIcon = styled.a`
 
 const HeroSocialLabel = styled.span`
 	font-size: 0.75rem;
-	white-space: nowrap;
 `
 
 const HeroSection = styled.section`
@@ -549,7 +549,7 @@ const ScrollFeatureTagline = styled(motion.p)`
 
 const ContentSection = styled.section`
 	position: relative;
-	width: 100vw;
+	width: 100%;
 	height: auto;
 	min-height: 100vh;
 	display: flex;
@@ -580,7 +580,7 @@ const ContentSection = styled.section`
 
 const AboutSectionWithSlider = styled.section`
 	position: relative;
-	width: 100vw;
+	width: 100%;
 	min-height: 100vh;
 	display: flex;
 	align-items: center;
