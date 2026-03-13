@@ -7,8 +7,6 @@ import { links } from "./siteConfig"
 import { PotionBackground } from "./components/PotionBackground"
 import { ErrorBoundary } from "./components/ErrorBoundary"
 import { Button } from "./components/Button"
-import { lumaService } from "./services/luma"
-import type { LumaEvent } from "./services/luma"
 
 // Constants //
 
@@ -44,9 +42,6 @@ export default function Home() {
 	// Image slider state
 	const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
-	// Next event state
-	const [nextEvent, setNextEvent] = useState<LumaEvent | null>(null)
-
 	// Auto-advance slider
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -56,31 +51,10 @@ export default function Home() {
 		return () => clearInterval(interval)
 	}, [])
 
-	// Fetch next upcoming event
-	useEffect(() => {
-		const loadNextEvent = async () => {
-			try {
-				const allEvents = await lumaService.listEvents()
-				const now = new Date()
-				const upcomingEvents = allEvents
-					.filter((event) => new Date(event.start_at) >= now)
-					.sort((a, b) => new Date(a.start_at).getTime() - new Date(b.start_at).getTime())
-
-				if (upcomingEvents.length > 0) {
-					setNextEvent(upcomingEvents[0])
-				}
-			} catch (error) {
-				console.error("Failed to load next event:", error)
-			}
-		}
-
-		loadNextEvent()
-	}, [])
-
 	const joinInView = useInView(joinRef, { amount: 0.3 })
 
-	// Determine the link for the next event button
-	const nextEventLink = nextEvent ? `/events/${nextEvent.api_id}` : "/events"
+	// Link to the events page
+	const eventsLink = "/events"
 
 	return (
 		<>
@@ -124,8 +98,8 @@ export default function Home() {
 						transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 }}
 						as={motion.div}
 					>
-						<Button href={nextEventLink} size="default">
-							Join the Next Event
+						<Button href={eventsLink} size="default">
+							See Our Event Lineup
 						</Button>
 					</HeroButtonContainer>
 					<HeroSocialLinks
@@ -393,8 +367,8 @@ export default function Home() {
 							animate={{ opacity: joinInView ? 1 : 0, scale: joinInView ? 1 : 0.9 }}
 							transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
 						>
-							<Button href={nextEventLink} size="default">
-								Join the Next Event
+							<Button href={eventsLink} size="default">
+								See Our Event Lineup
 							</Button>
 						</ContentText>
 					</ContentWrapper>
