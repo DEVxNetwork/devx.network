@@ -175,6 +175,11 @@ export default function AdminTalks() {
 		return pathSegments[pathSegments.length - 1] || filePath
 	}
 
+	const getStatusLabel = (status: TalkStatus) => status.replace("_", " ")
+
+	const getStatusWidthCh = (status: TalkStatus) =>
+		Math.max(Math.ceil(getStatusLabel(status).length * 1.05) + 3, 10)
+
 	const handleSlidesDownload = async (talkId: number, filePath: string) => {
 		setDownloadingId(talkId)
 		setError(null)
@@ -270,9 +275,23 @@ export default function AdminTalks() {
 								<TalkCard key={talk.id}>
 									<CardHeader>
 										<TalkTitle>{talk.talk_title}</TalkTitle>
-										<StatusBadge $color={STATUS_COLORS[talk.status]}>
-											{talk.status.replace("_", " ")}
-										</StatusBadge>
+										<StatusPillWrap>
+											<StatusPillSelect
+												$color={STATUS_COLORS[talk.status]}
+												$widthCh={getStatusWidthCh(talk.status)}
+												value={talk.status}
+												onChange={(e) => handleStatusChange(talk.id, e.target.value as TalkStatus)}
+												disabled={updatingId === talk.id}
+												aria-label={`Change status for ${talk.talk_title}`}
+											>
+												{TALK_STATUSES.map((status) => (
+													<option key={status} value={status}>
+														{getStatusLabel(status)}
+													</option>
+												))}
+											</StatusPillSelect>
+											<StatusChevron $color={STATUS_COLORS[talk.status]} aria-hidden="true" />
+										</StatusPillWrap>
 									</CardHeader>
 
 									<MetaRow>
@@ -347,22 +366,6 @@ export default function AdminTalks() {
 											)}
 										</DetailsColumn>
 									</DetailsGrid>
-
-									<CardActions>
-										<ActionLabel>Change status:</ActionLabel>
-										<StatusSelect
-											value={talk.status}
-											onChange={(e) => handleStatusChange(talk.id, e.target.value as TalkStatus)}
-											disabled={updatingId === talk.id}
-										>
-											{TALK_STATUSES.map((s) => (
-												<option key={s} value={s}>
-													{s.replace("_", " ")}
-												</option>
-											))}
-										</StatusSelect>
-										{updatingId === talk.id && <UpdatingText>Saving...</UpdatingText>}
-									</CardActions>
 								</TalkCard>
 							))}
 						</TalkList>
@@ -512,16 +515,72 @@ const DetailsColumn = styled.div`
 	padding: 0.875rem;
 `
 
-const StatusBadge = styled.span<{ $color: string }>`
-	padding: 0.25rem 0.625rem;
-	border-radius: 1rem;
+const StatusPillWrap = styled.div`
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+`
+
+const StatusPillSelect = styled.select<{ $color: string; $widthCh: number }>`
+	width: ${(props) => `${props.$widthCh}ch`};
+	padding: 0.28rem 1.65rem 0.28rem 0.72rem;
+	border-radius: 999px;
 	font-size: 0.75rem;
 	font-weight: 600;
 	text-transform: capitalize;
 	white-space: nowrap;
+	text-align: center;
+	text-align-last: center;
+	font-family: inherit;
 	color: ${(props) => props.$color};
 	background-color: ${(props) => props.$color}22;
 	border: 1px solid ${(props) => props.$color}44;
+	cursor: pointer;
+	appearance: none !important;
+	-webkit-appearance: none !important;
+	-moz-appearance: none !important;
+	background-image: none;
+	line-height: 1.15;
+	transition:
+		background-color 0.2s ease,
+		border-color 0.2s ease,
+		box-shadow 0.2s ease;
+
+	&:hover:not(:disabled) {
+		background-color: ${(props) => props.$color}2c;
+		border-color: ${(props) => props.$color}66;
+	}
+
+	&:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 2px ${(props) => props.$color}55;
+	}
+
+	&:disabled {
+		opacity: 0.7;
+		cursor: not-allowed;
+	}
+
+	&::-ms-expand {
+		display: none;
+	}
+
+	option {
+		background-color: #1a1a2e;
+		color: white;
+	}
+`
+
+const StatusChevron = styled.span<{ $color: string }>`
+	position: absolute;
+	right: 0.62rem;
+	top: 50%;
+	transform: translateY(-58%) rotate(45deg);
+	width: 0.5rem;
+	height: 0.5rem;
+	border-right: 2px solid ${(props) => props.$color};
+	border-bottom: 2px solid ${(props) => props.$color};
+	pointer-events: none;
 `
 
 const MetaRow = styled.div`
@@ -607,48 +666,6 @@ const SlidesDownloadButton = styled.button`
 	&:hover:not(:disabled) {
 		color: rgba(156, 163, 255, 1);
 	}
-`
-
-const CardActions = styled.div`
-	display: flex;
-	align-items: center;
-	gap: 0.75rem;
-	padding-top: 0.75rem;
-	border-top: 1px solid rgba(255, 255, 255, 0.1);
-`
-
-const ActionLabel = styled.span`
-	font-size: 0.8125rem;
-	color: rgba(255, 255, 255, 0.6);
-	white-space: nowrap;
-`
-
-const StatusSelect = styled.select`
-	padding: 0.375rem 0.75rem;
-	border-radius: 0.375rem;
-	background-color: rgba(255, 255, 255, 0.1);
-	border: 1px solid rgba(255, 255, 255, 0.2);
-	color: white;
-	font-size: 0.8125rem;
-	font-family: inherit;
-	cursor: pointer;
-	text-transform: capitalize;
-
-	&:disabled {
-		opacity: 0.5;
-		cursor: not-allowed;
-	}
-
-	option {
-		background-color: #1a1a2e;
-		color: white;
-	}
-`
-
-const UpdatingText = styled.span`
-	font-size: 0.75rem;
-	color: rgba(255, 255, 255, 0.5);
-	font-style: italic;
 `
 
 const ErrorMessage = styled.div`
