@@ -67,6 +67,7 @@ export default function AdminTalks() {
 	const [talks, setTalks] = useState<TalkSubmission[]>([])
 	const [filterStatus, setFilterStatus] = useState<TalkStatus | "all">("all")
 	const [updatingId, setUpdatingId] = useState<number | null>(null)
+	const [downloadingId, setDownloadingId] = useState<number | null>(null)
 	const [error, setError] = useState<string | null>(null)
 
 	const fetchTalks = useCallback(async () => {
@@ -162,6 +163,37 @@ export default function AdminTalks() {
 			setError(err.message || "Failed to update status")
 		} finally {
 			setUpdatingId(null)
+		}
+	}
+
+	const getFileNameFromPath = (filePath: string) => {
+		const pathSegments = filePath.split("/")
+		return pathSegments[pathSegments.length - 1] || filePath
+	}
+
+	const handleSlidesDownload = async (talkId: number, filePath: string) => {
+		setDownloadingId(talkId)
+		setError(null)
+
+		try {
+			const { data: fileData, error: downloadError } = await supabaseClient.storage
+				.from("talk-slides")
+				.download(filePath)
+
+			if (downloadError) throw downloadError
+
+			const fileUrl = window.URL.createObjectURL(fileData)
+			const linkElement = document.createElement("a")
+			linkElement.href = fileUrl
+			linkElement.download = getFileNameFromPath(filePath)
+			document.body.appendChild(linkElement)
+			linkElement.click()
+			document.body.removeChild(linkElement)
+			window.URL.revokeObjectURL(fileUrl)
+		} catch (err: any) {
+			setError(err.message || "Failed to download slides")
+		} finally {
+			setDownloadingId(null)
 		}
 	}
 
@@ -282,7 +314,22 @@ export default function AdminTalks() {
 													</SlidesLink>
 												</>
 											)}
-											{talk.slides_file_path && <> — {talk.slides_file_path}</>}
+											{talk.slides_file_path && (
+												<>
+													{" — "}
+													<SlidesDownloadButton
+														type="button"
+														onClick={() =>
+															handleSlidesDownload(talk.id, talk.slides_file_path as string)
+														}
+														disabled={downloadingId === talk.id}
+													>
+														{downloadingId === talk.id
+															? "Downloading..."
+															: `Download ${getFileNameFromPath(talk.slides_file_path)}`}
+													</SlidesDownloadButton>
+												</>
+											)}
 										</SlidesInfo>
 									)}
 
@@ -494,6 +541,27 @@ const SlidesLink = styled.a`
 
 	&:hover {
 		text-decoration: underline;
+	}
+`
+
+const SlidesDownloadButton = styled.button`
+	background: none;
+	border: none;
+	padding: 0;
+	color: rgba(156, 163, 255, 0.9);
+	font-size: 0.8125rem;
+	font-family: inherit;
+	text-decoration: underline;
+	cursor: pointer;
+
+	&:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+		text-decoration: none;
+	}
+
+	&:hover:not(:disabled) {
+		color: rgba(156, 163, 255, 1);
 	}
 `
 
