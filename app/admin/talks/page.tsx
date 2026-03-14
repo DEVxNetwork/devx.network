@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { supabaseClient } from "../../../lib/supabaseClient"
 import { checkIsAdmin } from "../../../lib/adminCheck"
 import { PotionBackground } from "../../components/PotionBackground"
-import { Button } from "../../components/Button"
+import { TalkThumbnail } from "../../components/TalkThumbnail"
 
 // Types //
 
@@ -21,6 +21,7 @@ type TalkStatus =
 interface TalkSubmission {
 	id: number
 	talk_title: string
+	talk_hook: string | null
 	talk_synopsis: string
 	slides_type: "url" | "upload"
 	slides_url: string | null
@@ -33,6 +34,7 @@ interface TalkSubmission {
 		full_name: string
 		email: string
 		handle: string | null
+		profile_photo: string | null
 	}
 }
 
@@ -77,6 +79,7 @@ export default function AdminTalks() {
 				`
 				id,
 				talk_title,
+				talk_hook,
 				talk_synopsis,
 				slides_type,
 				slides_url,
@@ -88,7 +91,8 @@ export default function AdminTalks() {
 				profiles (
 					full_name,
 					email,
-					handle
+					handle,
+					profile_photo
 				)
 			`
 			)
@@ -296,42 +300,53 @@ export default function AdminTalks() {
 											<MetaValue>{formatDate(talk.updated_at)}</MetaValue>
 										</MetaItem>
 									</MetaRow>
+									<DetailsGrid>
+										<ThumbnailColumn>
+											<TalkThumbnail
+												speakerName={talk.profiles.full_name}
+												hook={talk.talk_hook || talk.talk_title}
+												profilePhotoUrl={talk.profiles.profile_photo || undefined}
+												width={420}
+											/>
+										</ThumbnailColumn>
+										<DetailsColumn>
+											<Synopsis>{talk.talk_synopsis}</Synopsis>
 
-									<Synopsis>{talk.talk_synopsis}</Synopsis>
-
-									{(talk.slides_url || talk.slides_file_path) && (
-										<SlidesInfo>
-											Slides: {talk.slides_type === "url" ? "URL" : "Uploaded file"}
-											{talk.slides_url && (
-												<>
-													{" — "}
-													<SlidesLink
-														href={talk.slides_url}
-														target="_blank"
-														rel="noopener noreferrer"
-													>
-														{talk.slides_url}
-													</SlidesLink>
-												</>
+											{(talk.slides_url || talk.slides_file_path) && (
+												<SlidesInfo>
+													Slides: {talk.slides_type === "url" ? "URL" : "Uploaded file"}
+													{talk.slides_url && (
+														<>
+															{" — "}
+															<SlidesLink
+																href={talk.slides_url}
+																target="_blank"
+																rel="noopener noreferrer"
+															>
+																{talk.slides_url}
+															</SlidesLink>
+														</>
+													)}
+													{talk.slides_file_path && (
+														<>
+															{" — "}
+															<SlidesDownloadButton
+																type="button"
+																onClick={() =>
+																	handleSlidesDownload(talk.id, talk.slides_file_path as string)
+																}
+																disabled={downloadingId === talk.id}
+															>
+																{downloadingId === talk.id
+																	? "Downloading..."
+																	: `Download ${getFileNameFromPath(talk.slides_file_path)}`}
+															</SlidesDownloadButton>
+														</>
+													)}
+												</SlidesInfo>
 											)}
-											{talk.slides_file_path && (
-												<>
-													{" — "}
-													<SlidesDownloadButton
-														type="button"
-														onClick={() =>
-															handleSlidesDownload(talk.id, talk.slides_file_path as string)
-														}
-														disabled={downloadingId === talk.id}
-													>
-														{downloadingId === talk.id
-															? "Downloading..."
-															: `Download ${getFileNameFromPath(talk.slides_file_path)}`}
-													</SlidesDownloadButton>
-												</>
-											)}
-										</SlidesInfo>
-									)}
+										</DetailsColumn>
+									</DetailsGrid>
 
 									<CardActions>
 										<ActionLabel>Change status:</ActionLabel>
@@ -447,7 +462,8 @@ const TalkList = styled.div`
 
 const TalkCard = styled.div`
 	background-color: rgba(21, 21, 28, 0.75);
-	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(20px);
+	backdrop-filter: blur(20px);
 	border: 1px solid rgba(255, 255, 255, 0.1);
 	border-radius: 0.75rem;
 	padding: 1.5rem;
@@ -471,6 +487,31 @@ const TalkTitle = styled.h2`
 	flex: 1;
 `
 
+const DetailsGrid = styled.div`
+	display: grid;
+	grid-template-columns: minmax(280px, 420px) minmax(0, 1fr);
+	gap: 1rem;
+	align-items: start;
+
+	@media (max-width: 900px) {
+		grid-template-columns: 1fr;
+	}
+`
+
+const ThumbnailColumn = styled.div`
+	max-width: 420px;
+	width: 100%;
+`
+
+const DetailsColumn = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	background-color: rgba(255, 255, 255, 0.035);
+	border-radius: 0.75rem;
+	padding: 0.875rem;
+`
+
 const StatusBadge = styled.span<{ $color: string }>`
 	padding: 0.25rem 0.625rem;
 	border-radius: 1rem;
@@ -487,6 +528,9 @@ const MetaRow = styled.div`
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 	gap: 0.75rem;
+	background-color: rgba(255, 255, 255, 0.03);
+	border-radius: 0.75rem;
+	padding: 0.75rem;
 `
 
 const MetaItem = styled.div`
