@@ -2,9 +2,8 @@
 import Link from "next/link"
 import styled from "styled-components"
 import { useState, useEffect, useCallback } from "react"
-import { useRouter } from "next/navigation"
 import { supabaseClient } from "../../../lib/supabaseClient"
-import { checkIsAdmin } from "../../../lib/adminCheck"
+import { useRequireAdminAuth } from "../../hooks/useRequireAdminAuth"
 import { PotionBackground } from "../../components/PotionBackground"
 import { TalkThumbnail } from "../../components/TalkThumbnail"
 
@@ -65,9 +64,7 @@ const STATUS_COLORS: Record<TalkStatus, string> = {
 // Components //
 
 export default function AdminTalks() {
-	const router = useRouter()
-	const [loading, setLoading] = useState(true)
-	const [isAdmin, setIsAdmin] = useState(false)
+	const { loading, isAdmin } = useRequireAdminAuth()
 	const [talks, setTalks] = useState<TalkSubmission[]>([])
 	const [filterStatus, setFilterStatus] = useState<TalkStatus | "all">("all")
 	const [updatingId, setUpdatingId] = useState<number | null>(null)
@@ -114,30 +111,6 @@ export default function AdminTalks() {
 
 		setTalks((data as unknown as TalkSubmission[]) || [])
 	}, [filterStatus])
-
-	useEffect(() => {
-		const init = async () => {
-			const {
-				data: { user }
-			} = await supabaseClient.auth.getUser()
-
-			if (!user) {
-				router.push("/login?redirect=%2Fadmin%2Ftalks")
-				return
-			}
-
-			const admin = await checkIsAdmin()
-			if (!admin) {
-				router.push("/")
-				return
-			}
-
-			setIsAdmin(true)
-			setLoading(false)
-		}
-
-		init()
-	}, [router])
 
 	useEffect(() => {
 		if (isAdmin) {
@@ -193,7 +166,7 @@ export default function AdminTalks() {
 		if (talk.profiles.profile_photo) {
 			params.set("profilePhotoUrl", talk.profiles.profile_photo)
 		}
-		return `/talk-thumbnail-gen?${params.toString()}`
+		return `/admin/thumbnails?${params.toString()}`
 	}
 
 	const handleSlidesDownload = async (talkId: number, filePath: string) => {

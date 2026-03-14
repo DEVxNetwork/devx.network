@@ -2,12 +2,13 @@
 import styled from "styled-components"
 import { useState, useRef, useCallback, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
-import { supabaseClient } from "../../lib/supabaseClient"
-import { TalkThumbnail } from "../components/TalkThumbnail"
-import { TextInput } from "../components/TextInput"
-import { Button } from "../components/Button"
-import { PotionBackground } from "../components/PotionBackground"
-import { PageContainer } from "../components/PageContainer"
+import { supabaseClient } from "../../../lib/supabaseClient"
+import { useRequireAdminAuth } from "../../hooks/useRequireAdminAuth"
+import { TalkThumbnail } from "../../components/TalkThumbnail"
+import { TextInput } from "../../components/TextInput"
+import { Button } from "../../components/Button"
+import { PotionBackground } from "../../components/PotionBackground"
+import { PageContainer } from "../../components/PageContainer"
 
 //
 // Constants
@@ -20,7 +21,8 @@ const THUMBNAIL_HEIGHT = 720
 // Components
 //
 
-export default function TalkThumbnailGen() {
+export default function AdminTalkThumbnailGen() {
+	const { loading, isAdmin } = useRequireAdminAuth()
 	const searchParams = useSearchParams()
 	const [hook, setHook] = useState("")
 	const [speakerName, setSpeakerName] = useState("")
@@ -193,6 +195,21 @@ export default function TalkThumbnailGen() {
 		},
 		[hook]
 	)
+
+	if (loading) {
+		return (
+			<>
+				<BackgroundContainer>
+					<PotionBackground />
+				</BackgroundContainer>
+				<Container>
+					<LoadingText>Verifying admin access...</LoadingText>
+				</Container>
+			</>
+		)
+	}
+
+	if (!isAdmin) return null
 
 	return (
 		<>
@@ -488,6 +505,13 @@ const SpecNote = styled.p`
 	text-align: center;
 	color: rgba(255, 255, 255, 0.4);
 	font-size: 0.75rem;
+`
+
+const LoadingText = styled.div`
+	color: white;
+	font-size: 1.25rem;
+	text-align: center;
+	margin-top: 4rem;
 `
 
 //
