@@ -1,6 +1,7 @@
 "use client"
 import styled from "styled-components"
 import { useState, useRef, useCallback, useEffect } from "react"
+import { useSearchParams } from "next/navigation"
 import { supabaseClient } from "../../lib/supabaseClient"
 import { TalkThumbnail } from "../components/TalkThumbnail"
 import { TextInput } from "../components/TextInput"
@@ -20,14 +21,17 @@ const THUMBNAIL_HEIGHT = 720
 //
 
 export default function TalkThumbnailGen() {
+	const searchParams = useSearchParams()
 	const [hook, setHook] = useState("")
+	const [speakerName, setSpeakerName] = useState("")
 	const [handle, setHandle] = useState("")
 	const [photoUrl, setPhotoUrl] = useState<string | null>(null)
-	const [photoSource, setPhotoSource] = useState<"none" | "upload" | "handle">("none")
+	const [photoSource, setPhotoSource] = useState<"none" | "upload" | "handle" | "url">("none")
 	const [handleLoading, setHandleLoading] = useState(false)
 	const [handleError, setHandleError] = useState<string | null>(null)
 	const fileInputRef = useRef<HTMLInputElement>(null)
 	const svgContainerRef = useRef<HTMLDivElement>(null)
+	const didApplyQueryPrefill = useRef(false)
 
 	// Revoke upload blob URL on unmount to prevent memory leaks
 	useEffect(() => {
@@ -37,6 +41,31 @@ export default function TalkThumbnailGen() {
 			}
 		}
 	}, [photoUrl, photoSource])
+
+	useEffect(() => {
+		if (didApplyQueryPrefill.current) return
+
+		const hookFromUrl = searchParams.get("hook")
+		const speakerNameFromUrl = searchParams.get("speakerName")
+		const handleFromUrl = searchParams.get("handle")
+		const profilePhotoUrlFromUrl = searchParams.get("profilePhotoUrl")
+
+		if (hookFromUrl) {
+			setHook(hookFromUrl)
+		}
+		if (speakerNameFromUrl) {
+			setSpeakerName(speakerNameFromUrl)
+		}
+		if (handleFromUrl) {
+			setHandle(handleFromUrl)
+		}
+		if (profilePhotoUrlFromUrl) {
+			setPhotoUrl(profilePhotoUrlFromUrl)
+			setPhotoSource("url")
+		}
+
+		didApplyQueryPrefill.current = true
+	}, [searchParams])
 
 	const handleFileUpload = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -241,7 +270,11 @@ export default function TalkThumbnailGen() {
 							<PhotoStatusRow>
 								<PhotoStatus>
 									Photo loaded
-									{photoSource === "handle" ? ` from @${handle}` : " from upload"}
+									{photoSource === "handle"
+										? ` from @${handle}`
+										: photoSource === "upload"
+											? " from upload"
+											: " from URL"}
 								</PhotoStatus>
 								<Button type="button" variant="tertiary" size="small" onClick={clearPhoto}>
 									Clear photo
@@ -253,7 +286,7 @@ export default function TalkThumbnailGen() {
 					<Preview ref={svgContainerRef}>
 						<TalkThumbnail
 							hook={hook || "Your Hook"}
-							speakerName=""
+							speakerName={speakerName}
 							profilePhotoUrl={photoUrl || undefined}
 							width={THUMBNAIL_WIDTH}
 						/>

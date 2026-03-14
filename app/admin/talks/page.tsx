@@ -1,4 +1,5 @@
 "use client"
+import Link from "next/link"
 import styled from "styled-components"
 import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
@@ -182,6 +183,19 @@ export default function AdminTalks() {
 	const getStatusWidthCh = (status: TalkStatus) =>
 		Math.max(Math.ceil(getStatusLabel(status).length * 1.05) + 3, 10)
 
+	const buildThumbnailGeneratorUrl = (talk: TalkSubmission) => {
+		const params = new URLSearchParams()
+		params.set("hook", talk.talk_hook || talk.talk_title)
+		params.set("speakerName", talk.profiles.full_name)
+		if (talk.profiles.handle) {
+			params.set("handle", talk.profiles.handle)
+		}
+		if (talk.profiles.profile_photo) {
+			params.set("profilePhotoUrl", talk.profiles.profile_photo)
+		}
+		return `/talk-thumbnail-gen?${params.toString()}`
+	}
+
 	const handleSlidesDownload = async (talkId: number, filePath: string) => {
 		setDownloadingId(talkId)
 		setError(null)
@@ -298,12 +312,17 @@ export default function AdminTalks() {
 
 									<DetailsGrid>
 										<ThumbnailColumn>
-											<TalkThumbnail
-												speakerName={talk.profiles.full_name}
-												hook={talk.talk_hook || talk.talk_title}
-												profilePhotoUrl={talk.profiles.profile_photo || undefined}
-												width={1000}
-											/>
+											<ThumbnailLink
+												href={buildThumbnailGeneratorUrl(talk)}
+												aria-label={`Edit and download thumbnail for ${talk.talk_title}`}
+											>
+												<TalkThumbnail
+													speakerName={talk.profiles.full_name}
+													hook={talk.talk_hook || talk.talk_title}
+													profilePhotoUrl={talk.profiles.profile_photo || undefined}
+													width={1000}
+												/>
+											</ThumbnailLink>
 										</ThumbnailColumn>
 										<DetailsColumn>
 											<Synopsis>{talk.talk_synopsis}</Synopsis>
@@ -515,6 +534,21 @@ const ThumbnailColumn = styled.div`
 	@media (max-width: 900px) {
 		max-width: none;
 		justify-self: stretch;
+	}
+`
+
+const ThumbnailLink = styled(Link)`
+	display: block;
+	border-radius: 0.5rem;
+	text-decoration: none;
+
+	&:hover {
+		opacity: 0.95;
+	}
+
+	&:focus-visible {
+		outline: 2px solid rgba(156, 163, 255, 0.9);
+		outline-offset: 2px;
 	}
 `
 
