@@ -33,6 +33,7 @@ interface TalkSubmission {
 	profiles: {
 		full_name: string
 		email: string
+		phone_number: string | null
 		handle: string | null
 		profile_photo: string | null
 	}
@@ -91,6 +92,7 @@ export default function AdminTalks() {
 				profiles (
 					full_name,
 					email,
+					phone_number,
 					handle,
 					profile_photo
 				)
@@ -294,38 +296,13 @@ export default function AdminTalks() {
 										</StatusPillWrap>
 									</CardHeader>
 
-									<MetaRow>
-										<MetaItem>
-											<MetaLabel>Submitter</MetaLabel>
-											<MetaValue>
-												{talk.profiles.full_name}
-												{talk.profiles.handle && (
-													<HandleLink href={`/whois?${talk.profiles.handle}`}>
-														@{talk.profiles.handle}
-													</HandleLink>
-												)}
-											</MetaValue>
-										</MetaItem>
-										<MetaItem>
-											<MetaLabel>Email</MetaLabel>
-											<MetaValue>{talk.profiles.email}</MetaValue>
-										</MetaItem>
-										<MetaItem>
-											<MetaLabel>Submitted</MetaLabel>
-											<MetaValue>{formatDate(talk.created_at)}</MetaValue>
-										</MetaItem>
-										<MetaItem>
-											<MetaLabel>Updated</MetaLabel>
-											<MetaValue>{formatDate(talk.updated_at)}</MetaValue>
-										</MetaItem>
-									</MetaRow>
 									<DetailsGrid>
 										<ThumbnailColumn>
 											<TalkThumbnail
 												speakerName={talk.profiles.full_name}
 												hook={talk.talk_hook || talk.talk_title}
 												profilePhotoUrl={talk.profiles.profile_photo || undefined}
-												width={420}
+												width={1000}
 											/>
 										</ThumbnailColumn>
 										<DetailsColumn>
@@ -366,6 +343,35 @@ export default function AdminTalks() {
 											)}
 										</DetailsColumn>
 									</DetailsGrid>
+									<MetaRow>
+										<MetaItem>
+											<MetaLabel>Submitter</MetaLabel>
+											<MetaValue>
+												{talk.profiles.full_name}
+												{talk.profiles.handle && (
+													<HandleLink href={`/whois?${talk.profiles.handle}`}>
+														@{talk.profiles.handle}
+													</HandleLink>
+												)}
+											</MetaValue>
+										</MetaItem>
+										<MetaItem>
+											<MetaLabel>Email</MetaLabel>
+											<MetaValue>{talk.profiles.email}</MetaValue>
+										</MetaItem>
+										<MetaItem>
+											<MetaLabel>Phone</MetaLabel>
+											<MetaValue>{talk.profiles.phone_number || "Not provided"}</MetaValue>
+										</MetaItem>
+										<MetaItem>
+											<MetaLabel>Submitted</MetaLabel>
+											<MetaValue>{formatDate(talk.created_at)}</MetaValue>
+										</MetaItem>
+										<MetaItem>
+											<MetaLabel>Updated</MetaLabel>
+											<MetaValue>{formatDate(talk.updated_at)}</MetaValue>
+										</MetaItem>
+									</MetaRow>
 								</TalkCard>
 							))}
 						</TalkList>
@@ -504,6 +510,12 @@ const DetailsGrid = styled.div`
 const ThumbnailColumn = styled.div`
 	max-width: 420px;
 	width: 100%;
+	min-width: 0;
+
+	@media (max-width: 900px) {
+		max-width: none;
+		justify-self: stretch;
+	}
 `
 
 const DetailsColumn = styled.div`
@@ -585,11 +597,19 @@ const StatusChevron = styled.span<{ $color: string }>`
 
 const MetaRow = styled.div`
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
 	gap: 0.75rem;
 	background-color: rgba(255, 255, 255, 0.03);
 	border-radius: 0.75rem;
 	padding: 0.75rem;
+
+	@media (max-width: 900px) {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	@media (max-width: 560px) {
+		grid-template-columns: 1fr;
+	}
 `
 
 const MetaItem = styled.div`
