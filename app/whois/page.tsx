@@ -15,6 +15,7 @@ type ProfileData = {
 	title: string
 	affiliation: string
 	profilePhoto: string
+	photoHash: string | null
 	interests: Tag[]
 	skills: Tag[]
 	links: Link[]
@@ -190,6 +191,7 @@ export default function Who() {
 					title: profileData.title || "",
 					affiliation: profileData.affiliation || "",
 					profilePhoto: profileData.profile_photo || "",
+					photoHash: profileData.photo_id || null,
 					interests,
 					skills,
 					links

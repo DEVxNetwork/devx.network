@@ -5,12 +5,14 @@ import { TextInput } from "./TextInput"
 import { Button } from "./Button"
 import { EditIcon, CameraIcon } from "./icons"
 import { HelpInfoButton } from "./HelpInfoButton"
+import { getPhotoUrl } from "../../lib/photoService"
 
 type NametagData = {
 	fullName: string
 	title: string
 	affiliation: string
 	profilePhoto: string
+	photoHash?: string | null
 }
 
 type NametagProps = {
@@ -45,6 +47,11 @@ export const Nametag = ({
 	// In forced edit mode, always keep editing enabled (unless readOnly)
 	// In readOnly mode, never allow editing
 	const effectiveEditing = readOnly ? false : forcedEditMode ? true : isEditing
+
+	// Use the optimized thumb URL when a photo hash is available
+	const avatarSrc = formData.photoHash
+		? getPhotoUrl(formData.photoHash, "thumb")
+		: formData.profilePhoto
 
 	// Notify parent of data changes in forced edit mode
 	useEffect(() => {
@@ -161,7 +168,7 @@ export const Nametag = ({
 					<NametagLeft>
 						<PhotoFrame>
 							{formData.profilePhoto ? (
-								<Avatar src={formData.profilePhoto} alt="Profile" />
+								<Avatar src={avatarSrc} alt="Profile" />
 							) : (
 								<PlaceholderAvatar>
 									<CameraIcon color="rgba(255, 255, 255, 0.5)" />

@@ -13,6 +13,7 @@ type ProfileListItem = {
 	title: string | null
 	affiliation: string | null
 	profilePhoto: string | null
+	photoHash: string | null
 }
 
 const PAGE_SIZE = 20
@@ -36,7 +37,7 @@ export function ProfileList() {
 
 			const { data: profilesData, error } = await supabaseClient
 				.from("profiles")
-				.select("id, handle, full_name, title, affiliation, profile_photo")
+				.select("id, handle, full_name, title, affiliation, profile_photo, photo_id")
 				.not("handle", "is", null)
 				.order("full_name", { ascending: true })
 				.range(from, to)
@@ -58,7 +59,8 @@ export function ProfileList() {
 					fullName: profile.full_name,
 					title: profile.title,
 					affiliation: profile.affiliation,
-					profilePhoto: profile.profile_photo
+					profilePhoto: profile.profile_photo,
+					photoHash: profile.photo_id || null
 				})) || []
 
 			if (append) {
@@ -149,7 +151,8 @@ export function ProfileList() {
 												fullName: profile.fullName,
 												title: profile.title || "",
 												affiliation: profile.affiliation || "",
-												profilePhoto: profile.profilePhoto || ""
+												profilePhoto: profile.profilePhoto || "",
+												photoHash: profile.photoHash
 											}}
 											onSave={handleSave}
 											onImageUpload={handleImageUpload}
