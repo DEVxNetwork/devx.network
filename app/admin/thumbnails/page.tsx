@@ -1,12 +1,14 @@
 "use client"
 import styled from "styled-components"
 import { useState, useRef, useCallback, useEffect } from "react"
-import { supabaseClient } from "../../lib/supabaseClient"
-import { TalkThumbnail } from "../components/TalkThumbnail"
-import { TextInput } from "../components/TextInput"
-import { Button } from "../components/Button"
-import { PotionBackground } from "../components/PotionBackground"
-import { PageContainer } from "../components/PageContainer"
+import { useSearchParams } from "next/navigation"
+import { supabaseClient } from "../../../lib/supabaseClient"
+import { useRequireAdminAuth } from "../../hooks/useRequireAdminAuth"
+import { TalkThumbnail } from "../../components/TalkThumbnail"
+import { TextInput } from "../../components/TextInput"
+import { Button } from "../../components/Button"
+import { PotionBackground } from "../../components/PotionBackground"
+import { PageContainer } from "../../components/PageContainer"
 
 //
 // Constants
@@ -19,15 +21,19 @@ const THUMBNAIL_HEIGHT = 720
 // Components
 //
 
-export default function TalkThumbnailGen() {
+export default function AdminTalkThumbnailGen() {
+	const { loading, isAdmin } = useRequireAdminAuth()
+	const searchParams = useSearchParams()
 	const [hook, setHook] = useState("")
+	const [speakerName, setSpeakerName] = useState("")
 	const [handle, setHandle] = useState("")
 	const [photoUrl, setPhotoUrl] = useState<string | null>(null)
-	const [photoSource, setPhotoSource] = useState<"none" | "upload" | "handle">("none")
+	const [photoSource, setPhotoSource] = useState<"none" | "upload" | "handle" | "url">("none")
 	const [handleLoading, setHandleLoading] = useState(false)
 	const [handleError, setHandleError] = useState<string | null>(null)
 	const fileInputRef = useRef<HTMLInputElement>(null)
 	const svgContainerRef = useRef<HTMLDivElement>(null)
+	const didApplyQueryPrefill = useRef(false)
 
 	// Revoke upload blob URL on unmount to prevent memory leaks
 	useEffect(() => {
@@ -37,6 +43,31 @@ export default function TalkThumbnailGen() {
 			}
 		}
 	}, [photoUrl, photoSource])
+
+	useEffect(() => {
+		if (didApplyQueryPrefill.current) return
+
+		const hookFromUrl = searchParams.get("hook")
+		const speakerNameFromUrl = searchParams.get("speakerName")
+		const handleFromUrl = searchParams.get("handle")
+		const profilePhotoUrlFromUrl = searchParams.get("profilePhotoUrl")
+
+		if (hookFromUrl) {
+			setHook(hookFromUrl)
+		}
+		if (speakerNameFromUrl) {
+			setSpeakerName(speakerNameFromUrl)
+		}
+		if (handleFromUrl) {
+			setHandle(handleFromUrl)
+		}
+		if (profilePhotoUrlFromUrl) {
+			setPhotoUrl(profilePhotoUrlFromUrl)
+			setPhotoSource("url")
+		}
+
+		didApplyQueryPrefill.current = true
+	}, [searchParams])
 
 	const handleFileUpload = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -165,6 +196,21 @@ export default function TalkThumbnailGen() {
 		[hook]
 	)
 
+	if (loading) {
+		return (
+			<>
+				<BackgroundContainer>
+					<PotionBackground />
+				</BackgroundContainer>
+				<Container>
+					<LoadingText>Verifying admin access...</LoadingText>
+				</Container>
+			</>
+		)
+	}
+
+	if (!isAdmin) return null
+
 	return (
 		<>
 			<BackgroundContainer>
@@ -241,7 +287,11 @@ export default function TalkThumbnailGen() {
 							<PhotoStatusRow>
 								<PhotoStatus>
 									Photo loaded
-									{photoSource === "handle" ? ` from @${handle}` : " from upload"}
+									{photoSource === "handle"
+										? ` from @${handle}`
+										: photoSource === "upload"
+											? " from upload"
+											: " from URL"}
 								</PhotoStatus>
 								<Button type="button" variant="tertiary" size="small" onClick={clearPhoto}>
 									Clear photo
@@ -253,7 +303,7 @@ export default function TalkThumbnailGen() {
 					<Preview ref={svgContainerRef}>
 						<TalkThumbnail
 							hook={hook || "Your Hook"}
-							speakerName=""
+							speakerName={speakerName}
 							profilePhotoUrl={photoUrl || undefined}
 							width={THUMBNAIL_WIDTH}
 						/>
@@ -455,6 +505,13 @@ const SpecNote = styled.p`
 	text-align: center;
 	color: rgba(255, 255, 255, 0.4);
 	font-size: 0.75rem;
+`
+
+const LoadingText = styled.div`
+	color: white;
+	font-size: 1.25rem;
+	text-align: center;
+	margin-top: 4rem;
 `
 
 //
