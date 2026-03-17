@@ -1,6 +1,6 @@
 "use client"
 import styled from "styled-components"
-import { useState, useRef, useCallback, useEffect } from "react"
+import { Suspense, useState, useRef, useCallback, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
 import { supabaseClient } from "../../../lib/supabaseClient"
 import { useRequireAdminAuth } from "../../hooks/useRequireAdminAuth"
@@ -21,7 +21,26 @@ const THUMBNAIL_HEIGHT = 720
 // Components
 //
 
-export default function AdminTalkThumbnailGen() {
+export default function AdminTalkThumbnailGenPage() {
+	return (
+		<Suspense
+			fallback={
+				<>
+					<BackgroundContainer>
+						<PotionBackground />
+					</BackgroundContainer>
+					<Container>
+						<LoadingText>Loading...</LoadingText>
+					</Container>
+				</>
+			}
+		>
+			<AdminTalkThumbnailGen />
+		</Suspense>
+	)
+}
+
+function AdminTalkThumbnailGen() {
 	const { loading, isAdmin } = useRequireAdminAuth()
 	const searchParams = useSearchParams()
 	const [hook, setHook] = useState("")
