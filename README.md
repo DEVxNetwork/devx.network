@@ -114,6 +114,18 @@ Admin-only pages:
 Access is enforced at both the database level (RLS policies) and the frontend (redirect on
 non-admin access).
 
+## GitHub Secrets Required for Production Deploy
+
+The GitHub Actions workflow requires the following repository secrets (Settings → Secrets and variables → Actions):
+
+| Secret | Description |
+| --- | --- |
+| `SUPABASE_ACCESS_TOKEN` | Personal access token from [supabase.com/dashboard/account/tokens](https://supabase.com/dashboard/account/tokens). Authenticates the CLI. |
+| `SUPABASE_PROJECT_REF` | Project reference ID (found in Supabase project settings → General). Used to link the CLI to the correct project. |
+| `SUPABASE_DB_PASSWORD` | Database password for the Supabase project. Required by `supabase db push` to apply migrations. |
+| `NEXT_PUBLIC_SUPABASE_URL` | Public Supabase project URL. Injected at build time for the frontend client. |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Public anon/publishable key. Injected at build time for the frontend client. |
+
 ## Contributing
 
 We welcome contributions from the community! If you have suggestions or improvements, feel free to open an issue or submit a pull request.
