@@ -11,13 +11,15 @@ concurrency:
 
 permissions:
   pull-requests: write
+  packages: write
 
 jobs:
   deploy-preview:
     if: github.event.action != 'closed'
     runs-on: ubuntu-latest
     env:
-      APP_NAME: devx-pr-${{ github.event.number }}
+      APP_NAME: pr-${{ github.event.number }}
+      IMAGE: ghcr.io/${{ github.repository_owner }}/devx-preview:pr-${{ github.event.number }}
       CAPROVER_URL: ${{ secrets.CAPROVER_URL }}
       CAPROVER_PASSWORD: ${{ secrets.CAPROVER_PASSWORD }}
     steps:
@@ -38,32 +40,43 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
-      - name: Create CapRover app (idempotent)
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ env.IMAGE }}
+
+      - name: Create app and deploy image via CapRover API
         run: |
-          TOKEN=$(curl -sf -X POST "$CAPROVER_URL/api/v2/login" \
+          ADMIN_TOKEN=$(curl -sf -X POST "$CAPROVER_URL/api/v2/login" \
             -H "Content-Type: application/json" \
             -d "{\"password\": \"$CAPROVER_PASSWORD\"}" \
             | jq -r '.data.token')
 
+          # Create app if it doesn't exist
           curl -s -X POST "$CAPROVER_URL/api/v2/user/apps/appDefinitions/register" \
             -H "Content-Type: application/json" \
-            -H "x-captain-auth: $TOKEN" \
+            -H "x-captain-auth: $ADMIN_TOKEN" \
             -d "{\"appName\": \"$APP_NAME\", \"hasPersistentData\": false}" || true
 
-      - name: Package and deploy to CapRover
-        run: |
-          tar -czf deploy.tar.gz captain-definition Dockerfile out/
-          npm install -g caprover
-          caprover deploy \
-            --caproverUrl "$CAPROVER_URL" \
-            --caproverPassword "$CAPROVER_PASSWORD" \
-            --appName "$APP_NAME" \
-            --tarFile ./deploy.tar.gz
+          # Point app at the pre-built image and trigger deploy
+          curl -sf -X POST "$CAPROVER_URL/api/v2/user/apps/appDefinitions/update" \
+            -H "Content-Type: application/json" \
+            -H "x-captain-auth: $ADMIN_TOKEN" \
+            -d "{\"appName\": \"$APP_NAME\", \"imageName\": \"$IMAGE\", \"instanceCount\": 1}"
 
       - name: Comment preview URL on PR
         uses: actions/github-script@v7
         env:
-          APP_NAME: devx-pr-${{ github.event.number }}
+          APP_NAME: pr-${{ github.event.number }}
           CAPROVER_APP_DOMAIN: ${{ secrets.CAPROVER_APP_DOMAIN }}
         with:
           script: |
@@ -99,7 +112,7 @@ jobs:
     if: github.event.action == 'closed'
     runs-on: ubuntu-latest
     env:
-      APP_NAME: devx-pr-${{ github.event.number }}
+      APP_NAME: pr-${{ github.event.number }}
       CAPROVER_URL: ${{ secrets.CAPROVER_URL }}
       CAPROVER_PASSWORD: ${{ secrets.CAPROVER_PASSWORD }}
     steps:
