@@ -1,0 +1,66 @@
+name: Cleanup Expired Previews
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # every 6 hours
+  workflow_dispatch:
+
+permissions:
+  pull-requests: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    env:
+      CAPROVER_URL: ${{ secrets.CAPROVER_URL }}
+      CAPROVER_PASSWORD: ${{ secrets.CAPROVER_PASSWORD }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      REPO: ${{ github.repository }}
+      EXPIRY_HOURS: 6
+    steps:
+      - name: Expire old PR previews
+        run: |
+          ADMIN_TOKEN=$(curl -sf -X POST "$CAPROVER_URL/api/v2/login" \
+            -H "Content-Type: application/json" \
+            -d "{\"password\": \"$CAPROVER_PASSWORD\"}" \
+            | jq -r '.data.token')
+
+          NOW_TS=$(date +%s)
+          REDEPLOY_URL="https://github.com/$REPO/actions/workflows/preview.yml"
+
+          gh pr list --repo "$REPO" --state open --json number --jq '.[].number' | while read PR_NUM; do
+            APP_NAME="pr-$PR_NUM"
+
+            # Find the active (non-expired) preview comment
+            COMMENT=$(gh api "repos/$REPO/issues/$PR_NUM/comments" \
+              --jq '[.[] | select(.body | contains("<!-- caprover-preview -->")) | select(.body | contains("expired") | not)] | first')
+
+            [ "$COMMENT" = "null" ] || [ -z "$COMMENT" ] && continue
+
+            COMMENT_ID=$(echo "$COMMENT" | jq -r '.id')
+            UPDATED_AT=$(echo "$COMMENT" | jq -r '.updated_at')
+            UPDATED_TS=$(date -d "$UPDATED_AT" +%s)
+            AGE_HOURS=$(( (NOW_TS - UPDATED_TS) / 3600 ))
+
+            [ "$AGE_HOURS" -lt "$EXPIRY_HOURS" ] && continue
+
+            echo "Expiring preview for PR #$PR_NUM (age: ${AGE_HOURS}h)"
+
+            # Delete CapRover app
+            curl -s -X POST "$CAPROVER_URL/api/v2/user/apps/appDefinitions/delete" \
+              -H "Content-Type: application/json" \
+              -H "x-captain-auth: $ADMIN_TOKEN" \
+              -d "{\"appName\": \"$APP_NAME\"}" || true
+
+            # Update comment to show expired state with re-deploy link
+            gh api "repos/$REPO/issues/comments/$COMMENT_ID" \
+              -X PATCH \
+              --field body="<!-- caprover-preview -->
+## Preview deployment _(expired)_
+
+Removed after ${EXPIRY_HOURS}h of inactivity.
+
+[Re-deploy preview]($REDEPLOY_URL) — click **Run workflow** and enter PR number \`$PR_NUM\`.
+
+_Expired: $(date -u '+%a, %d %b %Y %H:%M:%S UTC')_"
+          done

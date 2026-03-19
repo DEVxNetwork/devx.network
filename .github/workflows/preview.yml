@@ -4,9 +4,14 @@ on:
   pull_request:
     branches: ["main"]
     types: [opened, reopened, synchronize, closed]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: PR number to (re-)deploy
+        required: true
 
 concurrency:
-  group: "preview-${{ github.event.number }}"
+  group: "preview-${{ github.event.number || inputs.pr_number }}"
   cancel-in-progress: true
 
 permissions:
@@ -18,7 +23,8 @@ jobs:
     if: github.event.action != 'closed'
     runs-on: ubuntu-latest
     env:
-      APP_NAME: pr-${{ github.event.number }}
+      PR_NUMBER: ${{ github.event.number || inputs.pr_number }}
+      APP_NAME: pr-${{ github.event.number || inputs.pr_number }}
       CAPROVER_URL: ${{ secrets.CAPROVER_URL }}
       CAPROVER_PASSWORD: ${{ secrets.CAPROVER_PASSWORD }}
     steps:
@@ -40,7 +46,7 @@ jobs:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
       - name: Set image URL
-        run: echo "IMAGE=$(echo ghcr.io/${{ github.repository_owner }}/devx-preview:pr-${{ github.event.number }}-$(echo ${{ github.sha }} | cut -c1-7) | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+        run: echo "IMAGE=$(echo ghcr.io/${{ github.repository_owner }}/devx-preview:pr-${PR_NUMBER}-$(echo ${{ github.sha }} | cut -c1-7) | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4.0.0
@@ -82,18 +88,19 @@ jobs:
       - name: Comment preview URL on PR
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
         env:
-          APP_NAME: pr-${{ github.event.number }}
           CAPROVER_APP_DOMAIN: ${{ secrets.CAPROVER_APP_DOMAIN }}
         with:
           script: |
-            const url = `https://${process.env.APP_NAME}.${process.env.CAPROVER_APP_DOMAIN}`;
+            const prNumber = process.env.PR_NUMBER;
+            const appName = `pr-${prNumber}`;
+            const url = `https://${appName}.${process.env.CAPROVER_APP_DOMAIN}`;
             const marker = '<!-- caprover-preview -->';
-            const body = `${marker}\n## Preview deployment\n\n${url}\n\n_Updated: ${new Date().toUTCString()}_`;
+            const body = `${marker}\n## Preview deployment\n\n${url}\n\n_Updated: ${new Date().toUTCString()} — expires after 6h of inactivity._`;
 
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.issue.number,
+              issue_number: Number(prNumber),
             });
 
             const existing = comments.find(c => c.body.includes(marker));
@@ -109,7 +116,7 @@ jobs:
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: context.issue.number,
+                issue_number: Number(prNumber),
                 body,
               });
             }
