@@ -19,7 +19,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       APP_NAME: pr-${{ github.event.number }}
-      IMAGE: ghcr.io/${{ github.repository_owner }}/devx-preview:pr-${{ github.event.number }}
       CAPROVER_URL: ${{ secrets.CAPROVER_URL }}
       CAPROVER_PASSWORD: ${{ secrets.CAPROVER_PASSWORD }}
     steps:
@@ -40,17 +39,24 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
+      - name: Set image URL
+        run: echo "IMAGE=$(echo ghcr.io/${{ github.repository_owner }}/devx-preview:pr-${{ github.event.number }}-$(echo ${{ github.sha }} | cut -c1-7) | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4.0.0
+
       - name: Log in to GHCR
         uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4.0.0
         with:
           registry: ghcr.io
-          username: ${{ github.actor }}
+          username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294 # v7.0.0
         with:
           context: .
+          file: ./Dockerfile
           push: true
           tags: ${{ env.IMAGE }}
 
