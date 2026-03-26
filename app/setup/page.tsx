@@ -10,6 +10,8 @@ import { TextInput } from "../components/TextInput"
 import { Button } from "../components/Button"
 import { HelpInfoButton } from "../components/HelpInfoButton"
 
+const HANDLE_REGEX = /^(?:[a-z0-9_]|-)+$/
+
 type NametagData = {
 	fullName: string
 	title: string
@@ -20,9 +22,8 @@ type NametagData = {
 /** Same rules as the availability effect: empty, format, or not explicitly available. */
 function getHandleHasError(handle: string, handleAvailable: boolean | null): boolean {
 	const trimmed = handle.trim()
-	const handleRegex = /^(?:[a-z0-9_]|-)+$/
 	const formatInvalid =
-		!trimmed || !handleRegex.test(handle) || handle.length < 3 || handle.length > 30
+		!trimmed || !HANDLE_REGEX.test(handle) || handle.length < 3 || handle.length > 30
 	return formatInvalid || handleAvailable !== true
 }
 
@@ -133,8 +134,7 @@ export default function Setup() {
 			}
 
 			// Validate handle format: lowercase alphanumeric with underscores/hyphens, 3-30 chars
-			const handleRegex = /^(?:[a-z0-9_]|-)+$/
-			if (!handleRegex.test(handle) || handle.length < 3 || handle.length > 30) {
+			if (!HANDLE_REGEX.test(handle) || handle.length < 3 || handle.length > 30) {
 				setHandleAvailable(false)
 				return
 			}
@@ -323,7 +323,8 @@ export default function Setup() {
 		}
 	}
 
-	const isHandleUnavailable = handleAvailable === false && !!handle.trim()
+	const isHandleFormatValid = HANDLE_REGEX.test(handle) && handle.length >= 3 && handle.length <= 30
+	const isHandleUnavailable = isHandleFormatValid && handleAvailable === false && !!handle.trim()
 
 	if (loading) {
 		return (
