@@ -1,6 +1,6 @@
 "use client"
 import styled from "styled-components"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { supabaseClient } from "../../lib/supabaseClient"
 import { updateProfileCache } from "../../lib/profileCache"
@@ -202,17 +202,15 @@ export default function Setup() {
 		}
 	}
 
-	const handleDataChange = (data: NametagData) => {
+	const handleDataChange = useCallback((data: NametagData) => {
 		setNametagData(data)
-		// Clear errors when user provides valid data
-		if (hasAttemptedSubmit) {
-			setValidationErrors((prev) => ({
-				...prev,
-				profilePhoto: !data.profilePhoto,
-				fullName: !data.fullName.trim()
-			}))
-		}
-	}
+		setValidationErrors((prev) => {
+			const newPhoto = !data.profilePhoto
+			const newName = !data.fullName.trim()
+			if (prev.profilePhoto === newPhoto && prev.fullName === newName) return prev
+			return { ...prev, profilePhoto: newPhoto, fullName: newName }
+		})
+	}, [])
 
 	const handleHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setHandle(e.target.value.toLowerCase())
