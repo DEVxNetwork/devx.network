@@ -51,6 +51,8 @@ const TALK_STATUSES: TalkStatus[] = [
 	"cancelled"
 ]
 
+const DEFAULT_FILTER_STATUSES: TalkStatus[] = ["pending", "under_review", "approved", "scheduled"]
+
 const STATUS_COLORS: Record<TalkStatus, string> = {
 	pending: "#f59e0b",
 	under_review: "#3b82f6",
@@ -66,7 +68,7 @@ const STATUS_COLORS: Record<TalkStatus, string> = {
 export default function AdminTalks() {
 	const { loading, isAdmin } = useRequireAdminAuth()
 	const [talks, setTalks] = useState<TalkSubmission[]>([])
-	const [filterStatus, setFilterStatus] = useState<TalkStatus | "all">("all")
+	const [filterStatuses, setFilterStatuses] = useState<TalkStatus[]>(DEFAULT_FILTER_STATUSES)
 	const [updatingId, setUpdatingId] = useState<number | null>(null)
 	const [downloadingId, setDownloadingId] = useState<number | null>(null)
 	const [error, setError] = useState<string | null>(null)
@@ -98,8 +100,13 @@ export default function AdminTalks() {
 			)
 			.order("created_at", { ascending: false })
 
-		if (filterStatus !== "all") {
-			query = query.eq("status", filterStatus)
+		if (filterStatuses.length === 0) {
+			setTalks([])
+			return
+		}
+
+		if (filterStatuses.length !== TALK_STATUSES.length) {
+			query = query.in("status", filterStatuses)
 		}
 
 		const { data, error: fetchError } = await query
@@ -110,7 +117,7 @@ export default function AdminTalks() {
 		}
 
 		setTalks((data as unknown as TalkSubmission[]) || [])
-	}, [filterStatus])
+	}, [filterStatuses])
 
 	useEffect(() => {
 		if (isAdmin) {
@@ -144,6 +151,26 @@ export default function AdminTalks() {
 		} finally {
 			setUpdatingId(null)
 		}
+	}
+
+	const handleFilterStatusToggle = (status: TalkStatus, withOptionKey: boolean) => {
+		setFilterStatuses((previousStatuses) => {
+			if (withOptionKey) {
+				const hasOtherEnabledStatuses = previousStatuses.some(
+					(enabledStatus) => enabledStatus !== status
+				)
+				return hasOtherEnabledStatuses ? [status] : TALK_STATUSES
+			}
+
+			if (previousStatuses.includes(status)) {
+				return previousStatuses.filter((enabledStatus) => enabledStatus !== status)
+			}
+
+			return TALK_STATUSES.filter(
+				(candidateStatus) =>
+					candidateStatus === status || previousStatuses.includes(candidateStatus)
+			)
+		})
 	}
 
 	const getFileNameFromPath = (filePath: string) => {
@@ -231,7 +258,9 @@ export default function AdminTalks() {
 						<Title>Talk Submissions</Title>
 						<Subtitle>
 							{talks.length} submission{talks.length !== 1 ? "s" : ""}
-							{filterStatus !== "all" ? ` (${filterStatus})` : ""}
+							{filterStatuses.length !== TALK_STATUSES.length
+								? ` (${filterStatuses.length} status filter${filterStatuses.length !== 1 ? "s" : ""})`
+								: ""}
 						</Subtitle>
 					</PageHeader>
 
@@ -240,15 +269,12 @@ export default function AdminTalks() {
 					<FilterBar>
 						<FilterLabel>Filter by status:</FilterLabel>
 						<FilterButtons>
-							<FilterButton $active={filterStatus === "all"} onClick={() => setFilterStatus("all")}>
-								All
-							</FilterButton>
 							{TALK_STATUSES.map((status) => (
 								<FilterButton
 									key={status}
-									$active={filterStatus === status}
+									$active={filterStatuses.includes(status)}
 									$color={STATUS_COLORS[status]}
-									onClick={() => setFilterStatus(status)}
+									onClick={(event) => handleFilterStatusToggle(status, event.altKey)}
 								>
 									{status.replace("_", " ")}
 								</FilterButton>
