@@ -18,6 +18,8 @@ export default function Login() {
 	const [signingUp, setSigningUp] = useState(false)
 	const [signupSuccess, setSignupSuccess] = useState(false)
 	const [showEmailForm, setShowEmailForm] = useState(false)
+	const [resettingPassword, setResettingPassword] = useState(false)
+	const [passwordResetSuccess, setPasswordResetSuccess] = useState(false)
 	const router = useRouter()
 
 	useEffect(() => {
@@ -211,11 +213,47 @@ export default function Login() {
 	const handleBackClick = () => {
 		setError(null)
 		setShowEmailForm(false)
+		setPasswordResetSuccess(false)
 	}
 
 	const handleContinueEmailClick = () => {
 		setError(null)
 		setShowEmailForm(true)
+		setPasswordResetSuccess(false)
+	}
+
+	const handleForgotPassword = async (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault()
+		setError(null)
+
+		if (!email.trim()) {
+			setError("Please enter your email")
+			return
+		}
+
+		try {
+			setResettingPassword(true)
+
+			// Preserve `redirect` so after password reset + sign in we land back where the user started.
+			const searchParams = new URLSearchParams(window.location.search)
+			const redirectParam = searchParams.get("redirect")
+
+			const redirectTo = redirectParam
+				? `${window.location.origin}/reset-password?redirect=${encodeURIComponent(redirectParam)}`
+				: `${window.location.origin}/reset-password`
+
+			const { error: resetError } = await supabaseClient.auth.resetPasswordForEmail(email, {
+				redirectTo
+			})
+
+			if (resetError) throw resetError
+
+			setPasswordResetSuccess(true)
+		} catch (err: any) {
+			setError(err?.message || "Failed to send password reset email")
+		} finally {
+			setResettingPassword(false)
+		}
 	}
 
 	return (
@@ -240,67 +278,92 @@ export default function Login() {
 							{error && <ErrorMessage>{error}</ErrorMessage>}
 
 							{showEmailForm ? (
-								<EmailForm
-									onSubmit={(e) => {
-										e.preventDefault()
-										handleEmailSignIn(e)
-									}}
-								>
-									<InputGroup>
-										<TextInput
-											type="email"
-											variant="secondary"
-											size="default"
-											value={email}
-											onChange={(e) => setEmail(e.target.value)}
-											placeholder="Email"
-											required
-											disabled={signingIn || signingUp}
+								passwordResetSuccess ? (
+									<SuccessContainer>
+										<SuccessMessage
+											title="Check your email"
+											message="We've sent you a password reset link. Follow the instructions to choose a new password."
 										/>
-									</InputGroup>
-									<InputGroup>
-										<TextInput
-											type="password"
-											variant="secondary"
-											size="default"
-											value={password}
-											onChange={(e) => setPassword(e.target.value)}
-											placeholder="Password"
-											required
-											minLength={6}
-											disabled={signingIn || signingUp}
-										/>
-										<PasswordHelpText>Password must be at least 6 characters</PasswordHelpText>
-									</InputGroup>
-									<ButtonWrapper>
-										<Button
-											type="submit"
-											size="default"
-											variant="primary"
-											disabled={signingIn || signingUp || !email || !password}
-										>
-											{signingIn ? "Signing in..." : "Sign In"}
-										</Button>
-										<Button
-											type="button"
-											size="default"
-											variant="secondary"
-											disabled={signingIn || signingUp || !email || !password}
-											onClick={(e) => {
-												if (e) {
-													e.preventDefault()
-													e.stopPropagation()
+										<BackButton type="button" onClick={handleBackClick}>
+											← Back to sign in options
+										</BackButton>
+									</SuccessContainer>
+								) : (
+									<EmailForm
+										onSubmit={(e) => {
+											e.preventDefault()
+											handleEmailSignIn(e)
+										}}
+									>
+										<InputGroup>
+											<TextInput
+												type="email"
+												variant="secondary"
+												size="default"
+												value={email}
+												onChange={(e) => setEmail(e.target.value)}
+												placeholder="Email"
+												required
+												disabled={signingIn || signingUp || resettingPassword}
+											/>
+										</InputGroup>
+										<InputGroup>
+											<TextInput
+												type="password"
+												variant="secondary"
+												size="default"
+												value={password}
+												onChange={(e) => setPassword(e.target.value)}
+												placeholder="Password"
+												required
+												minLength={6}
+												disabled={signingIn || signingUp || resettingPassword}
+											/>
+											<PasswordHelpText>Password must be at least 6 characters</PasswordHelpText>
+										</InputGroup>
+										<ButtonWrapper>
+											<Button
+												type="submit"
+												size="default"
+												variant="primary"
+												disabled={
+													signingIn || signingUp || resettingPassword || !email || !password
 												}
-												handleEmailSignUp(e!)
-											}}
+											>
+												{signingIn ? "Signing in..." : "Sign In"}
+											</Button>
+											<Button
+												type="button"
+												size="default"
+												variant="secondary"
+												disabled={
+													signingIn || signingUp || resettingPassword || !email || !password
+												}
+												onClick={(e) => {
+													if (e) {
+														e.preventDefault()
+														e.stopPropagation()
+													}
+													handleEmailSignUp(e!)
+												}}
+											>
+												{signingUp ? "Signing up..." : "Sign Up"}
+											</Button>
+										</ButtonWrapper>
+
+										<ForgotPasswordButton
+											type="button"
+											onClick={handleForgotPassword}
+											disabled={resettingPassword || signingIn || signingUp || !email}
 										>
-											{signingUp ? "Signing up..." : "Sign Up"}
-										</Button>
-									</ButtonWrapper>
-									<BackButton type="button" onClick={handleBackClick}>
-										← Back to sign in options
-									</BackButton>
-								</EmailForm>
+											Forgot password?
+										</ForgotPasswordButton>
+
+										<BackButton type="button" onClick={handleBackClick}>
+											← Back to sign in options
+										</BackButton>
+									</EmailForm>
+								)
 							) : (
 								<ButtonContainer>
 									<Button onClick={handleLogin("google")} size="default" variant="primary">
@@ -429,5 +492,27 @@ const BackButton = styled.button`
 
 	&:hover {
 		color: rgba(255, 255, 255, 0.9);
+	}
+`
+
+const ForgotPasswordButton = styled.button`
+	background: none;
+	border: none;
+	color: rgba(255, 255, 255, 0.6);
+	cursor: pointer;
+	padding: 0;
+	margin-top: -0.5rem;
+	font-size: 0.875rem;
+	transition: color 0.2s ease;
+	font-family: inherit;
+	text-align: right;
+
+	&:hover:not(:disabled) {
+		color: rgba(255, 255, 255, 0.9);
+	}
+
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
 	}
 `
