@@ -5,6 +5,25 @@ TODO: Fill in missing startTime/endTime values by watching videos
 */
 
 export const talks = [
+	// April 2026
+	{
+		videoId: "STI5pw5F5Lo",
+		speaker: "Tyler Lindow",
+		title: "Minds & Models",
+		date: "2026-04-18",
+		year: 2026,
+		startTime: "10m30s",
+		endTime: "34m51s"
+	},
+	{
+		videoId: "STI5pw5F5Lo",
+		speaker: "Andy Sustic",
+		title: "AgentVouch: The Trust Layer for the Agent Economy",
+		date: "2026-04-18",
+		year: 2026,
+		startTime: "35m52s",
+		endTime: "70m25s"
+	},
 	// March 2026
 	{
 		videoId: "z3lbfdhgiUc",
