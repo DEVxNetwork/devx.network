@@ -6,6 +6,8 @@ import { Footer } from "./components/Footer"
 import { siteConfig } from "./siteConfig"
 import StyledComponentsRegistry from "./StyledComponentsRegistry"
 
+console.log("well well well...")
+
 // Constants //
 
 export const metadata: Metadata = {
