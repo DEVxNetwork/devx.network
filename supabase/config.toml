@@ -123,11 +123,18 @@ enabled = true
 site_url = "https://devx.network"
 # A list of *exact* URLs that auth providers are permitted to redirect to post authentication.
 additional_redirect_urls = [
+	"http://localhost:3000",
+	"http://localhost:3000/login",
+	"http://localhost:3000/reset-password",
+	"http://127.0.0.1:3000",
+	"http://127.0.0.1:3000/login",
+	"http://127.0.0.1:3000/reset-password",
 	"https://127.0.0.1:3000",
 	"http://192.168.1.93:3000",
 	"https://192.168.1.93:3000",
 	"https://devx.network",
-	"https://devx.network/login"
+	"https://devx.network/login",
+	"https://devx.network/reset-password"
 ]
 # How long tokens are valid for, in seconds. Defaults to 3600 (1 hour), maximum 604,800 (1 week).
 jwt_expiry = 3600
@@ -205,6 +212,10 @@ otp_expiry = 3600
 # [auth.email.template.invite]
 # subject = "You have been invited"
 # content_path = "./supabase/templates/invite.html"
+
+[auth.email.template.recovery]
+subject = "Reset Your Password"
+content_path = "./email-templates/reset-password-email.html"
 
 # Uncomment to customize notification email template
 # [auth.email.notification.password_changed]
