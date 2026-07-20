@@ -17,6 +17,11 @@ export const organizers = [
 		linkedIn: "https://www.linkedin.com/in/ezekiel-lopez-633b57212/"
 	},
 	{
+		name: "Gilbert Doplito",
+		imageSrc: "/images/profile-photos/gilbert-2026.png",
+		linkedIn: "https://www.linkedin.com/in/gilbert-d-jr/"
+	},
+	{
 		name: "Jonathan Lewis",
 		imageSrc: "/images/profile-photos/jon-about.png",
 		linkedIn: "https://www.linkedin.com/in/jonathan-david-lewis/"
