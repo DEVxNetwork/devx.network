@@ -29,7 +29,7 @@ export const talks = [
 		videoId: "UtTMJvR0IU0",
 		speaker: "AJ Caldwell",
 		title: "Your coffeeshop on git",
-		date: "2026-06-20",
+		date: "2026-06-27",
 		year: 2026,
 		startTime: "5m34s",
 		endTime: "18m24s"
@@ -38,7 +38,7 @@ export const talks = [
 		videoId: "UtTMJvR0IU0",
 		speaker: "Keith Menor",
 		title: "Nobody really wants software",
-		date: "2026-06-20",
+		date: "2026-06-27",
 		year: 2026,
 		startTime: "19m30s",
 		endTime: "37m6s"
