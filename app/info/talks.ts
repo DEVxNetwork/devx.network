@@ -5,6 +5,63 @@ TODO: Fill in missing startTime/endTime values by watching videos
 */
 
 export const talks = [
+	// July 2026
+	{
+		videoId: "3kLcT0rMgJs",
+		speaker: "Cammie Clay and Sonia Sarao",
+		title: "Three years in, has AI delivered us the freedom?",
+		date: "2026-07-18",
+		year: 2026,
+		startTime: "10m52s",
+		endTime: "49m39s"
+	},
+	{
+		videoId: "3kLcT0rMgJs",
+		speaker: "Tryston Perry",
+		title: "Claude Code for Designers",
+		date: "2026-07-18",
+		year: 2026,
+		startTime: "53m23s",
+		endTime: "67m51s"
+	},
+	// June 2026
+	{
+		videoId: "UtTMJvR0IU0",
+		speaker: "AJ Caldwell",
+		title: "Your coffeeshop on git",
+		date: "2026-06-20",
+		year: 2026,
+		startTime: "5m34s",
+		endTime: "18m24s"
+	},
+	{
+		videoId: "UtTMJvR0IU0",
+		speaker: "Keith Menor",
+		title: "Nobody really wants software",
+		date: "2026-06-20",
+		year: 2026,
+		startTime: "19m30s",
+		endTime: "37m6s"
+	},
+	// May 2026
+	{
+		videoId: "BBCS7DYpiy0",
+		speaker: "Joey Sipos",
+		title: "My Journey Creating Glider Sim: A Planetary-Scale Flight Simulator",
+		date: "2026-05-16",
+		year: 2026,
+		startTime: "8m38s",
+		endTime: "30m4s"
+	},
+	{
+		videoId: "BBCS7DYpiy0",
+		speaker: "Jonathan Lewis",
+		title: "Should You Build It?",
+		date: "2026-05-16",
+		year: 2026,
+		startTime: "34m0s",
+		endTime: "63m10s"
+	},
 	// April 2026
 	{
 		videoId: "STI5pw5F5Lo",
