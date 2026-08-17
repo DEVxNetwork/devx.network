@@ -70,69 +70,53 @@ export const Button = ({
 
 // Styled Components //
 
-const StyledButton = styled.button<{
+// Shared visual rules for all three DOM variants (button/Link/anchor) —
+// kept as one template so the three renderers below can't drift apart.
+const sharedButtonCss = (props: {
 	$variant: "primary" | "secondary" | "tertiary"
 	$size: "small" | "default"
-}>`
-	padding: ${(props) => (props.$size === "small" ? "0.5rem 1rem" : "0.75rem 1.5rem")};
-	border-radius: ${(props) => (props.$variant === "tertiary" ? "0.375rem" : "0.25rem")};
-	font-weight: ${(props) => (props.$size === "small" ? "500" : "600")};
-	font-size: ${(props) => (props.$size === "small" ? "inherit" : "1.1rem")};
+}) => `
+	padding: ${props.$size === "small" ? "0.5rem 1.1rem" : "0.85rem 1.75rem"};
+	border-radius: 999px;
+	font-weight: ${props.$size === "small" ? "600" : "700"};
+	font-size: ${props.$size === "small" ? "0.9rem" : "1.05rem"};
 	cursor: pointer;
-	transition: all 0.3s ease;
+	transition: all 0.2s ease;
 	text-decoration: none;
 	display: inline-flex;
 	align-items: center;
+	justify-content: center;
 	gap: 0.5rem;
-	border: none;
 	font-family: inherit;
 	line-height: 1.5;
-	background-color: ${(props) =>
+	white-space: nowrap;
+	background-color: ${
 		props.$variant === "primary"
-			? "white"
-			: props.$variant === "tertiary"
+			? "var(--color-accent)"
+			: props.$variant === "secondary"
 				? "transparent"
-				: "transparent"};
-	color: ${(props) => (props.$variant === "primary" ? "black" : "white")};
-	border: ${(props) => (props.$variant === "secondary" ? "1px solid white" : "none")};
-	position: ${(props) => (props.$variant === "tertiary" ? "relative" : "static")};
-	overflow: ${(props) => (props.$variant === "tertiary" ? "hidden" : "visible")};
+				: "transparent"
+	};
+	color: ${
+		props.$variant === "primary"
+			? "var(--color-accent-ink)"
+			: props.$variant === "secondary"
+				? "var(--color-ink)"
+				: "var(--color-ink-muted)"
+	};
+	border: ${props.$variant === "secondary" ? "1.5px solid var(--color-ink)" : "1.5px solid transparent"};
+`
 
-	${(props) =>
-		props.$variant === "tertiary" &&
-		`
-		&::before {
-			content: "";
-			position: absolute;
-			top: 0;
-			left: -100%;
-			width: 100%;
-			height: 100%;
-			background: linear-gradient(
-				90deg,
-				transparent,
-				rgba(255, 255, 255, 0.1),
-				transparent
-			);
-			transition: left 0.5s ease;
-		}
-	`}
-
+const sharedButtonHoverCss = (props: { $variant: "primary" | "secondary" | "tertiary" }) => `
 	&:hover:not(:disabled) {
-		background-color: ${(props) => {
-			if (props.$variant === "primary") return "#ddd"
-			if (props.$variant === "tertiary") return "rgba(255, 255, 255, 0.05)"
-			return "rgba(255, 255, 255, 0.1)"
-		}};
-		border-radius: ${(props) => (props.$variant === "tertiary" ? "0.375rem" : "0.25rem")};
-
-		${(props) =>
-			props.$variant === "tertiary" &&
-			`
-			&::before {
-				left: 100%;
-			}
-		`}
+		background-color: ${
+			props.$variant === "primary"
+				? "var(--color-accent-hover)"
+				: props.$variant === "secondary"
+					? "var(--color-ink)"
+					: "transparent"
+		};
+		color: ${props.$variant === "secondary" ? "var(--color-bg)" : props.$variant === "tertiary" ? "var(--color-ink)" : "var(--color-accent-ink)"};
 	}
 
 	&:disabled {
@@ -141,134 +125,26 @@ const StyledButton = styled.button<{
 	}
 `
 
+const StyledButton = styled.button<{
+	$variant: "primary" | "secondary" | "tertiary"
+	$size: "small" | "default"
+}>`
+	${sharedButtonCss}
+	${sharedButtonHoverCss}
+`
+
 const StyledLink = styled(Link)<{
 	$variant: "primary" | "secondary" | "tertiary"
 	$size: "small" | "default"
 }>`
-	padding: ${(props) => (props.$size === "small" ? "0.5rem 1rem" : "0.75rem 1.5rem")};
-	border-radius: ${(props) => (props.$variant === "tertiary" ? "0.375rem" : "0.25rem")};
-	font-weight: ${(props) => (props.$size === "small" ? "500" : "600")};
-	font-size: ${(props) => (props.$size === "small" ? "inherit" : "1.1rem")};
-	cursor: pointer;
-	transition: all 0.3s ease;
-	text-decoration: none;
-	display: inline-flex;
-	align-items: center;
-	gap: 0.5rem;
-	border: none;
-	font-family: inherit;
-	line-height: 1.5;
-	background-color: ${(props) =>
-		props.$variant === "primary"
-			? "white"
-			: props.$variant === "tertiary"
-				? "transparent"
-				: "transparent"};
-	color: ${(props) => (props.$variant === "primary" ? "black" : "white")};
-	border: ${(props) => (props.$variant === "secondary" ? "1px solid white" : "none")};
-	position: ${(props) => (props.$variant === "tertiary" ? "relative" : "static")};
-	overflow: ${(props) => (props.$variant === "tertiary" ? "hidden" : "visible")};
-
-	${(props) =>
-		props.$variant === "tertiary" &&
-		`
-		&::before {
-			content: "";
-			position: absolute;
-			top: 0;
-			left: -100%;
-			width: 100%;
-			height: 100%;
-			background: linear-gradient(
-				90deg,
-				transparent,
-				rgba(255, 255, 255, 0.1),
-				transparent
-			);
-			transition: left 0.5s ease;
-		}
-	`}
-
-	&:hover {
-		background-color: ${(props) => {
-			if (props.$variant === "primary") return "#ddd"
-			if (props.$variant === "tertiary") return "rgba(255, 255, 255, 0.05)"
-			return "rgba(255, 255, 255, 0.1)"
-		}};
-		border-radius: ${(props) => (props.$variant === "tertiary" ? "0.375rem" : "0.25rem")};
-
-		${(props) =>
-			props.$variant === "tertiary" &&
-			`
-			&::before {
-				left: 100%;
-			}
-		`}
-	}
+	${sharedButtonCss}
+	${sharedButtonHoverCss}
 `
 
 const StyledExternalLink = styled.a<{
 	$variant: "primary" | "secondary" | "tertiary"
 	$size: "small" | "default"
 }>`
-	padding: ${(props) => (props.$size === "small" ? "0.5rem 1rem" : "0.75rem 1.5rem")};
-	border-radius: ${(props) => (props.$variant === "tertiary" ? "0.375rem" : "0.25rem")};
-	font-weight: ${(props) => (props.$size === "small" ? "500" : "600")};
-	font-size: ${(props) => (props.$size === "small" ? "inherit" : "1.1rem")};
-	cursor: pointer;
-	transition: all 0.3s ease;
-	text-decoration: none;
-	display: inline-flex;
-	align-items: center;
-	gap: 0.5rem;
-	border: none;
-	font-family: inherit;
-	line-height: 1.5;
-	background-color: ${(props) =>
-		props.$variant === "primary"
-			? "white"
-			: props.$variant === "tertiary"
-				? "transparent"
-				: "transparent"};
-	color: ${(props) => (props.$variant === "primary" ? "black" : "white")};
-	border: ${(props) => (props.$variant === "secondary" ? "1px solid white" : "none")};
-	position: ${(props) => (props.$variant === "tertiary" ? "relative" : "static")};
-	overflow: ${(props) => (props.$variant === "tertiary" ? "hidden" : "visible")};
-
-	${(props) =>
-		props.$variant === "tertiary" &&
-		`
-		&::before {
-			content: "";
-			position: absolute;
-			top: 0;
-			left: -100%;
-			width: 100%;
-			height: 100%;
-			background: linear-gradient(
-				90deg,
-				transparent,
-				rgba(255, 255, 255, 0.1),
-				transparent
-			);
-			transition: left 0.5s ease;
-		}
-	`}
-
-	&:hover {
-		background-color: ${(props) => {
-			if (props.$variant === "primary") return "#ddd"
-			if (props.$variant === "tertiary") return "rgba(255, 255, 255, 0.05)"
-			return "rgba(255, 255, 255, 0.1)"
-		}};
-		border-radius: ${(props) => (props.$variant === "tertiary" ? "0.375rem" : "0.25rem")};
-
-		${(props) =>
-			props.$variant === "tertiary" &&
-			`
-			&::before {
-				left: 100%;
-			}
-		`}
-	}
+	${sharedButtonCss}
+	${sharedButtonHoverCss}
 `

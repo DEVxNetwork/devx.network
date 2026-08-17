@@ -78,13 +78,13 @@ export const CardContent = styled.div<{ $padding?: string }>`
 export const CardTitle = styled.h3<{ $size?: string }>`
 	font-size: ${(props) => props.$size || "1.25rem"};
 	font-weight: bold;
-	color: white;
+	color: var(--color-ink);
 	margin-bottom: 0.5rem;
 `
 
 export const CardText = styled.p<{ $color?: string; $size?: string; $weight?: string }>`
 	font-size: ${(props) => props.$size || "0.875rem"};
-	color: ${(props) => props.$color || "#9ca3af"};
+	color: ${(props) => props.$color || "var(--color-ink-muted)"};
 	margin-bottom: 0.5rem;
 	font-weight: ${(props) => props.$weight || "normal"};
 `
@@ -94,49 +94,55 @@ export const CardText = styled.p<{ $color?: string; $size?: string; $weight?: st
 const StyledLink = styled(Link)`
 	display: flex;
 	flex-direction: column;
-	background-color: rgba(21, 21, 28, 0.75);
-	backdrop-filter: blur(10px);
-	border-radius: 0.5rem;
+	background-color: var(--color-bg-raised);
+	border: 1px solid var(--color-border);
+	border-radius: 0.75rem;
 	overflow: hidden;
-	transition: transform 0.2s ease;
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease;
 	text-decoration: none;
 	color: inherit;
 
 	&:hover {
 		transform: translateY(-4px);
-		box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+		box-shadow: 0 12px 24px rgba(23, 20, 15, 0.1);
 	}
 `
 
 const StyledExternalLink = styled.a`
 	display: flex;
 	flex-direction: column;
-	background-color: rgba(21, 21, 28, 0.75);
-	backdrop-filter: blur(10px);
-	border-radius: 0.5rem;
+	background-color: var(--color-bg-raised);
+	border: 1px solid var(--color-border);
+	border-radius: 0.75rem;
 	overflow: hidden;
-	transition: transform 0.2s ease;
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease;
 	text-decoration: none;
 	color: inherit;
 
 	&:hover {
 		transform: translateY(-4px);
-		box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+		box-shadow: 0 12px 24px rgba(23, 20, 15, 0.1);
 	}
 `
 
 const StyledDiv = styled.div`
 	display: flex;
 	flex-direction: column;
-	background-color: rgba(21, 21, 28, 0.75);
-	backdrop-filter: blur(10px);
-	border-radius: 0.5rem;
+	background-color: var(--color-bg-raised);
+	border: 1px solid var(--color-border);
+	border-radius: 0.75rem;
 	overflow: hidden;
-	transition: transform 0.2s ease;
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease;
 
 	&:hover {
 		transform: translateY(-4px);
-		box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+		box-shadow: 0 12px 24px rgba(23, 20, 15, 0.1);
 	}
 `
 
@@ -147,8 +153,8 @@ const ImageContainer = styled.div<{ $aspectRatio?: "16/9" | "1/1" | "auto" }>`
 	${(props) => props.$aspectRatio === "16/9" && "aspect-ratio: 16/9;"}
 	${(props) => props.$aspectRatio === "1/1" && "aspect-ratio: 1/1;"}
 	background-color: ${(props) =>
-		props.$aspectRatio !== "auto" ? "rgba(0, 0, 0, 0.8)" : "transparent"};
-	border-radius: ${(props) => (props.$aspectRatio !== "auto" ? "0.5rem" : "0")};
+		props.$aspectRatio !== "auto" ? "var(--color-border)" : "transparent"};
+	border-radius: 0;
 `
 
 const CardImage = styled.img<{ $aspectRatio?: "16/9" | "1/1" | "auto" }>`

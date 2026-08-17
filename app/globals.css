@@ -3,15 +3,25 @@
 @tailwind utilities;
 
 :root {
-	--error-color: #f87171;
+	/* Warm, editorial light theme */
+	--color-bg: #f6f3ec;
+	--color-bg-raised: #ffffff;
+	--color-ink: #17140f;
+	--color-ink-muted: #6b6459;
+	--color-ink-faint: #a49c8c;
+	--color-border: #e4ddcd;
+	--color-accent: #ff4b1f;
+	--color-accent-hover: #e63d14;
+	--color-accent-deep: #c43510;
+	--color-accent-ink: #fffaf5;
+
+	--error-color: #d5432a;
 	--b1: #000000;
 	--n: 21% 0.003 296.813;
 }
 
-@media (prefers-color-scheme: dark) {
-	html {
-		color-scheme: dark;
-	}
+html {
+	color-scheme: light;
 }
 
 html,
@@ -25,6 +35,16 @@ body {
 	flex-direction: column;
 	margin: 0;
 	padding: 0;
+	background-color: var(--color-bg);
+	color: var(--color-ink);
+	font-family:
+		"Chivo",
+		-apple-system,
+		BlinkMacSystemFont,
+		"Segoe UI",
+		Helvetica,
+		Arial,
+		sans-serif;
 }
 
 #__next {
@@ -41,7 +61,8 @@ h5,
 h6 {
 	margin-top: 0;
 	margin-bottom: 1rem;
-	line-height: 1.2;
+	line-height: 1.1;
+	letter-spacing: -0.01em;
 }
 
 h1 {
@@ -62,6 +83,10 @@ h3 {
 p {
 	line-height: 1.6;
 	margin-bottom: 1rem;
+}
+
+a {
+	color: var(--color-accent-deep);
 }
 
 header {

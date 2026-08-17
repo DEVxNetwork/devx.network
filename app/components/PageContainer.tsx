@@ -28,8 +28,8 @@ export const PageContainer = ({
 const StyledContainer = styled.div<{
 	$alignItems: "center" | "stretch" | "flex-start" | "flex-end"
 }>`
-	background-color: rgba(21, 21, 28, 0.75);
-	backdrop-filter: blur(10px);
+	background-color: var(--color-bg-raised);
+	border: 1px solid var(--color-border);
 	padding: 3rem;
 	border-radius: 1rem;
 	width: 100%;
@@ -38,5 +38,5 @@ const StyledContainer = styled.div<{
 	flex-direction: column;
 	align-items: ${(props) => props.$alignItems};
 	gap: 2rem;
-	box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+	box-shadow: 0 12px 40px rgba(23, 20, 15, 0.06);
 `

@@ -90,8 +90,8 @@ const FooterContainer = styled.footer`
 	align-items: center;
 	justify-content: center;
 	width: 100%;
-	background-color: rgba(0, 0, 0, 0.1);
-	backdrop-filter: blur(64px);
+	background-color: var(--color-bg);
+	border-top: 1px solid var(--color-border);
 	margin-top: auto;
 `
 
@@ -101,7 +101,7 @@ const FooterContent = styled.div`
 	align-items: center;
 	justify-content: space-between;
 	padding: 1.5rem 1rem;
-	color: #a3a3a3;
+	color: var(--color-ink-muted);
 	max-width: 1200px;
 	width: 100%;
 	gap: 1rem;
@@ -139,14 +139,14 @@ const SocialNav = styled.nav`
 const SocialLink = styled.a`
 	display: flex;
 	align-items: center;
-	color: inherit;
-	transition: opacity 0.2s ease;
+	color: var(--color-ink-muted);
+	transition: color 0.2s ease;
 
 	svg {
 		fill: currentColor;
 	}
 
 	&:hover {
-		opacity: 0.7;
+		color: var(--color-accent);
 	}
 `

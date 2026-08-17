@@ -1,6 +1,7 @@
 "use client"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import styled from "styled-components"
 import { links } from "../siteConfig"
 import { GiveATalkCTA } from "./GiveATalkCTA"
@@ -129,7 +130,7 @@ export const Header = () => {
 			<Container>
 				<Nav>
 					<NavStart>
-						<MenuButton onClick={toggleMenu}>
+						<MenuButton onClick={toggleMenu} aria-label="Open menu">
 							<MenuIcon
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"
@@ -144,6 +145,9 @@ export const Header = () => {
 								/>
 							</MenuIcon>
 						</MenuButton>
+						<Logo href="/">
+							DEV<LogoAccent>x</LogoAccent>
+						</Logo>
 					</NavStart>
 					<NavCenter>
 						<MenuList>
@@ -304,9 +308,9 @@ const Container = styled.header`
 	width: 100%;
 	position: sticky;
 	top: 0;
-	background-color: rgba(0, 0, 0, 0.05);
-	backdrop-filter: blur(38px);
-	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+	background-color: rgba(246, 243, 236, 0.85);
+	backdrop-filter: blur(16px);
+	border-bottom: 1px solid var(--color-border);
 	z-index: 100;
 
 	body.full & {
@@ -318,17 +322,28 @@ const Nav = styled.nav`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 1rem;
+	padding: 1rem 1.5rem;
 	max-width: 1200px;
 	margin: 0 auto;
 `
 
 const NavStart = styled.div`
 	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+`
 
-	@media (min-width: 768px) {
-		display: none;
-	}
+const Logo = styled(Link)`
+	font-size: 1.35rem;
+	font-weight: 900;
+	letter-spacing: -0.02em;
+	color: var(--color-ink);
+	text-decoration: none;
+`
+
+const LogoAccent = styled.span`
+	color: var(--color-accent);
 `
 
 const MenuButton = styled.button`
@@ -339,10 +354,15 @@ const MenuButton = styled.button`
 	border: none;
 	cursor: pointer;
 	padding: 0.5rem;
-	color: white;
+	margin-left: -0.5rem;
+	color: var(--color-ink);
 
 	&:hover {
-		opacity: 0.8;
+		opacity: 0.7;
+	}
+
+	@media (min-width: 768px) {
+		display: none;
 	}
 `
 
@@ -395,7 +415,7 @@ const ProfileImage = styled.img`
 	height: 100%;
 	object-fit: cover;
 	border-radius: 50%;
-	border: 2px solid rgba(255, 255, 255, 0.2);
+	border: 2px solid var(--color-border);
 `
 
 const ProfilePlaceholder = styled.div`
@@ -404,10 +424,10 @@ const ProfilePlaceholder = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background-color: rgba(255, 255, 255, 0.1);
+	background-color: var(--color-accent);
 	border-radius: 50%;
-	border: 2px solid rgba(255, 255, 255, 0.2);
-	color: white;
+	border: 2px solid var(--color-border);
+	color: var(--color-accent-ink);
 	font-size: 1rem;
 	font-weight: 600;
 `
@@ -425,21 +445,21 @@ const AccountMenuItem = styled.li`
 const AccountMenuLink = styled.a`
 	display: block;
 	padding: 0.75rem 1rem;
-	color: white;
+	color: var(--color-ink);
 	text-decoration: none;
 	font-size: 1.1rem;
 	border-radius: 0.375rem;
 	transition: background-color 0.2s ease;
 
 	&:hover {
-		background-color: rgba(255, 255, 255, 0.1);
+		background-color: var(--color-border);
 	}
 `
 
 const AccountMenuButton = styled.button`
 	display: block;
 	padding: 0.75rem 1rem;
-	color: white;
+	color: var(--color-ink);
 	text-decoration: none;
 	font-size: 1.1rem;
 	border-radius: 0.375rem;
@@ -451,13 +471,13 @@ const AccountMenuButton = styled.button`
 	cursor: pointer;
 
 	&:hover {
-		background-color: rgba(255, 255, 255, 0.1);
+		background-color: var(--color-border);
 	}
 `
 
 const AccountMenuDivider = styled.hr`
 	border: none;
-	border-top: 1px solid rgba(255, 255, 255, 0.1);
+	border-top: 1px solid var(--color-border);
 	margin: 0.5rem 0;
 `
 
@@ -467,7 +487,7 @@ const SidebarOverlay = styled.div<{ $isOpen: boolean }>`
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background-color: rgba(0, 0, 0, 0.5);
+	background-color: rgba(23, 20, 15, 0.4);
 	z-index: 200;
 	display: ${(props) => (props.$isOpen ? "block" : "none")};
 `
@@ -478,13 +498,12 @@ const LeftSidebar = styled.div<{ $isOpen: boolean }>`
 	left: 0;
 	width: 280px;
 	height: 100%;
-	background-color: rgba(0, 0, 0, 0.05);
-	backdrop-filter: blur(38px);
-	border-right: 1px solid rgba(255, 255, 255, 0.1);
+	background-color: var(--color-bg-raised);
+	border-right: 1px solid var(--color-border);
 	z-index: 201;
 	transform: translateX(${(props) => (props.$isOpen ? "0" : "-100%")});
 	transition: transform 0.3s ease-in-out;
-	box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3);
+	box-shadow: 2px 0 20px rgba(23, 20, 15, 0.1);
 
 	@media (min-width: 768px) {
 		display: none;
@@ -497,13 +516,12 @@ const RightSidebar = styled.div<{ $isOpen: boolean }>`
 	right: 0;
 	width: 280px;
 	height: 100%;
-	background-color: rgba(0, 0, 0, 0.05);
-	backdrop-filter: blur(38px);
-	border-left: 1px solid rgba(255, 255, 255, 0.1);
+	background-color: var(--color-bg-raised);
+	border-left: 1px solid var(--color-border);
 	z-index: 201;
 	transform: translateX(${(props) => (props.$isOpen ? "0" : "100%")});
 	transition: transform 0.3s ease-in-out;
-	box-shadow: -2px 0 20px rgba(0, 0, 0, 0.3);
+	box-shadow: -2px 0 20px rgba(23, 20, 15, 0.1);
 `
 
 const SidebarHeader = styled.div`
@@ -530,13 +548,13 @@ const SidebarProfileImage = styled.img`
 	height: 2.5rem;
 	object-fit: cover;
 	border-radius: 50%;
-	border: 2px solid rgba(255, 255, 255, 0.2);
+	border: 2px solid var(--color-border);
 	display: block;
 	flex-shrink: 0;
 `
 
 const ProfileHandle = styled.span`
-	color: white;
+	color: var(--color-ink);
 	font-size: 1rem;
 	font-weight: 500;
 `
@@ -549,10 +567,10 @@ const CloseButton = styled.button`
 	border: none;
 	cursor: pointer;
 	padding: 0.5rem;
-	color: white;
+	color: var(--color-ink);
 
 	&:hover {
-		opacity: 0.8;
+		opacity: 0.7;
 	}
 `
 
@@ -591,14 +609,15 @@ const MenuItem = styled.li`
 const MenuLink = styled.a`
 	display: block;
 	padding: 0.75rem 1rem;
-	color: white;
+	color: var(--color-ink);
 	text-decoration: none;
 	font-size: 1.1rem;
+	font-weight: 500;
 	border-radius: 0.375rem;
 	transition: background-color 0.2s ease;
 
 	&:hover {
-		background-color: rgba(255, 255, 255, 0.1);
+		background-color: var(--color-border);
 	}
 
 	@media (min-width: 768px) {
@@ -606,6 +625,7 @@ const MenuLink = styled.a`
 		font-size: 1rem;
 
 		&:hover {
+			color: var(--color-accent);
 			background-color: transparent;
 			text-decoration: underline;
 		}
