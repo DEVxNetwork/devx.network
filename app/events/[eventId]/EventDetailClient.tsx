@@ -8,6 +8,8 @@ import { PotionBackground } from "@/app/components/PotionBackground"
 import { ErrorBoundary } from "@/app/components/ErrorBoundary"
 import { Button } from "@/app/components/Button"
 import { TextInput } from "@/app/components/TextInput"
+import { supabaseClient } from "@/lib/supabaseClient"
+import { isInterestedInEvent, removeEventInterest, toggleEventInterest } from "@/lib/eventInterests"
 
 // Components //
 
@@ -21,13 +23,34 @@ export default function EventDetailClient() {
 	const [userInfo, setUserInfo] = useState<{ name: string; email: string }>({ name: "", email: "" })
 	const [registering, setRegistering] = useState(false)
 	const [hasStoredInfo, setHasStoredInfo] = useState(false)
+	const [isLoggedIn, setIsLoggedIn] = useState(false)
+	const [isInterested, setIsInterested] = useState(false)
+	const [interestLoading, setInterestLoading] = useState(true)
+	const [interestSaving, setInterestSaving] = useState(false)
 	const nameInputRef = useRef<HTMLInputElement>(null)
 
 	useEffect(() => {
 		loadEvent()
 		loadSavedInfo()
+		loadInterestState()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [eventId])
+
+	useEffect(() => {
+		if (!event || !isLoggedIn) {
+			return
+		}
+
+		const isPast = new Date(event.start_at) < new Date()
+		if (!isPast || !isInterested) {
+			return
+		}
+
+		// Past events are no longer actionable — drop the DB row
+		removeEventInterest(eventId)
+			.then(() => setIsInterested(false))
+			.catch((error) => console.error("Failed to prune past event interest:", error))
+	}, [event, isLoggedIn, isInterested, eventId])
 
 	const loadEvent = async () => {
 		try {
@@ -41,6 +64,53 @@ export default function EventDetailClient() {
 			console.error("Failed to load event:", error)
 		} finally {
 			setLoading(false)
+		}
+	}
+
+	const loadInterestState = async () => {
+		setInterestLoading(true)
+		try {
+			const {
+				data: { user }
+			} = await supabaseClient.auth.getUser()
+
+			if (!user) {
+				setIsLoggedIn(false)
+				setIsInterested(false)
+				return
+			}
+
+			setIsLoggedIn(true)
+			const interested = await isInterestedInEvent(eventId)
+			setIsInterested(interested)
+		} catch (error) {
+			console.error("Failed to load event interest:", error)
+			setIsInterested(false)
+		} finally {
+			setInterestLoading(false)
+		}
+	}
+
+	const handleToggleInterest = async () => {
+		if (!event || new Date(event.start_at) < new Date()) {
+			return
+		}
+
+		if (!isLoggedIn) {
+			const redirectUrl = encodeURIComponent(`/events/${eventId}`)
+			router.push(`/login?redirect=${redirectUrl}`)
+			return
+		}
+
+		setInterestSaving(true)
+		try {
+			const next = await toggleEventInterest(eventId)
+			setIsInterested(next)
+		} catch (error) {
+			console.error("Failed to update event interest:", error)
+			alert("Failed to update interest. Please try again.")
+		} finally {
+			setInterestSaving(false)
 		}
 	}
 
@@ -174,17 +244,19 @@ export default function EventDetailClient() {
 							<Header>
 								<Title>{event.name}</Title>
 								<DateTime>{formatEventDateTime(event.start_at, event.end_at)}</DateTime>
-								<Button
-									onClick={() => {
-										nameInputRef.current?.scrollIntoView({
-											behavior: "smooth",
-											block: "center"
-										})
-										setTimeout(() => nameInputRef.current?.focus(), 400)
-									}}
-								>
-									Attend This Event
-								</Button>
+								<MobileAttendButton>
+									<Button
+										onClick={() => {
+											nameInputRef.current?.scrollIntoView({
+												behavior: "smooth",
+												block: "center"
+											})
+											setTimeout(() => nameInputRef.current?.focus(), 400)
+										}}
+									>
+										Attend This Event
+									</Button>
+								</MobileAttendButton>
 							</Header>
 
 							{event.location && event.location.type === "online" && (
@@ -205,6 +277,32 @@ export default function EventDetailClient() {
 						</MainArea>
 						<SidebarArea>
 							<span id="registration-form" />
+
+							{!isPastEvent && (
+								<InterestSection>
+									<SectionTitle>Save Event</SectionTitle>
+									<InterestCopy>
+										{isInterested
+											? "Saved to your account. Come back anytime while you decide."
+											: "On the fence? Mark this event so you can find it later."}
+									</InterestCopy>
+									<Button
+										variant={isInterested ? "secondary" : "primary"}
+										onClick={handleToggleInterest}
+										disabled={interestLoading || interestSaving}
+									>
+										{interestLoading
+											? "Loading..."
+											: interestSaving
+												? "Saving..."
+												: isInterested
+													? "Remove Interest"
+													: isLoggedIn
+														? "I'm Interested"
+														: "Log in to Save"}
+									</Button>
+								</InterestSection>
+							)}
 
 							{!isPastEvent && (
 								<RegistrationSection>
@@ -441,6 +539,12 @@ const Header = styled.header`
 	margin-bottom: 2rem;
 `
 
+const MobileAttendButton = styled.div`
+	@media (min-width: 768px) {
+		display: none;
+	}
+`
+
 const Title = styled.h1`
 	font-size: 2.25rem;
 	font-weight: bold;
@@ -598,6 +702,28 @@ const AttendeeLink = styled.a`
 	&:hover {
 		text-decoration: underline;
 	}
+`
+
+const InterestSection = styled.section`
+	background-color: rgba(255, 255, 255, 0.01);
+	backdrop-filter: blur(32px);
+	box-shadow: 4px 8px 8px 0 rgba(0, 0, 0, 0.05);
+	padding: 1.5rem;
+	border-radius: 0.5rem;
+	margin: 2rem 0 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 0.75rem;
+	text-align: center;
+`
+
+const InterestCopy = styled.p`
+	font-size: 0.875rem;
+	color: #d1d5db;
+	line-height: 1.5;
+	margin: 0;
 `
 
 const RegistrationSection = styled.section`
