@@ -338,37 +338,49 @@ const HeroWordmarkBase = styled.span`
 `
 
 const HeroWordmarkAccent = styled.span`
+	position: relative;
 	display: inline-block;
 	padding: 0.08em;
 	margin: -0.08em;
 	color: transparent;
 	-webkit-text-stroke: 1px white;
 	paint-order: stroke fill;
-	background: linear-gradient(
-		45deg,
-		#ff0000 0%,
-		#ff7f00 12.5%,
-		#ffff00 25%,
-		#00ff00 37.5%,
-		#00ffff 50%,
-		#0000ff 62.5%,
-		#4b0082 75%,
-		#9400d3 87.5%,
-		#ff0000 100%
-	);
-	background-size: 100% 100%;
-	background-clip: text;
-	-webkit-background-clip: text;
-	text-shadow:
-		0 0 0.04em rgba(255, 64, 96, 0.35),
-		0 0 0.09em rgba(64, 224, 255, 0.25),
-		0 0 0.14em rgba(190, 90, 255, 0.18);
-	animation: ${heroAccentCycle} 4s ease-in-out infinite;
-	will-change: filter, text-shadow;
+
+	&::before {
+		content: "x";
+		position: absolute;
+		top: 0.08em;
+		left: 0.08em;
+		color: transparent;
+		-webkit-text-stroke: 0;
+		background: linear-gradient(
+			45deg,
+			#ff0000 0%,
+			#ff7f00 12.5%,
+			#ffff00 25%,
+			#00ff00 37.5%,
+			#00ffff 50%,
+			#0000ff 62.5%,
+			#4b0082 75%,
+			#9400d3 87.5%,
+			#ff0000 100%
+		);
+		background-size: 100% 100%;
+		background-clip: text;
+		-webkit-background-clip: text;
+		text-shadow:
+			0 0 0.04em rgba(255, 64, 96, 0.35),
+			0 0 0.09em rgba(64, 224, 255, 0.25),
+			0 0 0.14em rgba(190, 90, 255, 0.18);
+		animation: ${heroAccentCycle} 4s ease-in-out infinite;
+		will-change: filter, text-shadow;
+	}
 
 	@media (prefers-reduced-motion: reduce) {
-		animation: none;
-		filter: none;
+		&::before {
+			animation: none;
+			filter: none;
+		}
 	}
 `
 
