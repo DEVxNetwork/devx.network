@@ -347,7 +347,7 @@ const HeroWordmarkAccent = styled.span`
 	background-size: 450% 450%;
 	background-clip: text;
 	-webkit-background-clip: text;
-	animation: ${heroAccentCycle} 8s linear infinite;
+	animation: ${heroAccentCycle} 4s linear infinite;
 
 	@media (prefers-reduced-motion: reduce) {
 		animation: none;
