@@ -13,17 +13,12 @@ import type { LumaEvent } from "./services/luma"
 // Constants //
 
 const heroAccentCycle = keyframes`
-	0%,
-	100% {
-		color: #af00e3;
+	from {
+		background-position: 0% 50%;
 	}
 
-	33.333% {
-		color: #008375;
-	}
-
-	66.666% {
-		color: #ff5a2d;
+	to {
+		background-position: 100% 50%;
 	}
 `
 
@@ -334,11 +329,16 @@ const HeroWordmarkBase = styled.span`
 `
 
 const HeroWordmarkAccent = styled.span`
+	color: transparent;
+	background: linear-gradient(90deg, #af00e3 0%, #008375 33%, #ff5a2d 66%, #af00e3 100%);
+	background-size: 300% 100%;
+	background-clip: text;
+	-webkit-background-clip: text;
 	animation: ${heroAccentCycle} 12s linear infinite;
 
 	@media (prefers-reduced-motion: reduce) {
 		animation: none;
-		color: #af00e3;
+		background-position: 50% 50%;
 	}
 `
 
