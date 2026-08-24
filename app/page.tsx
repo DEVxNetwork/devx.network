@@ -329,6 +329,9 @@ const HeroWordmarkBase = styled.span`
 `
 
 const HeroWordmarkAccent = styled.span`
+	display: inline-block;
+	padding: 0.08em;
+	margin: -0.08em;
 	color: transparent;
 	background: linear-gradient(45deg, #af00e3 0%, #008375 33%, #ff5a2d 66%, #af00e3 100%);
 	background-size: 450% 450%;
