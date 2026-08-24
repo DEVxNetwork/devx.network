@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useState } from "react"
-import styled from "styled-components"
+import styled, { keyframes } from "styled-components"
 import { AnimatePresence, motion } from "framer-motion"
 import { organizers } from "./info/organizers"
 import { links } from "./siteConfig"
@@ -11,6 +11,21 @@ import { lumaService } from "./services/luma"
 import type { LumaEvent } from "./services/luma"
 
 // Constants //
+
+const heroAccentCycle = keyframes`
+	0%,
+	100% {
+		color: #af00e3;
+	}
+
+	33.333% {
+		color: #008375;
+	}
+
+	66.666% {
+		color: #ff5a2d;
+	}
+`
 
 const heroLocations = [
 	{ code: "SD", city: "San Diego" },
@@ -319,7 +334,12 @@ const HeroWordmarkBase = styled.span`
 `
 
 const HeroWordmarkAccent = styled.span`
-	color: var(--accent);
+	animation: ${heroAccentCycle} 12s linear infinite;
+
+	@media (prefers-reduced-motion: reduce) {
+		animation: none;
+		color: #af00e3;
+	}
 `
 
 const HeroLocationSlot = styled.span`
