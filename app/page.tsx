@@ -13,12 +13,21 @@ import type { LumaEvent } from "./services/luma"
 // Constants //
 
 const heroAccentCycle = keyframes`
-	from {
+	0%,
+	100% {
 		filter: hue-rotate(0deg);
+		text-shadow:
+			0 0 0.03em rgba(255, 0, 0, 0.18),
+			0 0 0.07em rgba(0, 191, 255, 0.12),
+			0 0 0.1em rgba(148, 0, 211, 0.08);
 	}
 
-	to {
-		filter: hue-rotate(360deg);
+	50% {
+		filter: hue-rotate(180deg);
+		text-shadow:
+			0 0 0.06em rgba(255, 0, 0, 0.34),
+			0 0 0.11em rgba(0, 191, 255, 0.24),
+			0 0 0.16em rgba(148, 0, 211, 0.16);
 	}
 `
 
@@ -348,7 +357,11 @@ const HeroWordmarkAccent = styled.span`
 	background-size: 100% 100%;
 	background-clip: text;
 	-webkit-background-clip: text;
-	animation: ${heroAccentCycle} 4s linear infinite;
+	text-shadow:
+		0 0 0.03em rgba(255, 0, 0, 0.18),
+		0 0 0.07em rgba(0, 191, 255, 0.12),
+		0 0 0.1em rgba(148, 0, 211, 0.08);
+	animation: ${heroAccentCycle} 4s ease-in-out infinite;
 
 	@media (prefers-reduced-motion: reduce) {
 		animation: none;
