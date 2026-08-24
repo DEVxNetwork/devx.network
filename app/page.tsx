@@ -18,14 +18,23 @@ const heroLocations = [
 	{ code: "SF", city: "San Francisco" }
 ] as const
 
-const sliderImages = [
-	"/images/slides/slide1.webp",
-	"/images/slides/slide2.webp",
-	"/images/slides/slide3.webp",
-	"/images/slides/slide4.webp",
-	"/images/slides/slide5.webp",
-	"/images/slides/slide6.webp"
-]
+const aboutItems = [
+	{
+		title: "Welcomes everyone",
+		copy: "We're a community of developers of all skill levels, hosted by organizers who want everyone to have a place to learn, meet people, and share what they're working on.",
+		image: "/images/slides/slide1.webp"
+	},
+	{
+		title: "Shares knowledge",
+		copy: "Our monthly meetups pair good food and real conversation with talks from local developers. Members can present an idea, demo a project, or ask the room for help.",
+		image: "/images/slides/slide3.webp"
+	},
+	{
+		title: "Builds together",
+		copy: "After the talks, we break into groups for project showcases, coding help, and casual networking. Bring your laptop and leave with feedback, collaborators, or a problem solved.",
+		image: "/images/slides/slide5.webp"
+	}
+] as const
 
 const pillars = [
 	{
@@ -47,8 +56,7 @@ const pillars = [
 export default function Home() {
 	const [currentHeroLocationIndex, setCurrentHeroLocationIndex] = useState(0)
 
-	// Image slider state
-	const [currentImageIndex, setCurrentImageIndex] = useState(0)
+	const [activeAboutIndex, setActiveAboutIndex] = useState(0)
 
 	// Next event state
 	const [nextEvent, setNextEvent] = useState<LumaEvent | null>(null)
@@ -57,15 +65,6 @@ export default function Home() {
 		const interval = setInterval(() => {
 			setCurrentHeroLocationIndex((previousIndex) => (previousIndex + 1) % heroLocations.length)
 		}, 3000)
-
-		return () => clearInterval(interval)
-	}, [])
-
-	// Auto-advance slider
-	useEffect(() => {
-		const interval = setInterval(() => {
-			setCurrentImageIndex((prevIndex) => (prevIndex + 1) % sliderImages.length)
-		}, 4000)
 
 		return () => clearInterval(interval)
 	}, [])
@@ -213,40 +212,43 @@ export default function Home() {
 				</PillarsSection>
 
 				<AboutSection>
-					<AboutGrid>
-						<AboutText>
+					<AboutLayout>
+						<AboutSummary>
 							<SectionEyebrow>About us</SectionEyebrow>
-							<SectionTitle>
-								Fostering a fun, educational developer community, in person.
-							</SectionTitle>
-							<ContentParagraph>
-								We&apos;re a community of developers of all skill levels, hosted by a team of
-								passionate organizers. Our monthly meetups offer a chance to network, learn, and
-								showcase community projects. Complimentary food and drinks included.
-							</ContentParagraph>
-							<ContentParagraph>
-								After the talks, we break into groups for casual networking, project showcases, and
-								coding help. Whether you&apos;re a seasoned developer or just starting out,
-								there&apos;s something for everyone.
-							</ContentParagraph>
-							<ContentParagraph $noMargin>
-								Bring your laptop if you&apos;d like to share your latest project or give a
-								presentation. We look forward to seeing what you&apos;re building.
-							</ContentParagraph>
-						</AboutText>
-						<AboutPhoto>
-							<AnimatePresence initial={false}>
-								<AboutPhotoImage
-									key={currentImageIndex}
-									src={sliderImages[currentImageIndex]}
-									alt="DEVx community gathering"
-									animate={{ opacity: 1 }}
-									exit={{ opacity: 0 }}
-									transition={{ duration: 1 }}
-								/>
-							</AnimatePresence>
-						</AboutPhoto>
-					</AboutGrid>
+							<AboutLead>A community that</AboutLead>
+						</AboutSummary>
+						<AboutAccordion>
+							{aboutItems.map((item, index) => {
+								const isActive = activeAboutIndex === index
+								const panelId = `about-panel-${index}`
+
+								return (
+									<AboutAccordionItem key={item.title} $active={isActive} $image={item.image}>
+										<AboutAccordionButton
+											type="button"
+											$active={isActive}
+											aria-expanded={isActive}
+											aria-controls={panelId}
+											onClick={() => setActiveAboutIndex(index)}
+										>
+											<AboutItemIndex>0{index + 1}</AboutItemIndex>
+											<AboutItemTitle>{item.title}</AboutItemTitle>
+											<AboutItemIndicator aria-hidden="true">
+												{isActive ? "−" : "+"}
+											</AboutItemIndicator>
+										</AboutAccordionButton>
+										<AboutPanel id={panelId} $active={isActive}>
+											<AboutPanelClip>
+												<AboutPanelContent>
+													<AboutPanelCopy>{item.copy}</AboutPanelCopy>
+												</AboutPanelContent>
+											</AboutPanelClip>
+										</AboutPanel>
+									</AboutAccordionItem>
+								)
+							})}
+						</AboutAccordion>
+					</AboutLayout>
 				</AboutSection>
 
 				<ContentSection>
@@ -450,27 +452,201 @@ const PillarCopy = styled.p`
 
 const AboutSection = styled.section`
 	width: 100%;
-	max-width: 1200px;
-	padding: 3rem 1.5rem;
+	padding: 3rem 0;
 
 	@media (max-width: 768px) {
-		padding: 1rem 1.5rem;
+		padding: 1rem 0;
 	}
 `
 
-const AboutGrid = styled.div`
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 4rem;
+const AboutLayout = styled.div`
+	display: flex;
+	width: 100%;
+	min-height: 620px;
+	background-color: var(--surface-solid);
+	border-top: 1px solid var(--border);
+	border-bottom: 1px solid var(--border);
+	overflow: hidden;
+
+	@media (max-width: 800px) {
+		min-height: 0;
+		flex-direction: column;
+	}
+`
+
+const AboutSummary = styled.div`
+	flex: 0 0 clamp(240px, 25vw, 380px);
+	padding: 2.5rem;
+	border-right: 1px solid var(--border);
+
+	@media (max-width: 800px) {
+		flex-basis: auto;
+		border-right: none;
+		border-bottom: 1px solid var(--border);
+	}
+`
+
+const AboutLead = styled.h2`
+	font-size: clamp(2rem, 4vw, 3.5rem);
+	font-weight: 800;
+	line-height: 1.05;
+	margin: 0;
+	color: var(--foreground);
+`
+
+const AboutAccordion = styled.div`
+	display: flex;
+	flex: 1;
+	min-width: 0;
+
+	@media (max-width: 800px) {
+		flex-direction: column;
+	}
+`
+
+const AboutAccordionItem = styled.div<{ $active: boolean; $image: string }>`
+	display: flex;
+	flex: ${(props) => (props.$active ? "5 1 0" : "1 1 0")};
+	flex-direction: column;
+	min-width: 0;
+	overflow: hidden;
+	border-left: 1px solid rgba(255, 255, 255, 0.2);
+	background-image: ${(props) =>
+		`linear-gradient(rgba(5, 5, 8, ${props.$active ? 0.48 : 0.7}), rgba(5, 5, 8, ${
+			props.$active ? 0.78 : 0.84
+		})), url("${props.$image}")`};
+	background-position: center;
+	background-size: cover;
+	transition: flex 0.5s ease;
+
+	&:first-child {
+		border-left: none;
+	}
+
+	@media (max-width: 800px) {
+		flex: none;
+		border-top: 1px solid rgba(255, 255, 255, 0.2);
+		border-left: none;
+
+		&:first-child {
+			border-top: none;
+		}
+	}
+`
+
+const AboutAccordionButton = styled.button<{ $active: boolean }>`
+	display: ${(props) => (props.$active ? "grid" : "flex")};
+	grid-template-columns: 3rem minmax(0, 1fr) auto;
+	flex: ${(props) => (props.$active ? "none" : "1")};
+	flex-direction: column;
+	gap: 1rem;
 	align-items: center;
+	justify-content: ${(props) => (props.$active ? "normal" : "space-between")};
+	width: 100%;
+	min-height: ${(props) => (props.$active ? "auto" : "100%")};
+	padding: 1.5rem 2rem;
+	border: none;
+	background: transparent;
+	color: ${(props) => (props.$active ? "#ffffff" : "rgba(255, 255, 255, 0.72)")};
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
+	transition: color 0.2s ease;
+
+	&:hover,
+	&:focus-visible {
+		color: #ffffff;
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: -2px;
+	}
+
+	@media (max-width: 800px) {
+		display: grid;
+		grid-template-columns: 2rem minmax(0, 1fr) auto;
+		flex: none;
+		flex-direction: row;
+		gap: 0.5rem;
+		align-items: center;
+		min-height: auto;
+		padding: 1.25rem;
+	}
+`
+
+const AboutItemIndex = styled.span`
+	align-self: start;
+	padding-top: 0.4rem;
+	font-size: 0.8rem;
+	font-weight: 700;
+`
+
+const AboutItemTitle = styled.span`
+	font-size: clamp(2.25rem, 5.5vw, 4.75rem);
+	font-weight: 500;
+	letter-spacing: -0.04em;
+	line-height: 0.95;
+
+	${AboutAccordionButton}:not([aria-expanded="true"]) & {
+		font-size: clamp(1.5rem, 2.5vw, 2.5rem);
+		writing-mode: vertical-rl;
+		transform: rotate(180deg);
+	}
+
+	@media (max-width: 800px) {
+		${AboutAccordionButton}:not([aria-expanded="true"]) & {
+			font-size: clamp(2rem, 9vw, 3.5rem);
+			writing-mode: horizontal-tb;
+			transform: none;
+		}
+	}
+`
+
+const AboutItemIndicator = styled.span`
+	font-size: 1.75rem;
+	font-weight: 300;
+`
+
+const AboutPanel = styled.div<{ $active: boolean }>`
+	display: grid;
+	flex: ${(props) => (props.$active ? "1" : "0")};
+	min-height: 0;
+	grid-template-rows: ${(props) => (props.$active ? "1fr" : "0fr")};
+	opacity: ${(props) => (props.$active ? 1 : 0)};
+	transition:
+		flex 0.45s ease,
+		grid-template-rows 0.45s ease,
+		opacity 0.3s ease;
+`
+
+const AboutPanelClip = styled.div`
+	min-height: 0;
+	overflow: hidden;
+`
+
+const AboutPanelContent = styled.div`
+	display: flex;
+	align-items: flex-end;
+	height: 100%;
+	padding: 0 2rem 2rem 6rem;
 
 	@media (max-width: 900px) {
-		grid-template-columns: 1fr;
-		gap: 2.5rem;
+		padding-left: 2rem;
+	}
+
+	@media (max-width: 600px) {
+		padding: 0 1.25rem 1.5rem;
 	}
 `
 
-const AboutText = styled.div``
+const AboutPanelCopy = styled.p`
+	max-width: 560px;
+	font-size: 1.05rem;
+	line-height: 1.7;
+	color: rgba(255, 255, 255, 0.88);
+	margin: 0;
+`
 
 const SectionEyebrow = styled.p<{ $center?: boolean }>`
 	text-transform: uppercase;
@@ -490,31 +666,6 @@ const SectionTitle = styled.h2<{ $center?: boolean }>`
 	text-align: ${(props) => (props.$center ? "center" : "left")};
 	max-width: 720px;
 	${(props) => props.$center && "margin-left: auto; margin-right: auto;"}
-`
-
-const ContentParagraph = styled.p<{ $noMargin?: boolean }>`
-	font-size: 1.05rem;
-	line-height: 1.75;
-	color: var(--muted-foreground);
-	margin: 0 0 ${(props) => (props.$noMargin ? "0" : "1.25rem")} 0;
-`
-
-const AboutPhoto = styled.div`
-	position: relative;
-	width: 100%;
-	aspect-ratio: 4/3;
-	border-radius: 1rem;
-	overflow: hidden;
-	border: 1px solid var(--border);
-`
-
-const AboutPhotoImage = styled(motion.img)`
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
 `
 
 const ContentSection = styled.section`
