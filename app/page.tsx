@@ -12,6 +12,12 @@ import type { LumaEvent } from "./services/luma"
 
 // Constants //
 
+const heroLocations = [
+	{ code: "SD", city: "San Diego" },
+	{ code: "LA", city: "Los Angeles" },
+	{ code: "SF", city: "San Francisco" }
+] as const
+
 const sliderImages = [
 	"/images/slides/slide1.webp",
 	"/images/slides/slide2.webp",
@@ -39,11 +45,21 @@ const pillars = [
 // Components //
 
 export default function Home() {
+	const [currentHeroLocationIndex, setCurrentHeroLocationIndex] = useState(0)
+
 	// Image slider state
 	const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
 	// Next event state
 	const [nextEvent, setNextEvent] = useState<LumaEvent | null>(null)
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setCurrentHeroLocationIndex((previousIndex) => (previousIndex + 1) % heroLocations.length)
+		}, 3000)
+
+		return () => clearInterval(interval)
+	}, [])
 
 	// Auto-advance slider
 	useEffect(() => {
@@ -76,6 +92,7 @@ export default function Home() {
 	}, [])
 
 	const nextEventLink = nextEvent ? `/events/${nextEvent.api_id}` : "/events"
+	const heroLocation = heroLocations[currentHeroLocationIndex]
 
 	return (
 		<>
@@ -90,10 +107,27 @@ export default function Home() {
 			</BackgroundContainer>
 			<Main>
 				<Hero>
-					<HeroEyebrow>San Diego</HeroEyebrow>
-					<HeroImage src="/images/sd-devx-brand.png" alt="DEVx San Diego" />
+					<HeroEyebrow>{heroLocation.city}</HeroEyebrow>
+					<HeroWordmark aria-label={`DEVx ${heroLocation.code}`}>
+						<HeroWordmarkBase>DEV</HeroWordmarkBase>
+						<HeroWordmarkAccent>x</HeroWordmarkAccent>
+						<HeroLocationSlot aria-hidden="true">
+							<AnimatePresence mode="wait" initial={false}>
+								<HeroLocationCode
+									key={heroLocation.code}
+									initial={{ opacity: 0, y: "0.45em" }}
+									animate={{ opacity: 1, y: 0 }}
+									exit={{ opacity: 0, y: "-0.45em" }}
+									transition={{ duration: 0.35, ease: "easeInOut" }}
+								>
+									{heroLocation.code}
+								</HeroLocationCode>
+							</AnimatePresence>
+						</HeroLocationSlot>
+					</HeroWordmark>
 					<HeroTagline>
-						A developer community of events and open-source projects in San Diego, California.
+						A developer community of events and open-source projects in {heroLocation.city},
+						California.
 					</HeroTagline>
 					<HeroActions>
 						<Button href={nextEventLink} variant="primary" size="default">
@@ -293,15 +327,39 @@ const HeroEyebrow = styled.p`
 	margin: 0 0 1rem 0;
 `
 
-const HeroImage = styled.img`
-	width: 100%;
-	max-width: 688px;
+const HeroWordmark = styled.h1`
+	display: flex;
+	align-items: baseline;
+	justify-content: center;
+	font-size: clamp(4rem, 13vw, 8rem);
+	font-weight: 900;
+	letter-spacing: -0.04em;
+	line-height: 1;
 	margin: 0;
-	filter: invert(1);
+	color: var(--foreground);
+`
 
-	@media (prefers-color-scheme: dark) {
-		filter: none;
-	}
+const HeroWordmarkBase = styled.span`
+	color: transparent;
+	-webkit-text-stroke: 2px var(--foreground);
+	paint-order: stroke fill;
+`
+
+const HeroWordmarkAccent = styled.span`
+	color: var(--accent);
+`
+
+const HeroLocationSlot = styled.span`
+	display: inline-grid;
+	width: 2ch;
+	overflow: hidden;
+	color: var(--foreground);
+`
+
+const HeroLocationCode = styled(motion.span)`
+	grid-area: 1 / 1;
+	display: inline-block;
+	letter-spacing: -0.04em;
 `
 
 const HeroTagline = styled.p`
