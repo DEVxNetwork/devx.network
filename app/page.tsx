@@ -25,7 +25,7 @@ const aboutItems = [
 		image: "/images/slides/slide1.webp"
 	},
 	{
-		title: "Inspires vision",
+		title: "Inspires ideas",
 		copy: "Our monthly meetups pair good food and real conversation with talks from local developers. Members can present an idea, demo a project, or ask the room for help.",
 		image: "/images/slides/slide3.webp"
 	},
