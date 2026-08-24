@@ -36,21 +36,6 @@ const aboutItems = [
 	}
 ] as const
 
-const pillars = [
-	{
-		label: "Connect",
-		copy: "Monthly meetups bring developers of every background together over good food and real conversation."
-	},
-	{
-		label: "Inspire",
-		copy: "Live talks and demos from fellow San Diego builders. See what's being shipped right now."
-	},
-	{
-		label: "Build",
-		copy: "Bring your laptop. Show your project. Get feedback, collaborators, and momentum."
-	}
-]
-
 // Components //
 
 export default function Home() {
@@ -198,18 +183,6 @@ export default function Home() {
 						</HeroSocialIcon>
 					</HeroSocialLinks>
 				</Hero>
-
-				<PillarsSection>
-					<PillarsGrid>
-						{pillars.map((pillar, index) => (
-							<PillarCard key={pillar.label}>
-								<PillarIndex>0{index + 1}</PillarIndex>
-								<PillarLabel>{pillar.label}</PillarLabel>
-								<PillarCopy>{pillar.copy}</PillarCopy>
-							</PillarCard>
-						))}
-					</PillarsGrid>
-				</PillarsSection>
 
 				<AboutSection>
 					<AboutLayout>
@@ -404,51 +377,6 @@ const HeroSocialIcon = styled.a`
 	&:hover {
 		color: var(--accent);
 	}
-`
-
-const PillarsSection = styled.section`
-	width: 100%;
-	max-width: 1200px;
-	padding: 2rem 1.5rem 5rem;
-
-	@media (max-width: 768px) {
-		padding: 1rem 1.5rem 3rem;
-	}
-`
-
-const PillarsGrid = styled.div`
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-	gap: 1.5rem;
-`
-
-const PillarCard = styled.div`
-	background-color: var(--surface-solid);
-	border: 1px solid var(--border);
-	border-radius: 1rem;
-	padding: 2.25rem;
-`
-
-const PillarIndex = styled.span`
-	display: block;
-	font-size: 0.85rem;
-	font-weight: 700;
-	color: var(--accent);
-	margin-bottom: 1rem;
-`
-
-const PillarLabel = styled.h3`
-	font-size: 1.5rem;
-	font-weight: 800;
-	margin: 0 0 0.75rem 0;
-	color: var(--foreground);
-`
-
-const PillarCopy = styled.p`
-	font-size: 1rem;
-	line-height: 1.6;
-	color: var(--muted-foreground);
-	margin: 0;
 `
 
 const AboutSection = styled.section`
