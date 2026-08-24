@@ -343,13 +343,13 @@ const HeroWordmarkBase = styled.span`
 const HeroWordmarkAccent = styled.span`
 	display: inline-grid;
 	align-items: baseline;
-	padding: 0.12em;
-	margin: -0.12em;
 `
 
 const HeroWordmarkAccentFill = styled.span`
 	grid-area: 1 / 1;
 	display: inline-block;
+	padding: 0.12em;
+	margin: -0.12em;
 	color: transparent;
 	background: linear-gradient(
 		45deg,
@@ -382,6 +382,8 @@ const HeroWordmarkAccentFill = styled.span`
 const HeroWordmarkAccentOutline = styled.span`
 	grid-area: 1 / 1;
 	display: inline-block;
+	padding: 0.12em;
+	margin: -0.12em;
 	color: transparent;
 	-webkit-text-stroke: 1px white;
 	paint-order: stroke fill;
