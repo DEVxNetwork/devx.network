@@ -16,10 +16,18 @@ const heroAccentCycle = keyframes`
 	0%,
 	100% {
 		filter: hue-rotate(0deg) brightness(1.05);
+		text-shadow:
+			0 0 0.04em rgba(255, 64, 96, 0.35),
+			0 0 0.09em rgba(64, 224, 255, 0.25),
+			0 0 0.14em rgba(190, 90, 255, 0.18);
 	}
 
 	50% {
 		filter: hue-rotate(180deg) brightness(1.25);
+		text-shadow:
+			0 0 0.08em rgba(255, 90, 120, 0.72),
+			0 0 0.15em rgba(90, 235, 255, 0.56),
+			0 0 0.22em rgba(215, 120, 255, 0.42);
 	}
 `
 
@@ -351,8 +359,12 @@ const HeroWordmarkAccent = styled.span`
 	background-size: 100% 100%;
 	background-clip: text;
 	-webkit-background-clip: text;
+	text-shadow:
+		0 0 0.04em rgba(255, 64, 96, 0.35),
+		0 0 0.09em rgba(64, 224, 255, 0.25),
+		0 0 0.14em rgba(190, 90, 255, 0.18);
 	animation: ${heroAccentCycle} 4s ease-in-out infinite;
-	will-change: filter;
+	will-change: filter, text-shadow;
 
 	@media (prefers-reduced-motion: reduce) {
 		animation: none;
