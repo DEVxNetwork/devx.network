@@ -113,7 +113,10 @@ export default function Home() {
 					<HeroEyebrow>{heroLocation.city}</HeroEyebrow>
 					<HeroWordmark aria-label={`DEVx ${heroLocation.code}`}>
 						<HeroWordmarkBase>DEV</HeroWordmarkBase>
-						<HeroWordmarkAccent>x</HeroWordmarkAccent>
+						<HeroWordmarkAccent aria-label="x">
+							<HeroWordmarkAccentFill aria-hidden="true">x</HeroWordmarkAccentFill>
+							<HeroWordmarkAccentOutline aria-hidden="true">x</HeroWordmarkAccentOutline>
+						</HeroWordmarkAccent>
 						<HeroLocationSlot aria-hidden="true">
 							<AnimatePresence initial={false}>
 								<HeroLocationCode
@@ -338,50 +341,50 @@ const HeroWordmarkBase = styled.span`
 `
 
 const HeroWordmarkAccent = styled.span`
-	position: relative;
+	display: inline-grid;
+	align-items: baseline;
+	padding: 0.12em;
+	margin: -0.12em;
+`
+
+const HeroWordmarkAccentFill = styled.span`
+	grid-area: 1 / 1;
 	display: inline-block;
-	padding: 0.08em;
-	margin: -0.08em;
+	color: transparent;
+	background: linear-gradient(
+		45deg,
+		#ff0000 0%,
+		#ff7f00 12.5%,
+		#ffff00 25%,
+		#00ff00 37.5%,
+		#00ffff 50%,
+		#0000ff 62.5%,
+		#4b0082 75%,
+		#9400d3 87.5%,
+		#ff0000 100%
+	);
+	background-size: 100% 100%;
+	background-clip: text;
+	-webkit-background-clip: text;
+	text-shadow:
+		0 0 0.04em rgba(255, 64, 96, 0.35),
+		0 0 0.09em rgba(64, 224, 255, 0.25),
+		0 0 0.14em rgba(190, 90, 255, 0.18);
+	animation: ${heroAccentCycle} 4s ease-in-out infinite;
+	will-change: filter, text-shadow;
+
+	@media (prefers-reduced-motion: reduce) {
+		animation: none;
+		filter: none;
+	}
+`
+
+const HeroWordmarkAccentOutline = styled.span`
+	grid-area: 1 / 1;
+	display: inline-block;
 	color: transparent;
 	-webkit-text-stroke: 1px white;
 	paint-order: stroke fill;
-
-	&::before {
-		content: "x";
-		position: absolute;
-		top: 0.08em;
-		left: 0.08em;
-		color: transparent;
-		-webkit-text-stroke: 0;
-		background: linear-gradient(
-			45deg,
-			#ff0000 0%,
-			#ff7f00 12.5%,
-			#ffff00 25%,
-			#00ff00 37.5%,
-			#00ffff 50%,
-			#0000ff 62.5%,
-			#4b0082 75%,
-			#9400d3 87.5%,
-			#ff0000 100%
-		);
-		background-size: 100% 100%;
-		background-clip: text;
-		-webkit-background-clip: text;
-		text-shadow:
-			0 0 0.04em rgba(255, 64, 96, 0.35),
-			0 0 0.09em rgba(64, 224, 255, 0.25),
-			0 0 0.14em rgba(190, 90, 255, 0.18);
-		animation: ${heroAccentCycle} 4s ease-in-out infinite;
-		will-change: filter, text-shadow;
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		&::before {
-			animation: none;
-			filter: none;
-		}
-	}
 `
 
 const HeroLocationSlot = styled.span`
