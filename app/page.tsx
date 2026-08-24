@@ -112,7 +112,7 @@ export default function Home() {
 						<HeroWordmarkBase>DEV</HeroWordmarkBase>
 						<HeroWordmarkAccent>x</HeroWordmarkAccent>
 						<HeroLocationSlot aria-hidden="true">
-							<AnimatePresence mode="wait" initial={false}>
+							<AnimatePresence initial={false}>
 								<HeroLocationCode
 									key={heroLocation.code}
 									initial={{ opacity: 0, x: "-0.35em", y: "0.45em" }}
