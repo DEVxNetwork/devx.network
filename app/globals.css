@@ -10,6 +10,9 @@
 	--foreground-rgb: 23, 23, 28;
 	--muted-foreground: #555b66;
 	--subtle-foreground: #6b7280;
+	--accent: #6d5bd0;
+	--accent-hover: #5b49bd;
+	--accent-contrast: #ffffff;
 	--surface: rgba(255, 255, 255, 0.78);
 	--surface-solid: #ffffff;
 	--header-background: rgba(247, 247, 250, 0.82);
@@ -30,6 +33,9 @@
 		--foreground-rgb: 255, 255, 255;
 		--muted-foreground: #d1d5db;
 		--subtle-foreground: #9ca3af;
+		--accent: #9ca3ff;
+		--accent-hover: #b2b7ff;
+		--accent-contrast: #0a0a0a;
 		--surface: rgba(21, 21, 28, 0.75);
 		--surface-solid: #15151c;
 		--header-background: rgba(0, 0, 0, 0.05);
@@ -55,6 +61,14 @@ body {
 	padding: 0;
 	background-color: var(--background);
 	color: var(--foreground);
+	font-family:
+		"Chivo",
+		-apple-system,
+		BlinkMacSystemFont,
+		"Segoe UI",
+		Helvetica,
+		Arial,
+		sans-serif;
 }
 
 #__next {
@@ -71,7 +85,8 @@ h5,
 h6 {
 	margin-top: 0;
 	margin-bottom: 1rem;
-	line-height: 1.2;
+	line-height: 1.1;
+	letter-spacing: -0.01em;
 }
 
 h1 {

@@ -94,9 +94,9 @@ export const CardText = styled.p<{ $color?: string; $size?: string; $weight?: st
 const StyledLink = styled(Link)`
 	display: flex;
 	flex-direction: column;
-	background-color: var(--surface);
-	backdrop-filter: blur(10px);
-	border-radius: 0.5rem;
+	background-color: var(--surface-solid);
+	border: 1px solid var(--border);
+	border-radius: 0.75rem;
 	overflow: hidden;
 	transition: transform 0.2s ease;
 	text-decoration: none;
@@ -111,9 +111,9 @@ const StyledLink = styled(Link)`
 const StyledExternalLink = styled.a`
 	display: flex;
 	flex-direction: column;
-	background-color: var(--surface);
-	backdrop-filter: blur(10px);
-	border-radius: 0.5rem;
+	background-color: var(--surface-solid);
+	border: 1px solid var(--border);
+	border-radius: 0.75rem;
 	overflow: hidden;
 	transition: transform 0.2s ease;
 	text-decoration: none;
@@ -128,9 +128,9 @@ const StyledExternalLink = styled.a`
 const StyledDiv = styled.div`
 	display: flex;
 	flex-direction: column;
-	background-color: var(--surface);
-	backdrop-filter: blur(10px);
-	border-radius: 0.5rem;
+	background-color: var(--surface-solid);
+	border: 1px solid var(--border);
+	border-radius: 0.75rem;
 	overflow: hidden;
 	transition: transform 0.2s ease;
 
@@ -146,9 +146,8 @@ const ImageContainer = styled.div<{ $aspectRatio?: "16/9" | "1/1" | "auto" }>`
 	overflow: hidden;
 	${(props) => props.$aspectRatio === "16/9" && "aspect-ratio: 16/9;"}
 	${(props) => props.$aspectRatio === "1/1" && "aspect-ratio: 1/1;"}
-	background-color: ${(props) =>
-		props.$aspectRatio !== "auto" ? "rgba(0, 0, 0, 0.8)" : "transparent"};
-	border-radius: ${(props) => (props.$aspectRatio !== "auto" ? "0.5rem" : "0")};
+	background-color: ${(props) => (props.$aspectRatio !== "auto" ? "var(--border)" : "transparent")};
+	border-radius: 0;
 `
 
 const CardImage = styled.img<{ $aspectRatio?: "16/9" | "1/1" | "auto" }>`
