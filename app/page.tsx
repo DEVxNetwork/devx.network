@@ -342,9 +342,7 @@ const HeroWordmark = styled.h1`
 `
 
 const HeroWordmarkBase = styled.span`
-	color: transparent;
-	-webkit-text-stroke: 2px var(--foreground);
-	paint-order: stroke fill;
+	color: var(--foreground);
 `
 
 const HeroWordmarkAccent = styled.span`
@@ -360,7 +358,10 @@ const HeroLocationSlot = styled.span`
 const HeroLocationCode = styled(motion.span)`
 	grid-area: 1 / 1;
 	display: inline-block;
+	color: transparent;
+	-webkit-text-stroke: 2px var(--foreground);
 	letter-spacing: -0.04em;
+	paint-order: stroke fill;
 `
 
 const HeroTagline = styled.p`
