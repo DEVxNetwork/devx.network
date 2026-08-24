@@ -342,7 +342,7 @@ const HeroWordmarkAccent = styled.span`
 	padding: 0.08em;
 	margin: -0.08em;
 	color: transparent;
-	-webkit-text-stroke: 1px rgba(255, 255, 255, 0.85);
+	-webkit-text-stroke: 1px white;
 	paint-order: stroke fill;
 	background: linear-gradient(
 		45deg,
