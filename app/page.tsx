@@ -333,18 +333,19 @@ const HeroWordmarkAccent = styled.span`
 	padding: 0.08em;
 	margin: -0.08em;
 	color: transparent;
-	background: linear-gradient(
+	background: repeating-linear-gradient(
 		45deg,
 		#ff0000 0%,
-		#ff7f00 14%,
-		#ffff00 28%,
-		#00c853 42%,
-		#00bfff 57%,
-		#4b0082 71%,
-		#9400d3 85%,
-		#ff0000 100%
+		#ff7f00 6.25%,
+		#ffff00 12.5%,
+		#00ff00 18.75%,
+		#00ffff 25%,
+		#0000ff 31.25%,
+		#4b0082 37.5%,
+		#9400d3 43.75%,
+		#ff0000 50%
 	);
-	background-size: 450% 450%;
+	background-size: 200% 200%;
 	background-clip: text;
 	-webkit-background-clip: text;
 	animation: ${heroAccentCycle} 4s linear infinite;
