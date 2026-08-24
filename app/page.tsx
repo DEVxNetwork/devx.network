@@ -20,12 +20,12 @@ const heroLocations = [
 
 const aboutItems = [
 	{
-		title: "Welcomes everyone",
+		title: "Connects everyone",
 		copy: "We're a community of developers of all skill levels, hosted by organizers who want everyone to have a place to learn, meet people, and share what they're working on.",
 		image: "/images/slides/slide1.webp"
 	},
 	{
-		title: "Shares knowledge",
+		title: "Inspires vision",
 		copy: "Our monthly meetups pair good food and real conversation with talks from local developers. Members can present an idea, demo a project, or ask the room for help.",
 		image: "/images/slides/slide3.webp"
 	},
