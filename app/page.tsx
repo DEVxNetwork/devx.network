@@ -14,11 +14,11 @@ import type { LumaEvent } from "./services/luma"
 
 const heroAccentCycle = keyframes`
 	from {
-		background-position: 0 0;
+		filter: hue-rotate(0deg);
 	}
 
 	to {
-		background-position: 1.5em 0;
+		filter: hue-rotate(360deg);
 	}
 `
 
@@ -345,15 +345,14 @@ const HeroWordmarkAccent = styled.span`
 		#9400d3 87.5%,
 		#ff0000 100%
 	);
-	background-size: 1.5em 1.5em;
-	background-repeat: repeat;
+	background-size: 100% 100%;
 	background-clip: text;
 	-webkit-background-clip: text;
 	animation: ${heroAccentCycle} 4s linear infinite;
 
 	@media (prefers-reduced-motion: reduce) {
 		animation: none;
-		background-position: 0 0;
+		filter: none;
 	}
 `
 
