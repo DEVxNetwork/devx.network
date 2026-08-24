@@ -51,7 +51,9 @@ export default function Events() {
 		<>
 			<BackgroundContainer>
 				<ErrorBoundary
-					fallback={<div style={{ backgroundColor: "black", width: "100%", height: "100%" }} />}
+					fallback={
+						<div style={{ backgroundColor: "var(--background)", width: "100%", height: "100%" }} />
+					}
 				>
 					<PotionBackground />
 				</ErrorBoundary>
@@ -97,7 +99,7 @@ export default function Events() {
 										<CardTitle>{event.name}</CardTitle>
 										<CardText>{formatEventDate(event.start_at)}</CardText>
 										{event.location && (
-											<CardText $color="#d1d5db">
+											<CardText $color="var(--muted-foreground)">
 												{event.location.type === "physical"
 													? `${event.location.city}, ${event.location.state}`
 													: "Online Event"}
@@ -140,7 +142,7 @@ function formatEventDate(dateString: string): string {
 }
 
 const BackgroundContainer = styled.section`
-	background-color: #0a0a0a;
+	background-color: var(--background);
 	position: fixed;
 	height: 100vh;
 	width: 100vw;
@@ -176,7 +178,7 @@ const Title = styled.h2`
 	font-weight: bold;
 	margin-bottom: 1rem;
 	text-align: center;
-	color: white;
+	color: var(--foreground);
 `
 
 const EventDescription = styled.p`
@@ -187,7 +189,7 @@ const EventDescription = styled.p`
 	margin-left: auto;
 	margin-right: auto;
 	margin-bottom: 2rem;
-	color: #d1d5db;
+	color: var(--muted-foreground);
 `
 
 const FilterToggle = styled.div`
@@ -214,14 +216,14 @@ const EventsGrid = styled.div`
 
 const LoadingMessage = styled.p`
 	text-align: center;
-	color: #9ca3af;
+	color: var(--subtle-foreground);
 	font-size: 1.125rem;
 	padding: 2rem;
 `
 
 const NoEventsMessage = styled.p`
 	text-align: center;
-	color: #9ca3af;
+	color: var(--subtle-foreground);
 	font-size: 1.125rem;
 	padding: 2rem;
 `

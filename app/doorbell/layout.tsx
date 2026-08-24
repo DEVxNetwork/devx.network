@@ -36,12 +36,12 @@ const MinimalFooter = styled.div.attrs({ className: "doorbell-footer" })`
 `
 
 const FooterLink = styled(Link)`
-	color: rgba(255, 255, 255, 0.6);
+	color: rgba(var(--foreground-rgb), 0.6);
 	font-size: 0.875rem;
 	text-decoration: none;
 	transition: color 0.2s ease;
 
 	&:hover {
-		color: rgba(255, 255, 255, 0.9);
+		color: rgba(var(--foreground-rgb), 0.9);
 	}
 `

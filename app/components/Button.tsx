@@ -89,12 +89,12 @@ const StyledButton = styled.button<{
 	line-height: 1.5;
 	background-color: ${(props) =>
 		props.$variant === "primary"
-			? "white"
+			? "var(--foreground)"
 			: props.$variant === "tertiary"
 				? "transparent"
 				: "transparent"};
-	color: ${(props) => (props.$variant === "primary" ? "black" : "white")};
-	border: ${(props) => (props.$variant === "secondary" ? "1px solid white" : "none")};
+	color: ${(props) => (props.$variant === "primary" ? "var(--background)" : "var(--foreground)")};
+	border: ${(props) => (props.$variant === "secondary" ? "1px solid var(--foreground)" : "none")};
 	position: ${(props) => (props.$variant === "tertiary" ? "relative" : "static")};
 	overflow: ${(props) => (props.$variant === "tertiary" ? "hidden" : "visible")};
 
@@ -111,7 +111,7 @@ const StyledButton = styled.button<{
 			background: linear-gradient(
 				90deg,
 				transparent,
-				rgba(255, 255, 255, 0.1),
+				rgba(var(--foreground-rgb), 0.1),
 				transparent
 			);
 			transition: left 0.5s ease;
@@ -120,9 +120,9 @@ const StyledButton = styled.button<{
 
 	&:hover:not(:disabled) {
 		background-color: ${(props) => {
-			if (props.$variant === "primary") return "#ddd"
-			if (props.$variant === "tertiary") return "rgba(255, 255, 255, 0.05)"
-			return "rgba(255, 255, 255, 0.1)"
+			if (props.$variant === "primary") return "rgba(var(--foreground-rgb), 0.82)"
+			if (props.$variant === "tertiary") return "rgba(var(--foreground-rgb), 0.05)"
+			return "rgba(var(--foreground-rgb), 0.1)"
 		}};
 		border-radius: ${(props) => (props.$variant === "tertiary" ? "0.375rem" : "0.25rem")};
 
@@ -160,12 +160,12 @@ const StyledLink = styled(Link)<{
 	line-height: 1.5;
 	background-color: ${(props) =>
 		props.$variant === "primary"
-			? "white"
+			? "var(--foreground)"
 			: props.$variant === "tertiary"
 				? "transparent"
 				: "transparent"};
-	color: ${(props) => (props.$variant === "primary" ? "black" : "white")};
-	border: ${(props) => (props.$variant === "secondary" ? "1px solid white" : "none")};
+	color: ${(props) => (props.$variant === "primary" ? "var(--background)" : "var(--foreground)")};
+	border: ${(props) => (props.$variant === "secondary" ? "1px solid var(--foreground)" : "none")};
 	position: ${(props) => (props.$variant === "tertiary" ? "relative" : "static")};
 	overflow: ${(props) => (props.$variant === "tertiary" ? "hidden" : "visible")};
 
@@ -182,7 +182,7 @@ const StyledLink = styled(Link)<{
 			background: linear-gradient(
 				90deg,
 				transparent,
-				rgba(255, 255, 255, 0.1),
+				rgba(var(--foreground-rgb), 0.1),
 				transparent
 			);
 			transition: left 0.5s ease;
@@ -191,9 +191,9 @@ const StyledLink = styled(Link)<{
 
 	&:hover {
 		background-color: ${(props) => {
-			if (props.$variant === "primary") return "#ddd"
-			if (props.$variant === "tertiary") return "rgba(255, 255, 255, 0.05)"
-			return "rgba(255, 255, 255, 0.1)"
+			if (props.$variant === "primary") return "rgba(var(--foreground-rgb), 0.82)"
+			if (props.$variant === "tertiary") return "rgba(var(--foreground-rgb), 0.05)"
+			return "rgba(var(--foreground-rgb), 0.1)"
 		}};
 		border-radius: ${(props) => (props.$variant === "tertiary" ? "0.375rem" : "0.25rem")};
 
@@ -226,12 +226,12 @@ const StyledExternalLink = styled.a<{
 	line-height: 1.5;
 	background-color: ${(props) =>
 		props.$variant === "primary"
-			? "white"
+			? "var(--foreground)"
 			: props.$variant === "tertiary"
 				? "transparent"
 				: "transparent"};
-	color: ${(props) => (props.$variant === "primary" ? "black" : "white")};
-	border: ${(props) => (props.$variant === "secondary" ? "1px solid white" : "none")};
+	color: ${(props) => (props.$variant === "primary" ? "var(--background)" : "var(--foreground)")};
+	border: ${(props) => (props.$variant === "secondary" ? "1px solid var(--foreground)" : "none")};
 	position: ${(props) => (props.$variant === "tertiary" ? "relative" : "static")};
 	overflow: ${(props) => (props.$variant === "tertiary" ? "hidden" : "visible")};
 
@@ -248,7 +248,7 @@ const StyledExternalLink = styled.a<{
 			background: linear-gradient(
 				90deg,
 				transparent,
-				rgba(255, 255, 255, 0.1),
+				rgba(var(--foreground-rgb), 0.1),
 				transparent
 			);
 			transition: left 0.5s ease;
@@ -257,9 +257,9 @@ const StyledExternalLink = styled.a<{
 
 	&:hover {
 		background-color: ${(props) => {
-			if (props.$variant === "primary") return "#ddd"
-			if (props.$variant === "tertiary") return "rgba(255, 255, 255, 0.05)"
-			return "rgba(255, 255, 255, 0.1)"
+			if (props.$variant === "primary") return "rgba(var(--foreground-rgb), 0.82)"
+			if (props.$variant === "tertiary") return "rgba(var(--foreground-rgb), 0.05)"
+			return "rgba(var(--foreground-rgb), 0.1)"
 		}};
 		border-radius: ${(props) => (props.$variant === "tertiary" ? "0.375rem" : "0.25rem")};
 

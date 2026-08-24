@@ -375,7 +375,7 @@ export default function Setup() {
 								{handle && (
 									<HandleStatus>
 										{checkingHandle ? (
-											<StatusText $color="rgba(255, 255, 255, 0.5)">Checking...</StatusText>
+											<StatusText $color="rgba(var(--foreground-rgb), 0.5)">Checking...</StatusText>
 										) : handleAvailable === true ? (
 											<StatusText $color="#4ade80">✓ Available</StatusText>
 										) : handleAvailable === false ? (
@@ -460,13 +460,13 @@ const HeaderRow = styled.div`
 const Title = styled.h1`
 	font-size: 2.5rem;
 	font-weight: 700;
-	color: rgba(255, 255, 255, 0.95);
+	color: rgba(var(--foreground-rgb), 0.95);
 	text-align: center;
 	width: 100%;
 `
 
 const LoadingText = styled.p`
-	color: rgba(255, 255, 255, 0.7);
+	color: rgba(var(--foreground-rgb), 0.7);
 	font-size: 1.2rem;
 `
 
@@ -487,7 +487,7 @@ const Section = styled.div`
 const SectionTitle = styled.h2`
 	font-size: 1.5rem;
 	font-weight: 600;
-	color: rgba(255, 255, 255, 0.95);
+	color: rgba(var(--foreground-rgb), 0.95);
 	margin: 0;
 `
 
@@ -518,7 +518,7 @@ const StatusText = styled.span<{ $color: string }>`
 `
 
 const HelpText = styled.p`
-	color: rgba(255, 255, 255, 0.6);
+	color: rgba(var(--foreground-rgb), 0.6);
 	font-size: 0.875rem;
 	margin: 0;
 `

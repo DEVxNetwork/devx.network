@@ -304,7 +304,7 @@ const Container = styled.header`
 	width: 100%;
 	position: sticky;
 	top: 0;
-	background-color: rgba(0, 0, 0, 0.05);
+	background-color: var(--header-background);
 	backdrop-filter: blur(38px);
 	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 	z-index: 100;
@@ -339,7 +339,7 @@ const MenuButton = styled.button`
 	border: none;
 	cursor: pointer;
 	padding: 0.5rem;
-	color: white;
+	color: var(--foreground);
 
 	&:hover {
 		opacity: 0.8;
@@ -395,7 +395,7 @@ const ProfileImage = styled.img`
 	height: 100%;
 	object-fit: cover;
 	border-radius: 50%;
-	border: 2px solid rgba(255, 255, 255, 0.2);
+	border: 2px solid rgba(var(--foreground-rgb), 0.2);
 `
 
 const ProfilePlaceholder = styled.div`
@@ -404,10 +404,10 @@ const ProfilePlaceholder = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background-color: rgba(255, 255, 255, 0.1);
+	background-color: rgba(var(--foreground-rgb), 0.1);
 	border-radius: 50%;
-	border: 2px solid rgba(255, 255, 255, 0.2);
-	color: white;
+	border: 2px solid rgba(var(--foreground-rgb), 0.2);
+	color: var(--foreground);
 	font-size: 1rem;
 	font-weight: 600;
 `
@@ -425,21 +425,21 @@ const AccountMenuItem = styled.li`
 const AccountMenuLink = styled.a`
 	display: block;
 	padding: 0.75rem 1rem;
-	color: white;
+	color: var(--foreground);
 	text-decoration: none;
 	font-size: 1.1rem;
 	border-radius: 0.375rem;
 	transition: background-color 0.2s ease;
 
 	&:hover {
-		background-color: rgba(255, 255, 255, 0.1);
+		background-color: rgba(var(--foreground-rgb), 0.1);
 	}
 `
 
 const AccountMenuButton = styled.button`
 	display: block;
 	padding: 0.75rem 1rem;
-	color: white;
+	color: var(--foreground);
 	text-decoration: none;
 	font-size: 1.1rem;
 	border-radius: 0.375rem;
@@ -451,13 +451,13 @@ const AccountMenuButton = styled.button`
 	cursor: pointer;
 
 	&:hover {
-		background-color: rgba(255, 255, 255, 0.1);
+		background-color: rgba(var(--foreground-rgb), 0.1);
 	}
 `
 
 const AccountMenuDivider = styled.hr`
 	border: none;
-	border-top: 1px solid rgba(255, 255, 255, 0.1);
+	border-top: 1px solid var(--border);
 	margin: 0.5rem 0;
 `
 
@@ -478,9 +478,9 @@ const LeftSidebar = styled.div<{ $isOpen: boolean }>`
 	left: 0;
 	width: 280px;
 	height: 100%;
-	background-color: rgba(0, 0, 0, 0.05);
+	background-color: var(--sidebar-background);
 	backdrop-filter: blur(38px);
-	border-right: 1px solid rgba(255, 255, 255, 0.1);
+	border-right: 1px solid var(--border);
 	z-index: 201;
 	transform: translateX(${(props) => (props.$isOpen ? "0" : "-100%")});
 	transition: transform 0.3s ease-in-out;
@@ -497,9 +497,9 @@ const RightSidebar = styled.div<{ $isOpen: boolean }>`
 	right: 0;
 	width: 280px;
 	height: 100%;
-	background-color: rgba(0, 0, 0, 0.05);
+	background-color: var(--sidebar-background);
 	backdrop-filter: blur(38px);
-	border-left: 1px solid rgba(255, 255, 255, 0.1);
+	border-left: 1px solid var(--border);
 	z-index: 201;
 	transform: translateX(${(props) => (props.$isOpen ? "0" : "100%")});
 	transition: transform 0.3s ease-in-out;
@@ -530,13 +530,13 @@ const SidebarProfileImage = styled.img`
 	height: 2.5rem;
 	object-fit: cover;
 	border-radius: 50%;
-	border: 2px solid rgba(255, 255, 255, 0.2);
+	border: 2px solid rgba(var(--foreground-rgb), 0.2);
 	display: block;
 	flex-shrink: 0;
 `
 
 const ProfileHandle = styled.span`
-	color: white;
+	color: var(--foreground);
 	font-size: 1rem;
 	font-weight: 500;
 `
@@ -549,7 +549,7 @@ const CloseButton = styled.button`
 	border: none;
 	cursor: pointer;
 	padding: 0.5rem;
-	color: white;
+	color: var(--foreground);
 
 	&:hover {
 		opacity: 0.8;
@@ -591,14 +591,14 @@ const MenuItem = styled.li`
 const MenuLink = styled.a`
 	display: block;
 	padding: 0.75rem 1rem;
-	color: white;
+	color: var(--foreground);
 	text-decoration: none;
 	font-size: 1.1rem;
 	border-radius: 0.375rem;
 	transition: background-color 0.2s ease;
 
 	&:hover {
-		background-color: rgba(255, 255, 255, 0.1);
+		background-color: rgba(var(--foreground-rgb), 0.1);
 	}
 
 	@media (min-width: 768px) {

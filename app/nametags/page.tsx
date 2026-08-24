@@ -45,7 +45,9 @@ export default function NametagPage() {
 					<source src="/videos/nametags-hero.webm" type="video/webm" />
 				</VideoBackground>
 				<ErrorBoundary
-					fallback={<div style={{ backgroundColor: "black", width: "100%", height: "100%" }} />}
+					fallback={
+						<div style={{ backgroundColor: "var(--background)", width: "100%", height: "100%" }} />
+					}
 				>
 					<PotionBackground />
 				</ErrorBoundary>
@@ -92,7 +94,7 @@ export default function NametagPage() {
 // Styled Components //
 
 const Main = styled.main`
-	color: white;
+	color: var(--foreground);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -100,7 +102,7 @@ const Main = styled.main`
 `
 
 const BackgroundContainer = styled.section`
-	background-color: #0a0a0a;
+	background-color: var(--background);
 	position: fixed;
 	height: 100vh;
 	width: 100vw;
@@ -196,7 +198,7 @@ const Heading = styled.h1`
 const Description = styled.p`
 	font-size: clamp(1.25rem, 2vw, 1.75rem);
 	margin: 0;
-	color: rgba(255, 255, 255, 0.9);
+	color: rgba(var(--foreground-rgb), 0.9);
 	line-height: 1.4;
 `
 

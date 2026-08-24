@@ -86,7 +86,9 @@ export default function Home() {
 		<>
 			<BackgroundContainer>
 				<ErrorBoundary
-					fallback={<div style={{ backgroundColor: "black", width: "100%", height: "100%" }} />}
+					fallback={
+						<div style={{ backgroundColor: "var(--background)", width: "100%", height: "100%" }} />
+					}
 				>
 					<PotionBackground />
 				</ErrorBoundary>
@@ -395,7 +397,7 @@ export default function Home() {
 }
 
 const Main = styled.main`
-	color: white;
+	color: var(--foreground);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -403,7 +405,7 @@ const Main = styled.main`
 `
 
 const BackgroundContainer = styled.section`
-	background-color: #0a0a0a;
+	background-color: var(--background);
 	position: fixed;
 	height: 100vh;
 	width: 100vw;
@@ -441,7 +443,7 @@ const HeroSocialLinks = styled.div`
 const HeroSocialIcon = styled.a`
 	display: flex;
 	align-items: center;
-	color: rgba(255, 255, 255, 0.7);
+	color: rgba(var(--foreground-rgb), 0.7);
 	transition: all 0.3s ease;
 
 	svg {
@@ -465,6 +467,11 @@ const HeroImage = styled.img`
 	width: 100%;
 	max-width: 688px;
 	margin: 0 auto;
+	filter: invert(1);
+
+	@media (prefers-color-scheme: dark) {
+		filter: none;
+	}
 `
 
 const Tagline = styled.section`
@@ -523,7 +530,7 @@ const ScrollFeatureTagline = styled(motion.p)`
 	font-size: clamp(1.5rem, 3vw, 2.5rem);
 	text-align: center;
 	max-width: 820px;
-	color: rgba(255, 255, 255, 0.8);
+	color: rgba(var(--foreground-rgb), 0.8);
 	line-height: 1.4;
 `
 
@@ -605,6 +612,7 @@ const SliderOverlay = styled.div`
 const AboutContentOverlay = styled.div`
 	position: relative;
 	z-index: 2;
+	color: #ffffff;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -740,7 +748,7 @@ const OrganizerCardWrapper = styled.div`
 `
 
 const OrganizerCardLink = styled.a`
-	background-color: rgba(255, 255, 255, 0.02);
+	background-color: rgba(var(--foreground-rgb), 0.02);
 	padding: 3rem;
 	border-radius: 0.5rem;
 	text-align: center;
@@ -755,7 +763,7 @@ const OrganizerCardLink = styled.a`
 	transition: background-color 0.3s ease;
 
 	&:hover {
-		background-color: rgba(255, 255, 255, 0.05);
+		background-color: rgba(var(--foreground-rgb), 0.05);
 	}
 
 	@media (max-width: 768px) {

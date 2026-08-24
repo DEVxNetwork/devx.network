@@ -78,13 +78,13 @@ export const CardContent = styled.div<{ $padding?: string }>`
 export const CardTitle = styled.h3<{ $size?: string }>`
 	font-size: ${(props) => props.$size || "1.25rem"};
 	font-weight: bold;
-	color: white;
+	color: var(--foreground);
 	margin-bottom: 0.5rem;
 `
 
 export const CardText = styled.p<{ $color?: string; $size?: string; $weight?: string }>`
 	font-size: ${(props) => props.$size || "0.875rem"};
-	color: ${(props) => props.$color || "#9ca3af"};
+	color: ${(props) => props.$color || "var(--subtle-foreground)"};
 	margin-bottom: 0.5rem;
 	font-weight: ${(props) => props.$weight || "normal"};
 `
@@ -94,7 +94,7 @@ export const CardText = styled.p<{ $color?: string; $size?: string; $weight?: st
 const StyledLink = styled(Link)`
 	display: flex;
 	flex-direction: column;
-	background-color: rgba(21, 21, 28, 0.75);
+	background-color: var(--surface);
 	backdrop-filter: blur(10px);
 	border-radius: 0.5rem;
 	overflow: hidden;
@@ -111,7 +111,7 @@ const StyledLink = styled(Link)`
 const StyledExternalLink = styled.a`
 	display: flex;
 	flex-direction: column;
-	background-color: rgba(21, 21, 28, 0.75);
+	background-color: var(--surface);
 	backdrop-filter: blur(10px);
 	border-radius: 0.5rem;
 	overflow: hidden;
@@ -128,7 +128,7 @@ const StyledExternalLink = styled.a`
 const StyledDiv = styled.div`
 	display: flex;
 	flex-direction: column;
-	background-color: rgba(21, 21, 28, 0.75);
+	background-color: var(--surface);
 	backdrop-filter: blur(10px);
 	border-radius: 0.5rem;
 	overflow: hidden;
@@ -169,8 +169,8 @@ const PlayButton = styled.div`
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	background-color: rgba(255, 255, 255, 0.5);
-	color: black;
+	background-color: rgba(var(--foreground-rgb), 0.5);
+	color: var(--background);
 	border-radius: 50%;
 	width: 60px;
 	height: 60px;
@@ -185,7 +185,7 @@ const PlayButton = styled.div`
 	${StyledLink}:hover &,
 	${StyledDiv}:hover &,
 	${StyledExternalLink}:hover & {
-		background-color: rgba(255, 255, 255, 0.8);
+		background-color: rgba(var(--foreground-rgb), 0.8);
 		transform: translate(-50%, -50%) scale(1.1);
 	}
 `
