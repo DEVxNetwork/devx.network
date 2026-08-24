@@ -330,11 +330,11 @@ const HeroWordmarkBase = styled.span`
 
 const HeroWordmarkAccent = styled.span`
 	color: transparent;
-	background: linear-gradient(90deg, #af00e3 0%, #008375 33%, #ff5a2d 66%, #af00e3 100%);
-	background-size: 300% 100%;
+	background: linear-gradient(45deg, #af00e3 0%, #008375 33%, #ff5a2d 66%, #af00e3 100%);
+	background-size: 450% 450%;
 	background-clip: text;
 	-webkit-background-clip: text;
-	animation: ${heroAccentCycle} 12s linear infinite;
+	animation: ${heroAccentCycle} 18s linear infinite;
 
 	@media (prefers-reduced-motion: reduce) {
 		animation: none;
