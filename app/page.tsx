@@ -352,7 +352,6 @@ const HeroWordmarkAccent = styled.span`
 const HeroLocationSlot = styled.span`
 	display: inline-grid;
 	width: 2ch;
-	overflow: hidden;
 	color: var(--foreground);
 `
 
