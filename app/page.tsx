@@ -115,9 +115,9 @@ export default function Home() {
 							<AnimatePresence mode="wait" initial={false}>
 								<HeroLocationCode
 									key={heroLocation.code}
-									initial={{ opacity: 0, y: "0.45em" }}
-									animate={{ opacity: 1, y: 0 }}
-									exit={{ opacity: 0, y: "-0.45em" }}
+									initial={{ opacity: 0, x: "-0.35em", y: "0.45em" }}
+									animate={{ opacity: 1, x: 0, y: 0 }}
+									exit={{ opacity: 0, x: "0.35em", y: "-0.45em" }}
 									transition={{ duration: 0.35, ease: "easeInOut" }}
 								>
 									{heroLocation.code}
