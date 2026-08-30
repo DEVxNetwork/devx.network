@@ -1,0 +1,142 @@
+name: Preview
+
+on:
+  pull_request:
+    branches: ["main"]
+    types: [opened, reopened, synchronize, closed]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: PR number to (re-)deploy
+        required: true
+
+concurrency:
+  group: "preview-${{ github.event.number || inputs.pr_number }}"
+  cancel-in-progress: true
+
+permissions:
+  pull-requests: write
+  packages: write
+
+jobs:
+  deploy-preview:
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    env:
+      PR_NUMBER: ${{ github.event.number || inputs.pr_number }}
+      APP_NAME: pr-${{ github.event.number || inputs.pr_number }}
+      CAPROVER_URL: ${{ secrets.CAPROVER_URL }}
+      CAPROVER_PASSWORD: ${{ secrets.CAPROVER_PASSWORD }}
+      CAPROVER_APP_DOMAIN: ${{ secrets.CAPROVER_APP_DOMAIN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Set image URL
+        run: |
+          REPO=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          echo "IMAGE=ghcr.io/${REPO}-preview:pr-${PR_NUMBER}-${SHA}" >> $GITHUB_ENV
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4.0.0
+
+      - name: Log in to GHCR
+        uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4.0.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294 # v7.0.0
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ env.IMAGE }}
+          build-args: |
+            NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+            NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Create app and deploy image via CapRover API
+        run: |
+          ADMIN_TOKEN=$(curl -sf -X POST "$CAPROVER_URL/api/v2/login" \
+            -H "Content-Type: application/json" \
+            -d "$(jq -nc --arg pass "$CAPROVER_PASSWORD" '{password:$pass}')" \
+            | jq -r '.data.token')
+
+          # Create app if it doesn't exist
+          curl -s -X POST "$CAPROVER_URL/api/v2/user/apps/appDefinitions/register" \
+            -H "Content-Type: application/json" \
+            -H "x-captain-auth: $ADMIN_TOKEN" \
+            -d "{\"appName\": \"$APP_NAME\", \"hasPersistentData\": false}" || true
+
+          curl -sf -X POST "$CAPROVER_URL/api/v2/user/apps/appDefinitions/enablebasedomainssl" \
+            -H "Content-Type: application/json" \
+            -H "x-captain-auth: $ADMIN_TOKEN" \
+            -d "{\"appName\": \"$APP_NAME\"}" || true
+
+          # Point app at the pre-built image and trigger deploy
+          curl -sf -X POST "$CAPROVER_URL/api/v2/user/apps/appDefinitions/update" \
+            -H "Content-Type: application/json" \
+            -H "x-captain-auth: $ADMIN_TOKEN" \
+            -d "{\"appName\": \"$APP_NAME\", \"imageName\": \"$IMAGE\", \"instanceCount\": 1}"
+
+      - name: Comment preview URL on PR
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        env:
+          CAPROVER_APP_DOMAIN: ${{ secrets.CAPROVER_APP_DOMAIN }}
+        with:
+          script: |
+            const prNumber = process.env.PR_NUMBER;
+            const appName = `pr-${prNumber}`;
+            const url = `https://${appName}.${process.env.CAPROVER_APP_DOMAIN}`;
+            const marker = '<!-- caprover-preview -->';
+            const body = `${marker}\n## Preview deployment\n\n${url}\n\n_Updated: ${new Date().toUTCString()} — expires after 6h of inactivity._`;
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: Number(prNumber),
+            });
+
+            const existing = comments.find(c => c.body.includes(marker));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: Number(prNumber),
+                body,
+              });
+            }
+
+  cleanup-preview:
+    if: github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    env:
+      APP_NAME: pr-${{ github.event.number }}
+      CAPROVER_URL: ${{ secrets.CAPROVER_URL }}
+      CAPROVER_PASSWORD: ${{ secrets.CAPROVER_PASSWORD }}
+    steps:
+      - name: Delete CapRover app
+        run: |
+          TOKEN=$(curl -sf -X POST "$CAPROVER_URL/api/v2/login" \
+            -H "Content-Type: application/json" \
+            -d "$(jq -nc --arg pass "$CAPROVER_PASSWORD" '{password:$pass}')" \
+            | jq -r '.data.token')
+
+          curl -s -X POST "$CAPROVER_URL/api/v2/user/apps/appDefinitions/delete" \
+            -H "Content-Type: application/json" \
+            -H "x-captain-auth: $TOKEN" \
+            -d "{\"appName\": \"$APP_NAME\"}" || true
