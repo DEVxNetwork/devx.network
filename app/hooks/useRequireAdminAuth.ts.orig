@@ -32,14 +32,12 @@ export function useRequireAdminAuth(): UseRequireAdminAuthResult {
 			if (!user) {
 				const redirectPath = encodeURIComponent(pathname || "/")
 				router.push(`/login?redirect=${redirectPath}`)
-				setLoading(false)
 				return
 			}
 
 			const admin = await checkIsAdmin()
 			if (!admin) {
 				router.push("/")
-				setLoading(false)
 				return
 			}
 

@@ -46,6 +46,7 @@ export default function Setup() {
 		fullName: false
 	})
 	const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false)
+	const [submitError, setSubmitError] = useState<string | null>(null)
 	const router = useRouter()
 
 	useEffect(() => {
@@ -231,6 +232,7 @@ export default function Setup() {
 	const handleFinishSetup = async (e: React.FormEvent) => {
 		e.preventDefault()
 		setHasAttemptedSubmit(true)
+		setSubmitError(null)
 
 		// Validate form and set error states
 		const errors = {
@@ -317,7 +319,7 @@ export default function Setup() {
 			}
 		} catch (err: any) {
 			console.error("Failed to create profile:", err)
-			// TODO: Show error message to user
+			setSubmitError(err?.message || "Failed to create profile. Please try again.")
 		} finally {
 			setSaving(false)
 		}
@@ -415,6 +417,8 @@ export default function Setup() {
 							</Button>
 						</ButtonWrapper>
 					</Form>
+
+					{submitError && <ErrorMessage>{submitError}</ErrorMessage>}
 				</ContentWrapper>
 			</Container>
 		</>
@@ -463,6 +467,17 @@ const Title = styled.h1`
 	color: rgba(255, 255, 255, 0.95);
 	text-align: center;
 	width: 100%;
+`
+
+const ErrorMessage = styled.p`
+	color: #ff6b6b;
+	background-color: rgba(255, 107, 107, 0.1);
+	padding: 0.75rem;
+	border-radius: 0.5rem;
+	font-size: 0.875rem;
+	text-align: center;
+	width: 100%;
+	margin: 0;
 `
 
 const LoadingText = styled.p`

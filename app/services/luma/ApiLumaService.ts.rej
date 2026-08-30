@@ -1,0 +1,38 @@
+--- ApiLumaService.ts
++++ ApiLumaService.ts
+@@ -17,10 +17,15 @@
+ 		if (!response.ok) {
+ 			throw new Error(`Failed to fetch events: ${response.statusText}`)
+ 		}
+ 
+-		const data = await response.json()
+-		return data.entries || []
++		const data: { entries?: Array<{ event: Record<string, unknown> }> } = await response.json()
++		// The list endpoint returns entries with nested event objects; extract them.
++		return (data.entries || []).map((entry) => this.transformApiEvent(entry.event))
+ 	}
+ 
++	/**
++	 * Fetch a single event by its API ID.
++	 * The Luma `event/get` endpoint expects `api_id` as a query parameter
++	 * and returns the event wrapped in an `{ event: ... }` envelope.
++	 */
+ 	async getEvent(eventId: string): Promise<LumaEvent | null> {
+-		const response = await fetch(`${LUMA_API_BASE_URL}/event/get?event_api_id=${eventId}`, {
+--- /dev/null
++++ /dev/null
+@@ -33,9 +38,12 @@
+ 				return null
+ 			}
+ 			throw new Error(`Failed to fetch event: ${response.statusText}`)
+ 		}
+ 
+-		const data = await response.json()
+-		return data
++		const data: { event?: Record<string, unknown> } = await response.json()
++		if (!data.event) {
++			return null
++		}
++		return this.transformApiEvent(data.event)
+ 	}
+ 

@@ -214,8 +214,7 @@ export default function AdminTalks() {
 			document.body.appendChild(linkElement)
 			linkElement.click()
 			document.body.removeChild(linkElement)
-			// Delay revoking the blob URL so the browser can start the asynchronous download
-			setTimeout(() => window.URL.revokeObjectURL(fileUrl), 10_000)
+			window.URL.revokeObjectURL(fileUrl)
 		} catch (err: any) {
 			setError(err.message || "Failed to download slides")
 		} finally {
