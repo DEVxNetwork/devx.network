@@ -3,7 +3,7 @@ name: Preview
 on:
   pull_request:
     branches: ["main"]
-    types: [opened, reopened, synchronize, closed]
+    types: [opened, reopened, synchronize, closed, labeled, unlabeled]
   workflow_dispatch:
     inputs:
       pr_number:
@@ -19,8 +19,15 @@ permissions:
   packages: write
 
 jobs:
+  # Only deploys when the PR carries the "preview" label — either the label
+  # was just added, or it was already present when the PR opened/reopened/
+  # got new commits. Keeps previews opt-in instead of building on every PR.
   deploy-preview:
-    if: github.event.action != 'closed'
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.action == 'labeled' && github.event.label.name == 'preview') ||
+      (contains(fromJSON('["opened","reopened","synchronize"]'), github.event.action) &&
+        contains(github.event.pull_request.labels.*.name, 'preview'))
     runs-on: ubuntu-latest
     env:
       PR_NUMBER: ${{ github.event.number || inputs.pr_number }}
@@ -122,7 +129,9 @@ jobs:
             }
 
   cleanup-preview:
-    if: github.event.action == 'closed'
+    if: |
+      github.event.action == 'closed' ||
+      (github.event.action == 'unlabeled' && github.event.label.name == 'preview')
     runs-on: ubuntu-latest
     env:
       APP_NAME: pr-${{ github.event.number }}
