@@ -32,6 +32,16 @@ export const organizers = [
 		linkedIn: "https://www.linkedin.com/in/jonathan-david-lewis/"
 	},
 	{
+		name: "Keith Chester",
+		imageSrc: "/images/profile-photos/keith-chester.webp",
+		linkedIn: "https://www.linkedin.com/in/keith-chester/"
+	},
+	{
+		name: "Keith Groves",
+		imageSrc: "/images/profile-photos/keith-groves.webp",
+		linkedIn: "https://www.linkedin.com/in/keithalgroves/"
+	},
+	{
 		name: "Sam Holmes",
 		imageSrc: "/images/profile-photos/sam-2026.jpg",
 		linkedIn: "https://www.linkedin.com/in/sammyholmes/"
