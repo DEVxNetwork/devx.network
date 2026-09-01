@@ -12,7 +12,8 @@
 		"format": "prettier --write .",
 		"precommit": "lint-staged",
 		"prepare": "husky",
-		"update-events": "bun run scripts/update-events.ts"
+		"update-events": "bun run scripts/update-events.ts",
+		"test": "vitest run"
 	},
 	"lint-staged": {
 		"*.{js,jsx,ts,tsx}": "eslint"
@@ -48,6 +49,7 @@
 		"prettier": "3.3.3",
 		"supabase": "^2.76.7",
 		"tailwindcss": "^3.4.4",
-		"typescript": "^5"
+		"typescript": "^5",
+		"vitest": "^3"
 	}
 }
