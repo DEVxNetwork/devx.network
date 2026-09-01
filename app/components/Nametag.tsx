@@ -579,7 +579,7 @@ const PhotoFrame = styled.div<{ $error?: boolean }>`
 const Avatar = styled.img`
 	width: 100%;
 	height: 100%;
-	object-fit: cover;
+	object-fit: fill;
 	position: relative;
 	z-index: 0;
 `
