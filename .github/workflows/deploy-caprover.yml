@@ -1,0 +1,96 @@
+name: Deploy (CapRover)
+
+# Second, parallel production deploy path — runs alongside deploy.yml
+# (GitHub Pages) on every push to main so we can compare stability before
+# considering a cutover. Does not replace deploy.yml.
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+concurrency:
+  group: "caprover-prod"
+  cancel-in-progress: false
+
+permissions:
+  packages: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      APP_NAME: devx-prod
+      CAPROVER_URL: ${{ secrets.CAPROVER_URL }}
+      CAPROVER_PASSWORD: ${{ secrets.CAPROVER_PASSWORD }}
+      CAPROVER_APP_DOMAIN: ${{ secrets.CAPROVER_APP_DOMAIN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Set image URL
+        run: |
+          REPO=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          echo "IMAGE=ghcr.io/${REPO}:main-${SHA}" >> $GITHUB_ENV
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4.0.0
+
+      - name: Log in to GHCR
+        uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4.0.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294 # v7.0.0
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ env.IMAGE }}
+          build-args: |
+            NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+            NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Create app and deploy image via CapRover API
+        run: |
+          ADMIN_TOKEN=$(curl -sf -X POST "$CAPROVER_URL/api/v2/login" \
+            -H "Content-Type: application/json" \
+            -d "$(jq -nc --arg pass "$CAPROVER_PASSWORD" '{password:$pass}')" \
+            | jq -r '.data.token')
+
+          # Create app if it doesn't exist (no-op once devx-prod is scaffolded)
+          curl -s -X POST "$CAPROVER_URL/api/v2/user/apps/appDefinitions/register" \
+            -H "Content-Type: application/json" \
+            -H "x-captain-auth: $ADMIN_TOKEN" \
+            -d "{\"appName\": \"$APP_NAME\", \"hasPersistentData\": false}" || true
+
+          curl -sf -X POST "$CAPROVER_URL/api/v2/user/apps/appDefinitions/enablebasedomainssl" \
+            -H "Content-Type: application/json" \
+            -H "x-captain-auth: $ADMIN_TOKEN" \
+            -d "{\"appName\": \"$APP_NAME\"}" || true
+
+          curl -sf -X POST "$CAPROVER_URL/api/v2/user/apps/appDefinitions/update" \
+            -H "Content-Type: application/json" \
+            -H "x-captain-auth: $ADMIN_TOKEN" \
+            -d "{\"appName\": \"$APP_NAME\", \"instanceCount\": 1}"
+
+          # Pre-built image deploy goes through appData with a
+          # captainDefinitionContent payload — appDefinitions/update's
+          # imageName field is silently ignored (see preview.yml).
+          CAPTAIN_DEF=$(jq -nc --arg img "$IMAGE" '{"schemaVersion":2,"imageName":$img}')
+          BODY=$(jq -nc --arg def "$CAPTAIN_DEF" '{"captainDefinitionContent":$def,"gitHash":""}')
+          curl -sf -X POST "$CAPROVER_URL/api/v2/user/apps/appData/$APP_NAME" \
+            -H "Content-Type: application/json" \
+            -H "x-captain-auth: $ADMIN_TOKEN" \
+            -d "$BODY"
+
+      - name: Summary
+        run: |
+          echo "### Deployed to CapRover" >> $GITHUB_STEP_SUMMARY
+          echo "https://${APP_NAME}.${CAPROVER_APP_DOMAIN}" >> $GITHUB_STEP_SUMMARY
