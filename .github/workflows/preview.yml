@@ -86,11 +86,20 @@ jobs:
             -H "x-captain-auth: $ADMIN_TOKEN" \
             -d "{\"appName\": \"$APP_NAME\"}" || true
 
-          # Point app at the pre-built image and trigger deploy
           curl -sf -X POST "$CAPROVER_URL/api/v2/user/apps/appDefinitions/update" \
             -H "Content-Type: application/json" \
             -H "x-captain-auth: $ADMIN_TOKEN" \
-            -d "{\"appName\": \"$APP_NAME\", \"imageName\": \"$IMAGE\", \"instanceCount\": 1}"
+            -d "{\"appName\": \"$APP_NAME\", \"instanceCount\": 1}"
+
+          # Deploying a pre-built image is NOT done via appDefinitions/update's
+          # imageName field (that field is silently ignored) — it goes through
+          # appData with a captainDefinitionContent payload, same as the CLI.
+          CAPTAIN_DEF=$(jq -nc --arg img "$IMAGE" '{"schemaVersion":2,"imageName":$img}')
+          BODY=$(jq -nc --arg def "$CAPTAIN_DEF" '{"captainDefinitionContent":$def,"gitHash":""}')
+          curl -sf -X POST "$CAPROVER_URL/api/v2/user/apps/appData/$APP_NAME" \
+            -H "Content-Type: application/json" \
+            -H "x-captain-auth: $ADMIN_TOKEN" \
+            -d "$BODY"
 
       - name: Comment preview URL on PR
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
