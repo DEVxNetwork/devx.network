@@ -71,6 +71,18 @@ export const Footer = () => {
 						</svg>
 					</SocialLink>
 
+					<SocialLink href={links.eventship} aria-label="Eventship" target="_blank">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="currentColor"
+						>
+							<path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM12 11l1.12 3.38L16.5 13l-1.12 3.38L18.5 18h-3.62L12 21l-2.88-3H5.5l3.12-1.62L7.5 13l3.38 1.38L12 11z" />
+						</svg>
+					</SocialLink>
+
 					<SocialLink href={links.github} aria-label="Github" target="_blank">
 						<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
 							<path
