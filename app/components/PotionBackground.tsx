@@ -1,6 +1,6 @@
 "use client"
 import { useRef, useEffect, useState } from "react"
-import styled from "styled-components"
+import { styled } from "styled-components"
 import createFragmentShader from "../shaders/background"
 import { FragmentShader } from "../shaders/types"
 

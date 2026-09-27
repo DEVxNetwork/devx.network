@@ -1,6 +1,6 @@
 "use client"
-import Link from "next/link"
-import styled from "styled-components"
+import { Link } from "./Link"
+import { styled } from "styled-components"
 
 // Types //
 

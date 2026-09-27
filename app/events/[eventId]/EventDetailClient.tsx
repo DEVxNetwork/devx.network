@@ -1,21 +1,22 @@
 "use client"
 import { useEffect, useRef, useState } from "react"
-import { useParams, useRouter } from "next/navigation"
-import styled from "styled-components"
+import { styled } from "styled-components"
 import type { LumaEvent } from "@/app/services/luma"
 import { lumaService } from "@/app/services/luma"
-import { PotionBackground } from "@/app/components/PotionBackground"
-import { ErrorBoundary } from "@/app/components/ErrorBoundary"
 import { Button } from "@/app/components/Button"
 import { TextInput } from "@/app/components/TextInput"
+import { EventRoom } from "@/app/components/WaysToShowUp"
+import { isGatheringPast, type PublicGathering } from "@/app/content/gatherings"
 
 // Components //
 
-export default function EventDetailClient() {
-	const params = useParams()
-	const router = useRouter()
-	const eventId = params.eventId as string
-
+export default function EventDetailClient({
+	gathering,
+	eventId
+}: {
+	gathering: PublicGathering | null
+	eventId: string
+}) {
 	const [event, setEvent] = useState<LumaEvent | null>(null)
 	const [loading, setLoading] = useState(true)
 	const [userInfo, setUserInfo] = useState<{ name: string; email: string }>({ name: "", email: "" })
@@ -26,14 +27,13 @@ export default function EventDetailClient() {
 	useEffect(() => {
 		loadEvent()
 		loadSavedInfo()
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [eventId])
 
 	const loadEvent = async () => {
 		try {
 			const eventData = await lumaService.getEvent(eventId)
 			if (!eventData) {
-				router.push("/events")
+				window.location.assign("/events")
 				return
 			}
 			setEvent(eventData)
@@ -129,90 +129,53 @@ export default function EventDetailClient() {
 		setHasStoredInfo(false)
 	}
 
-	if (loading) {
+	if (loading && !gathering) {
 		return (
-			<>
-				<BackgroundContainer>
-					<ErrorBoundary
-						fallback={
-							<div
-								style={{ backgroundColor: "var(--background)", width: "100%", height: "100%" }}
-							/>
-						}
-					>
-						<PotionBackground />
-					</ErrorBoundary>
-				</BackgroundContainer>
-				<Main>
-					<Container>
-						<LoadingMessage>Loading event details...</LoadingMessage>
-					</Container>
-				</Main>
-			</>
+			<Main>
+				<Container>
+					<LoadingMessage>Loading event details...</LoadingMessage>
+				</Container>
+			</Main>
 		)
 	}
 
-	if (!event) {
+	if (!event && !gathering) {
 		return null
 	}
 
-	const eventDate = new Date(event.start_at)
-	const isPastEvent = eventDate < new Date()
+	const shown = gathering ?? (event ? gatheringFromLuma(event) : null)
+	const isPastEvent = shown ? isGatheringPast(shown) : false
 
 	return (
 		<>
-			<BackgroundContainer>
-				<ErrorBoundary
-					fallback={
-						<div style={{ backgroundColor: "var(--background)", width: "100%", height: "100%" }} />
-					}
-				>
-					<PotionBackground />
-				</ErrorBoundary>
-			</BackgroundContainer>
 			<Main>
 				<Container>
 					<ContentLayout>
-						<ImageArea>
-							{event.cover_url && <CoverImage src={event.cover_url} alt={event.name} />}
-						</ImageArea>
 						<MainArea>
-							<Header>
-								<Title>{event.name}</Title>
-								<DateTime>{formatEventDateTime(event.start_at, event.end_at)}</DateTime>
-								<Button
-									onClick={() => {
-										nameInputRef.current?.scrollIntoView({
-											behavior: "smooth",
-											block: "center"
-										})
-										setTimeout(() => nameInputRef.current?.focus(), 400)
-									}}
-								>
-									Attend This Event
-								</Button>
-							</Header>
+							{shown ? <EventRoom gathering={shown} past={isPastEvent} /> : null}
 
-							{event.location && event.location.type === "online" && (
+							{!gathering && event?.location && event.location.type === "online" && (
 								<LocationSection>
 									<SectionTitle>Location</SectionTitle>
 									<LocationText>Online Event</LocationText>
 								</LocationSection>
 							)}
 
-							<DescriptionSection>
-								<SectionTitle>About Event</SectionTitle>
-								{event.description_html ? (
-									<Description dangerouslySetInnerHTML={{ __html: event.description_html }} />
-								) : (
-									<Description>{event.description}</Description>
-								)}
-							</DescriptionSection>
+							{event ? (
+								<DescriptionSection>
+									<SectionTitle>About this gathering</SectionTitle>
+									{event.description_html ? (
+										<Description dangerouslySetInnerHTML={{ __html: event.description_html }} />
+									) : (
+										<Description>{event.description}</Description>
+									)}
+								</DescriptionSection>
+							) : null}
 						</MainArea>
 						<SidebarArea>
 							<span id="registration-form" />
 
-							{!isPastEvent && (
+							{event && !isPastEvent && (
 								<RegistrationSection>
 									<SectionTitle>Registration</SectionTitle>
 									{hasStoredInfo ? (
@@ -259,7 +222,7 @@ export default function EventDetailClient() {
 								</RegistrationSection>
 							)}
 
-							{event.guest_count !== undefined && (
+							{event && event.guest_count !== undefined && (
 								<AttendeeSection>
 									<SectionTitle>Attendees</SectionTitle>
 									{event.guest_count === -1 ? (
@@ -288,14 +251,15 @@ export default function EventDetailClient() {
 								</AttendeeSection>
 							)}
 
-							{event.location && event.location.type === "physical" && (
+							{!gathering && event?.location && event.location.type === "physical" && (
 								<LocationSection>
 									<SectionTitle>Location</SectionTitle>
 									<LocationText>{event.location.address}</LocationText>
 								</LocationSection>
 							)}
 
-							{event.location &&
+							{!gathering &&
+								event?.location &&
 								event.location.type === "physical" &&
 								event.location.coordinates && (
 									<LocationSection>
@@ -329,144 +293,66 @@ function MiniMap({ lat, lng, address }: { lat: string; lng: string; address?: st
 
 // Utility Functions //
 
-function formatEventDateTime(startAt: string, endAt: string): string {
-	const start = new Date(startAt)
-	const end = new Date(endAt)
-
-	const dateStr = start.toLocaleDateString("en-US", {
-		weekday: "long",
-		year: "numeric",
-		month: "long",
-		day: "numeric"
-	})
-
-	const startTime = start.toLocaleTimeString("en-US", {
-		hour: "numeric",
-		minute: "2-digit"
-	})
-
-	const endTime = end.toLocaleTimeString("en-US", {
-		hour: "numeric",
-		minute: "2-digit"
-	})
-
-	return `${dateStr} • ${startTime} - ${endTime}`
+function gatheringFromLuma(event: LumaEvent): PublicGathering {
+	const address = event.location?.type === "physical" ? (event.location.address ?? "") : ""
+	return {
+		id: event.api_id,
+		name: event.name,
+		start: event.start_at,
+		hasTime: event.start_at.includes("T"),
+		location: event.location?.city ?? "",
+		address,
+		lumaUrl: event.url || null,
+		status: "",
+		href: `/events/${event.api_id}`
+	}
 }
 
 // Styled Components //
 
-const BackgroundContainer = styled.section`
-	background-color: var(--background);
-	position: fixed;
-	height: 100vh;
-	width: 100vw;
-	top: 0;
-	left: 0;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-`
-
 const Main = styled.main`
 	position: relative;
-	z-index: 1;
-	padding-top: 2rem;
-	padding-bottom: 2rem;
+	padding: 2.5rem 0 3rem;
 `
 
 const Container = styled.div`
-	max-width: 1100px;
+	width: min(var(--column), calc(100% - 2.5rem));
 	margin: 0 auto;
-	margin-inline: 1rem;
-
-	@media (min-width: 1132px) {
-		margin-inline: auto;
-	}
-	background-color: var(--surface);
-	backdrop-filter: blur(10px);
-	border-radius: 0.5rem;
-	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-	overflow: hidden;
 `
 
 const ContentLayout = styled.div`
 	display: grid;
-	grid-template-columns: 1fr;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 1.75rem;
 	grid-template-areas:
-		"image"
 		"main"
 		"sidebar";
-
-	@media (min-width: 768px) {
-		grid-template-columns: 380px 1fr;
-		grid-template-rows: auto 1fr;
-		column-gap: 2rem;
-		grid-template-areas:
-			"image main"
-			"sidebar main";
-	}
-`
-
-const ImageArea = styled.div`
-	grid-area: image;
 `
 
 const MainArea = styled.div`
 	grid-area: main;
-	padding: 2rem;
+	padding: 1.25rem 0 0;
 
 	@media (min-width: 768px) {
-		padding: 2rem 2rem 2rem 0;
+		padding: 0;
 	}
 `
 
 const SidebarArea = styled.div`
 	grid-area: sidebar;
-	padding: 0 2rem 2rem;
-
-	@media (min-width: 768px) {
-		padding: 0 0 2rem 2rem;
-	}
-`
-
-const CoverImage = styled.img`
-	width: 100%;
-	aspect-ratio: 1 / 1;
-	object-fit: cover;
-	display: block;
-
-	@media (min-width: 768px) {
-		border-radius: 0.5rem;
-		margin: 2rem 0 0 2rem;
-		width: calc(100% - 2rem);
-	}
-`
-
-const Header = styled.header`
-	margin-bottom: 2rem;
-`
-
-const Title = styled.h1`
-	font-size: 2.25rem;
-	font-weight: bold;
-	color: var(--foreground);
-	margin-bottom: 0.5rem;
-`
-
-const DateTime = styled.p`
-	font-size: 1.125rem;
-	color: var(--subtle-foreground);
-	margin-bottom: 1rem;
+	padding: 1.5rem 0 0;
 `
 
 const SectionTitle = styled.h2`
-	font-size: 1.5rem;
-	font-weight: bold;
+	font-family: "Fraunces", "Iowan Old Style", Palatino, serif;
+	font-size: clamp(1.35rem, 2vw, 1.6rem);
+	font-weight: 560;
+	letter-spacing: -0.03em;
+	line-height: 1.15;
 	color: var(--foreground);
-	margin-bottom: 1rem;
+	margin-bottom: 0.85rem;
 	border-bottom: 1px solid var(--border);
-	padding-bottom: 0.75rem;
+	padding-bottom: 0.45rem;
 `
 
 const LocationSection = styled.section`
@@ -574,7 +460,7 @@ const Description = styled.div`
 	}
 
 	a {
-		color: #8b5cf6;
+		color: var(--accent);
 		text-decoration: underline;
 		text-underline-offset: 0.2em;
 	}
@@ -591,13 +477,13 @@ const AttendeeSection = styled.section`
 
 const AttendeeCount = styled.p`
 	font-size: 1rem;
-	color: #8b5cf6;
+	color: var(--accent);
 	font-weight: 500;
 `
 
 const AttendeeLink = styled.a`
 	font-size: 1rem;
-	color: #8b5cf6;
+	color: var(--accent);
 	font-weight: 500;
 	text-decoration: none;
 
@@ -607,27 +493,17 @@ const AttendeeLink = styled.a`
 `
 
 const RegistrationSection = styled.section`
-	background-color: rgba(var(--foreground-rgb), 0.01);
-	backdrop-filter: blur(32px);
-	box-shadow: 4px 8px 8px 0 rgba(0, 0, 0, 0.05);
-	padding: 1.5rem;
-	border-radius: 0.5rem;
-	margin: 2rem 0;
+	padding: 0;
+	margin: 0;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
-	justify-content: center;
+	align-items: stretch;
 `
 
 const RegistrationForm = styled.form`
 	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	gap: 1rem;
-
-	> input {
-		flex: 1 1 10rem;
-	}
+	flex-direction: column;
+	gap: 0.75rem;
 `
 
 const OneClickRSVPContainer = styled.div`
@@ -654,7 +530,7 @@ const EmailValue = styled.span`
 `
 
 const ClearUserInfoLink = styled.a`
-	color: #8b5cf6;
+	color: var(--accent);
 	font-weight: 500;
 	text-decoration: none;
 	font-size: 0.875rem;

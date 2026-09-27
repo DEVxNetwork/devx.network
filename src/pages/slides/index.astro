@@ -1,0 +1,12 @@
+---
+import Base from "../../layouts/Base.astro"
+import { siteConfig } from "@/app/siteConfig"
+import SlidesListClient from "@/app/slides/SlidesListClient"
+import { getAllSlides } from "@/app/slides/slidesData"
+
+const slides = getAllSlides()
+---
+
+<Base title={`Slides | ${siteConfig.title}`} description="Slides from talks at DEVx.">
+	<SlidesListClient client:load slides={slides} />
+</Base>

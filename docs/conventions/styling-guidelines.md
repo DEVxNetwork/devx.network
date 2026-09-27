@@ -4,20 +4,20 @@
 
 ## Overview
 
-DEVx.network is undergoing a refactoring process to migrate from Tailwind CSS to styled-components exclusively. This document outlines the styling conventions and best practices for the project.
+DEVx.network styles React components with styled-components. This document outlines the conventions.
 
 ## Current Status
 
-⚠️ **REFACTORING IN PROGRESS**: The codebase is being migrated from Tailwind to styled-components. Do not add new Tailwind classes.
+Use styled-components for component styles. Do not add Tailwind.
 
 ## Styled Components Guidelines
 
 ### Basic Usage
 
-All styling should be done using styled-components. Components should use the `styled` API from styled-components v6.
+All styling should be done using styled-components. Components should use the `styled` API from styled-components v6. Import it as a named export. The default import fails when Astro prerenders the page.
 
 ```typescript
-import styled from "styled-components"
+import { styled } from "styled-components"
 
 const Container = styled.div`
 	display: flex;
@@ -32,7 +32,7 @@ For components using styled-components, always include the `"use client"` direct
 
 ```typescript
 "use client"
-import styled from "styled-components"
+import { styled } from "styled-components"
 ```
 
 ### Naming Conventions

@@ -1,6 +1,6 @@
 "use client"
 
-import styled from "styled-components"
+import { styled } from "styled-components"
 import { Button } from "@/app/components/Button"
 import type { SlideData } from "../slidesData"
 

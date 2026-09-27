@@ -1,5 +1,5 @@
 "use client"
-import styled from "styled-components"
+import { styled } from "styled-components"
 import { forwardRef } from "react"
 
 // Types //

@@ -1,0 +1,27 @@
+---
+import Base from "../../layouts/Base.astro"
+import { EventsPage } from "@/app/events/EventsPage"
+import type { PublicGathering } from "@/app/content/gatherings"
+import { gatheringFromEvent } from "@/app/services/luma/staticGatherings"
+import { listPastEvents } from "@/app/services/luma/pastEvents"
+import { listPastGatherings, listUpcomingGatherings } from "@/app/services/notion/gatherings"
+import { siteConfig } from "@/app/siteConfig"
+
+function archiveGatherings(notionPast: PublicGathering[]): PublicGathering[] {
+	const linked = new Set(notionPast.map((gathering) => gathering.href))
+	const unmatched = listPastEvents()
+		.filter((event) => !linked.has(`/events/${event.api_id}`))
+		.map(gatheringFromEvent)
+
+	return [...notionPast, ...unmatched].sort((a, b) => b.start.localeCompare(a.start))
+}
+
+const [upcoming, notionPast] = await Promise.all([listUpcomingGatherings(), listPastGatherings()])
+---
+
+<Base
+	title={`Events | ${siteConfig.title}`}
+	description="Upcoming and past DEVx gatherings in San Diego."
+>
+	<EventsPage client:load upcoming={upcoming} past={archiveGatherings(notionPast)} />
+</Base>

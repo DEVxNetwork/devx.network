@@ -1,0 +1,26 @@
+---
+import Base from "../../layouts/Base.astro"
+import SlideDetailClient from "@/app/slides/[slug]/SlideDetailClient"
+import { getAllSlideSlugs, getSlideData } from "@/app/slides/slidesData"
+import { siteConfig } from "@/app/siteConfig"
+
+export async function getStaticPaths() {
+	return getAllSlideSlugs().map((slug) => ({
+		params: { slug }
+	}))
+}
+
+const slug = Astro.params.slug
+if (!slug) {
+	throw new Error("Missing slide slug")
+}
+
+const slideData = getSlideData(slug)
+if (!slideData) {
+	throw new Error(`Unknown slide: ${slug}`)
+}
+---
+
+<Base title={`${slideData.metadata.title} | ${siteConfig.title}`} description={slideData.metadata.description}>
+	<SlideDetailClient client:load slideData={slideData} />
+</Base>

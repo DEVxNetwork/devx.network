@@ -193,7 +193,7 @@
 	},
 	{
 		"api_id": "evt-K37cs9x4uxdEtWn",
-		"name": "co routine(\"Moniker\")",
+		"name": "co routine(\"Treehouse\")",
 		"description": "Join other developers for casual co-working. Bring your 💻 laptop, a project, idea, or questions about software, and a thirst for ☕ coffee!\nPlugs might be hard to come by, so make sure you charge your laptop before you come!\nWe host many types of meetups. This one in particular, is great for meeting new faces and picking each others brains for ideas / help on a problem.\nWe welcome people of all ages, backgrounds and skill levels! We just ask you remain respectful and considerate of peoples time.\nYou can find more information about our community at devx.network.",
 		"description_md": "Join other developers for casual co-working. Bring your 💻 laptop, a project, idea, or questions about software, and a thirst for ☕ coffee!\n\nPlugs might be hard to come by, so make sure you charge your laptop before you come!\n\nWe host many types of meetups. This one in particular, is great for meeting new faces and picking each others brains for ideas / help on a problem.\n\nWe welcome people of all ages, backgrounds and skill levels! We just ask you remain respectful and considerate of peoples time.\n\nYou can find more information about our community at [devx.network](https://devx.network).",
 		"description_html": "<p>Join other developers for casual co-working. Bring your 💻 laptop, a project, idea, or questions about software, and a thirst for ☕ coffee!</p>\n<p>Plugs might be hard to come by, so make sure you charge your laptop before you come!</p>\n<p>We host many types of meetups. This one in particular, is great for meeting new faces and picking each others brains for ideas / help on a problem.</p>\n<p>We welcome people of all ages, backgrounds and skill levels! We just ask you remain respectful and considerate of peoples time.</p>\n<p>You can find more information about our community at <a href=\"https://devx.network\">devx.network</a>.</p>\n",
@@ -201,12 +201,12 @@
 		"end_at": "2026-09-11T23:00:00.000Z",
 		"location": {
 			"type": "physical",
-			"address": "Moniker Coffee Co., 2860 Sims Rd, San Diego, CA 92106, USA",
+			"address": "Treehouse, 9945 Pacific Heights Blvd Suite 200, San Diego, CA 92121, USA",
 			"city": "San Diego",
 			"state": "California",
 			"coordinates": {
-				"lat": "32.740978399999996",
-				"lng": "-117.2112841"
+				"lat": "32.9006938",
+				"lng": "-117.1902705"
 			}
 		},
 		"cover_url": "https://images.lumacdn.com/event-covers/0u/6adc3b39-3783-49d3-bbec-0034a7fdcc46.jpg",

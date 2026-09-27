@@ -1,0 +1,148 @@
+:root {
+	color-scheme: light;
+	--background: #fff4e8;
+	--background-rgb: 255, 244, 232;
+	--foreground: #1b120c;
+	--foreground-rgb: 27, 18, 12;
+	--muted-foreground: #5c4636;
+	--subtle-foreground: #8a6852;
+	--accent: #b8330c;
+	--accent-display: #e23f0f;
+	--accent-2: #0e7c76;
+	--accent-hover: #8f2809;
+	--accent-contrast: #fff8f2;
+	--surface: rgba(255, 251, 246, 0.9);
+	--surface-solid: #fffdf9;
+	--wash: #ffe0c2;
+	--header-background: rgba(255, 244, 232, 0.9);
+	--sidebar-background: rgba(255, 244, 232, 0.97);
+	--footer-background: rgba(255, 244, 232, 0.94);
+	--border: rgba(27, 18, 12, 0.12);
+	--error-color: #dc2626;
+	--b1: #fffdf9;
+	--n: 35% 0.02 55;
+	--font-display: "Fraunces", "Iowan Old Style", Palatino, serif;
+	--column: 1120px;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		color-scheme: dark;
+		--background: #141210;
+		--background-rgb: 20, 18, 16;
+		--foreground: #f6f1e7;
+		--foreground-rgb: 246, 241, 231;
+		--muted-foreground: #cbbfb0;
+		--subtle-foreground: #9c9286;
+		--accent: #ff8a5c;
+		--accent-display: #ff6a33;
+		--accent-2: #3dccc4;
+		--accent-hover: #ffb088;
+		--accent-contrast: #1a120c;
+		--surface: rgba(32, 28, 24, 0.82);
+		--surface-solid: #241c16;
+		--wash: #3a2418;
+		--header-background: rgba(20, 16, 13, 0.88);
+		--sidebar-background: rgba(20, 16, 13, 0.97);
+		--footer-background: rgba(20, 16, 13, 0.94);
+		--border: rgba(255, 244, 232, 0.14);
+		--error-color: #f87171;
+		--b1: #141210;
+		--n: 18% 0.02 55;
+	}
+}
+
+body {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	margin: 0;
+	padding: 0;
+	background-color: var(--background);
+	color: var(--foreground);
+	font-family:
+		"Chivo",
+		-apple-system,
+		BlinkMacSystemFont,
+		"Segoe UI",
+		Helvetica,
+		Arial,
+		sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin-top: 0;
+	margin-bottom: 0.75rem;
+	line-height: 1.18;
+	letter-spacing: -0.03em;
+	font-family: var(--font-display);
+	font-weight: 560;
+}
+
+::selection {
+	background: var(--accent);
+	color: var(--accent-contrast);
+}
+
+h1 {
+	font-size: clamp(1.9rem, 3.5vw, 2.9rem);
+}
+
+h2 {
+	font-size: clamp(1.45rem, 2.2vw, 1.9rem);
+	line-height: 1.15;
+}
+
+h3 {
+	font-size: 1.2rem;
+	line-height: 1.25;
+}
+
+p {
+	line-height: 1.6;
+	margin-bottom: 1rem;
+}
+
+header {
+	position: relative;
+}
+
+main {
+	position: relative;
+	flex: 1;
+}
+
+.footer {
+	column-gap: unset;
+	row-gap: unset;
+	line-height: unset;
+	flex-direction: column-reverse;
+	place-items: unset;
+	position: relative;
+	grid-auto-flow: unset;
+	width: unset;
+}
+
+.devx-logo-copyright {
+	margin-top: 2.313rem;
+}
+
+.footer > * {
+	place-items: center;
+	gap: unset;
+}
+
+@media (min-width: 768px) {
+	.footer {
+		flex-direction: row;
+	}
+
+	.devx-logo-copyright {
+		margin-top: 0;
+	}
+}

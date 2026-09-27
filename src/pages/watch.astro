@@ -1,0 +1,9 @@
+---
+import Base from "../layouts/Base.astro"
+import { siteConfig } from "@/app/siteConfig"
+import WatchPage from "@/app/watch/WatchPage"
+---
+
+<Base title={`Watch | ${siteConfig.title}`} description="Talks from DEVx gatherings.">
+	<WatchPage client:load />
+</Base>

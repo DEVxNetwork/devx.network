@@ -1,5 +1,5 @@
 "use client"
-import styled from "styled-components"
+import { styled } from "styled-components"
 import { links } from "../siteConfig"
 
 // Components //
@@ -10,7 +10,7 @@ export const Footer = () => {
 			<FooterContent>
 				<Copyright>
 					<CopyrightText>
-						© Copyright {new Date().getFullYear()}. All rights reserved
+						A San Diego developer community. © {new Date().getFullYear()} DEVx
 					</CopyrightText>
 				</Copyright>
 				<SocialNav>
@@ -91,25 +91,24 @@ const FooterContainer = styled.footer`
 	justify-content: center;
 	width: 100%;
 	background-color: var(--footer-background);
-	backdrop-filter: blur(64px);
+	border-top: 1px solid var(--border);
 	margin-top: auto;
 `
 
 const FooterContent = styled.div`
 	display: flex;
 	flex-direction: column;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: space-between;
-	padding: 1.5rem 1rem;
+	padding: 1.25rem 0;
 	color: var(--subtle-foreground);
-	max-width: 1200px;
-	width: 100%;
-	gap: 1rem;
+	width: min(var(--column), calc(100% - 2.5rem));
+	gap: 0.85rem;
 
 	@media (min-width: 768px) {
 		flex-direction: row;
-		padding: 1rem;
-		gap: 0;
+		align-items: center;
+		gap: 1rem;
 	}
 `
 

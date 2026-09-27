@@ -2,13 +2,13 @@
 
 export const siteConfig = {
 	title: "San Diego DEVx",
-	description: "Fostering developer community through events and open-source projects.",
+	description:
+		"A San Diego developer community. Eat together, learn from the room, and build beside each other.",
 	url: "https://devx.network",
 	ogImage: "https://devx.network/images/devx-og-image.png"
 }
 
 export const links = {
-	talkSubmissionUrl: "https://forms.gle/6gtGEuL7XExHvc6c9",
 	linkedInUrl: "https://www.linkedin.com/company/devxnetworking",
 	lumaUrl: "https://lu.ma/DEVxNetwork",
 	discord: "https://discord.gg/J3YrrErwjc",

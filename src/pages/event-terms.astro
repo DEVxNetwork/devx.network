@@ -1,0 +1,9 @@
+---
+import Base from "../layouts/Base.astro"
+import EventTerms from "@/app/event-terms/EventTerms"
+import { siteConfig } from "@/app/siteConfig"
+---
+
+<Base title={`Event terms | ${siteConfig.title}`} description="Terms for DEVx events.">
+	<EventTerms client:load />
+</Base>

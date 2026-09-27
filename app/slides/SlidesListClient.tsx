@@ -1,7 +1,7 @@
 "use client"
 
-import styled from "styled-components"
-import Link from "next/link"
+import { styled } from "styled-components"
+import { Link } from "../components/Link"
 import type { SlideData } from "./slidesData"
 
 // Types //
@@ -16,7 +16,12 @@ export default function SlidesListClient({ slides }: SlidesListClientProps) {
 	return (
 		<Main>
 			<ContentSection>
-				<SectionTitle>Slides</SectionTitle>
+				<Eyebrow>From the seats</Eyebrow>
+				<SectionTitle>Slides from the room.</SectionTitle>
+				<Lead>
+					Decks members have given at Weekend Function. The recordings live on{" "}
+					<Link href="/watch">Watch</Link>.
+				</Lead>
 
 				{slides.length === 0 ? (
 					<EmptyState>No slides available yet.</EmptyState>
@@ -46,36 +51,43 @@ const Main = styled.main`
 `
 
 const ContentSection = styled.section`
-	width: 100%;
-	max-width: 1200px;
-	min-height: 100vh;
+	width: min(var(--column), calc(100% - 2.5rem));
 	display: flex;
 	flex-direction: column;
-	padding: 4rem;
-	padding-top: 6rem;
+	padding: 3rem 0 4rem;
 	box-sizing: border-box;
-	gap: 2rem;
+	gap: 0.8rem;
+`
 
-	@media (max-width: 1024px) {
-		padding: 3rem;
-		padding-top: 5rem;
-	}
-
-	@media (max-width: 768px) {
-		padding: 2rem;
-		padding-top: 5rem;
-	}
-
-	@media (max-width: 480px) {
-		padding: 1rem;
-		padding-top: 4rem;
-	}
+const Eyebrow = styled.p`
+	margin: 0;
+	font-family: "Chivo", sans-serif;
+	font-size: 0.78rem;
+	font-weight: 700;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: var(--accent);
 `
 
 const SectionTitle = styled.h1`
-	font-size: clamp(2rem, 6vw, 3rem);
-	font-weight: 700;
+	font-family: "Fraunces", "Iowan Old Style", Palatino, serif;
+	font-size: clamp(1.9rem, 3.5vw, 2.9rem);
+	font-weight: 560;
+	letter-spacing: -0.03em;
+	line-height: 1.18;
 	margin: 0;
+`
+
+const Lead = styled.p`
+	margin: 0 0 1.2rem;
+	max-width: 38rem;
+	color: var(--muted-foreground);
+	font-size: 1.05rem;
+	line-height: 1.55;
+
+	a {
+		color: var(--accent);
+	}
 `
 
 const EmptyState = styled.p`
@@ -86,28 +98,28 @@ const EmptyState = styled.p`
 const SlidesList = styled.div`
 	display: flex;
 	flex-direction: column;
-	gap: 1.5rem;
+	border-bottom: 1px solid var(--border);
 `
 
 const SlideCard = styled(Link)`
 	display: flex;
 	flex-direction: column;
-	gap: 0.5rem;
-	padding: 1.5rem;
-	background: rgba(var(--foreground-rgb), 0.03);
-	border-radius: 0.5rem;
+	gap: 0.35rem;
+	padding: 1.25rem 0;
+	border-top: 1px solid var(--border);
 	text-decoration: none;
 	color: inherit;
-	transition: background-color 0.3s ease;
 
-	&:hover {
-		background: rgba(255, 255, 255, 0.08);
+	&:hover h2 {
+		color: var(--accent);
 	}
 `
 
 const SlideTitle = styled.h2`
-	font-size: 1.5rem;
-	font-weight: 600;
+	font-family: "Fraunces", "Iowan Old Style", Palatino, serif;
+	font-size: 1.45rem;
+	font-weight: 560;
+	letter-spacing: -0.02em;
 	margin: 0;
 `
 

@@ -1,0 +1,40 @@
+---
+import Base from "../../layouts/Base.astro"
+import EventDetailClient from "@/app/events/[eventId]/EventDetailClient"
+import { formatOgDate, sanitizeDescription } from "@/app/events/[eventId]/og-utils"
+import { lumaService } from "@/app/services/luma"
+import { findGatheringByLumaUrl } from "@/app/services/notion/gatherings"
+import { siteConfig } from "@/app/siteConfig"
+
+export async function getStaticPaths() {
+	const events = await lumaService.listEvents()
+	return events.map((event) => ({
+		params: { eventId: event.api_id }
+	}))
+}
+
+const eventId = Astro.params.eventId
+if (!eventId) {
+	throw new Error("Missing event id")
+}
+
+const event = await lumaService.getEvent(eventId)
+if (!event) {
+	throw new Error(`Unknown event: ${eventId}`)
+}
+
+const gathering = event.url ? await findGatheringByLumaUrl(event.url) : null
+const dated = gathering?.start ?? event.start_at
+const date = formatOgDate(dated.includes("T") ? dated : `${dated.slice(0, 10)}T20:00:00.000Z`)
+const title = `${gathering?.name ?? event.name} — ${date} | DEVxSD`
+const description = sanitizeDescription(event.description) || siteConfig.description
+---
+
+<Base
+	title={title}
+	description={description}
+	ogUrl={`${siteConfig.url}/events/${event.api_id}`}
+	ogType="article"
+>
+	<EventDetailClient client:load gathering={gathering} eventId={eventId} />
+</Base>

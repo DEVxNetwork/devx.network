@@ -76,7 +76,7 @@ Utility files, service files, and other non-component files follow a simpler str
 ```typescript
 "use client"
 import { useState } from "react"
-import styled from "styled-components"
+import { styled } from "styled-components"
 
 //
 // Types

@@ -5,6 +5,16 @@ TODO: Fill in missing startTime/endTime values by watching videos
 */
 
 export const talks = [
+	// August 2026,
+	{
+		videoId: "YD7Zlv7RSX8",
+		speaker: "Thomas Desmond",
+		title: "Deploy on Cloudflare",
+		date: "2026-08-15",
+		year: 2026,
+		startTime: "1m23s",
+		endTime: "55m43s"
+	},
 	// July 2026
 	{
 		videoId: "3kLcT0rMgJs",
