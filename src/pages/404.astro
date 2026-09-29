@@ -3,10 +3,11 @@ import Base from "../layouts/Base.astro"
 import { siteConfig } from "@/app/siteConfig"
 ---
 
-<Base title={`Page not found | ${siteConfig.title}`} description="That page is not on the site.">
+<Base title={`This page left early | ${siteConfig.title}`} description="Nothing lives at this address.">
 	<main>
-		<h1>That page is not on the calendar.</h1>
-		<p><a href="/">Back home</a></p>
+		<h1>This page left early.</h1>
+		<p>The good stuff is back on the homepage.</p>
+		<p><a href="/">Take me home</a></p>
 	</main>
 </Base>
 
@@ -14,6 +15,13 @@ import { siteConfig } from "@/app/siteConfig"
 	main {
 		width: min(var(--column), calc(100% - 2.5rem));
 		margin: 4rem auto 6rem;
+	}
+
+	h1 {
+		max-width: 11ch;
+		font-size: clamp(3rem, 7vw, 5.4rem);
+		line-height: 0.92;
+		letter-spacing: -0.04em;
 	}
 
 	a {

@@ -55,13 +55,8 @@ export default function Watch() {
 		<>
 			<Main>
 				<HeroSection>
-					<Eyebrow>Talks</Eyebrow>
 					<Title>The room, on the record.</Title>
-					<HeroBlurb>
-						Every Weekend Function is livestreamed. The talks come from people in the seats. Within
-						a week of each one, the speaker gets the recording and a transcript. These are the ones
-						we kept.
-					</HeroBlurb>
+					<HeroBlurb>Saturday talks, filmed from the seats.</HeroBlurb>
 
 					{/* 3 most recent talks displayed as cards */}
 					<FeaturedGrid>
@@ -126,14 +121,14 @@ export default function Watch() {
 					})}
 					<ButtonSection>
 						<Button href="/slides" variant="secondary">
-							Read the slides
+							The decks
 						</Button>
 						<Button
 							href="https://www.youtube.com/@DEVxNetwork"
 							target="_blank"
 							rel="noopener noreferrer"
 						>
-							Watch on YouTube
+							YouTube
 						</Button>
 					</ButtonSection>
 				</WatchSection>
@@ -185,23 +180,14 @@ const HeroSection = styled.section`
 	gap: 1.5rem;
 `
 
-const Eyebrow = styled.p`
-	margin: 0;
-	font-family: "Chivo", sans-serif;
-	font-size: 0.78rem;
-	font-weight: 700;
-	letter-spacing: 0.16em;
-	text-transform: uppercase;
-	color: var(--accent);
-`
-
 const Title = styled.h1`
 	margin: 0;
+	max-width: 12ch;
 	font-family: "Fraunces", "Iowan Old Style", Palatino, serif;
-	font-size: clamp(1.9rem, 3.5vw, 2.9rem);
+	font-size: clamp(3rem, 7vw, 5.4rem);
 	font-weight: 560;
-	letter-spacing: -0.03em;
-	line-height: 1.18;
+	letter-spacing: -0.04em;
+	line-height: 0.92;
 	color: var(--foreground);
 `
 

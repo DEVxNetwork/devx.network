@@ -46,3 +46,7 @@ next-env.d.ts
 
 # nova 
 .nova
+
+# Local DEVx photo archive. The catalog is tracked; the image files stay on this machine.
+/assets/found-photos/**
+!/assets/found-photos/CATALOG.md

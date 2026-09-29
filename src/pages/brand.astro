@@ -1,0 +1,12 @@
+---
+import Base from "../layouts/Base.astro"
+import { BrandPage } from "@/app/brand/BrandPage"
+import { siteConfig } from "@/app/siteConfig"
+---
+
+<Base
+	title={`Brand | ${siteConfig.title}`}
+	description="The marks, and the colors they came with."
+>
+	<BrandPage client:load />
+</Base>

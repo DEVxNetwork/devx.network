@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useRef, useState } from "react"
 import { styled } from "styled-components"
+import { placeLine } from "@/app/content/community"
 import type { LumaEvent } from "@/app/services/luma"
 import { lumaService } from "@/app/services/luma"
 import { Button } from "@/app/components/Button"
@@ -99,7 +100,7 @@ export default function EventDetailClient({
 			setRegistering(false)
 		} catch (error) {
 			console.error("Failed to register:", error)
-			alert("Failed to register for event. Please try again.")
+			alert("That didn't go through. Try again in a moment.")
 			setRegistering(false)
 		}
 	}
@@ -117,7 +118,7 @@ export default function EventDetailClient({
 			setRegistering(false)
 		} catch (error) {
 			console.error("Failed to register:", error)
-			alert("Failed to register for event. Please try again.")
+			alert("That didn't go through. Try again in a moment.")
 			setRegistering(false)
 		}
 	}
@@ -133,7 +134,7 @@ export default function EventDetailClient({
 		return (
 			<Main>
 				<Container>
-					<LoadingMessage>Loading event details...</LoadingMessage>
+					<LoadingMessage>One second.</LoadingMessage>
 				</Container>
 			</Main>
 		)
@@ -154,16 +155,8 @@ export default function EventDetailClient({
 						<MainArea>
 							{shown ? <EventRoom gathering={shown} past={isPastEvent} /> : null}
 
-							{!gathering && event?.location && event.location.type === "online" && (
-								<LocationSection>
-									<SectionTitle>Location</SectionTitle>
-									<LocationText>Online Event</LocationText>
-								</LocationSection>
-							)}
-
 							{event ? (
 								<DescriptionSection>
-									<SectionTitle>About this gathering</SectionTitle>
 									{event.description_html ? (
 										<Description dangerouslySetInnerHTML={{ __html: event.description_html }} />
 									) : (
@@ -177,11 +170,11 @@ export default function EventDetailClient({
 
 							{event && !isPastEvent && (
 								<RegistrationSection>
-									<SectionTitle>Registration</SectionTitle>
+									<SectionTitle>Save a seat</SectionTitle>
 									{hasStoredInfo ? (
 										<OneClickRSVPContainer>
 											<StoredInfoDisplay>
-												RSVP as: <NameValue>{userInfo.name}</NameValue>{" "}
+												You're in as <NameValue>{userInfo.name}</NameValue>{" "}
 												<EmailValue>{userInfo.email}</EmailValue>{" "}
 												<ClearUserInfoLink
 													href="#"
@@ -194,7 +187,7 @@ export default function EventDetailClient({
 												</ClearUserInfoLink>
 											</StoredInfoDisplay>
 											<Button onClick={handleOneClickRSVP} disabled={registering}>
-												{registering ? "Redirecting..." : "One-Click RSVP"}
+												{registering ? "One moment…" : "Save a seat"}
 											</Button>
 										</OneClickRSVPContainer>
 									) : (
@@ -202,20 +195,20 @@ export default function EventDetailClient({
 											<TextInput
 												ref={nameInputRef}
 												type="text"
-												placeholder="Enter your name"
+												placeholder="Your name"
 												value={userInfo.name}
 												onChange={(e) => setUserInfo({ ...userInfo, name: e.target.value })}
 												required
 											/>
 											<TextInput
 												type="email"
-												placeholder="Enter your email"
+												placeholder="Your email"
 												value={userInfo.email}
 												onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value })}
 												required
 											/>
 											<Button type="submit" disabled={registering}>
-												{registering ? "Registering..." : "Register on Luma"}
+												{registering ? "Saving your seat…" : "Save a seat"}
 											</Button>
 										</RegistrationForm>
 									)}
@@ -224,11 +217,11 @@ export default function EventDetailClient({
 
 							{event && event.guest_count !== undefined && (
 								<AttendeeSection>
-									<SectionTitle>Attendees</SectionTitle>
+									<SectionTitle>Who's coming</SectionTitle>
 									{event.guest_count === -1 ? (
 										hasStoredInfo ? (
 											<AttendeeLink href={event.url} target="_blank" rel="noopener noreferrer">
-												Click to see attendees on Luma →
+												See them on Luma
 											</AttendeeLink>
 										) : (
 											<AttendeeLink
@@ -242,28 +235,22 @@ export default function EventDetailClient({
 													setTimeout(() => nameInputRef.current?.focus(), 400)
 												}}
 											>
-												Register to see attendees →
+												Save a seat to see who's coming
 											</AttendeeLink>
 										)
 									) : (
-										<AttendeeCount>{event.guest_count} people attending</AttendeeCount>
+										<AttendeeCount>
+											{event.guest_count} {event.guest_count === 1 ? "person" : "people"} coming
+										</AttendeeCount>
 									)}
 								</AttendeeSection>
 							)}
 
-							{!gathering && event?.location && event.location.type === "physical" && (
-								<LocationSection>
-									<SectionTitle>Location</SectionTitle>
-									<LocationText>{event.location.address}</LocationText>
-								</LocationSection>
-							)}
-
-							{!gathering &&
-								event?.location &&
+							{event?.location &&
 								event.location.type === "physical" &&
 								event.location.coordinates && (
 									<LocationSection>
-										<SectionTitle>Map</SectionTitle>
+										<SectionTitle>How to get there</SectionTitle>
 										<MapContainer>
 											<MiniMap
 												lat={event.location.coordinates.lat}
@@ -300,7 +287,7 @@ function gatheringFromLuma(event: LumaEvent): PublicGathering {
 		name: event.name,
 		start: event.start_at,
 		hasTime: event.start_at.includes("T"),
-		location: event.location?.city ?? "",
+		location: event.location ? placeLine(event) : "",
 		address,
 		lumaUrl: event.url || null,
 		status: "",
@@ -351,18 +338,10 @@ const SectionTitle = styled.h2`
 	line-height: 1.15;
 	color: var(--foreground);
 	margin-bottom: 0.85rem;
-	border-bottom: 1px solid var(--border);
-	padding-bottom: 0.45rem;
 `
 
 const LocationSection = styled.section`
-	margin-bottom: 2rem;
-`
-
-const LocationText = styled.p`
-	font-size: 1rem;
-	color: var(--muted-foreground);
-	margin-bottom: 1rem;
+	margin: 0.5rem 0 2rem;
 `
 
 const MapContainer = styled.div`
@@ -472,7 +451,7 @@ const Description = styled.div`
 `
 
 const AttendeeSection = styled.section`
-	margin-bottom: 2rem;
+	margin: 1.75rem 0 2rem;
 `
 
 const AttendeeCount = styled.p`

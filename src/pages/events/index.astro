@@ -21,7 +21,7 @@ const [upcoming, notionPast] = await Promise.all([listUpcomingGatherings(), list
 
 <Base
 	title={`Events | ${siteConfig.title}`}
-	description="Upcoming and past DEVx gatherings in San Diego."
+	description="Saturdays downtown, Fridays at a café. Come sit down."
 >
 	<EventsPage client:load upcoming={upcoming} past={archiveGatherings(notionPast)} />
 </Base>

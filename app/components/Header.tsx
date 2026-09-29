@@ -1,8 +1,12 @@
 "use client"
 import { useState, useEffect } from "react"
+import type { FocusEvent, MouseEvent } from "react"
+import { Button } from "./Button"
 import { Link } from "./Link"
 import { styled } from "styled-components"
 import { links } from "../siteConfig"
+import { DevxWordmark } from "../logo-lab/DevxWordmark"
+import { headerSitJump } from "../logo-lab/sitJump"
 
 //
 // Components
@@ -57,9 +61,9 @@ export const Header = () => {
 								/>
 							</MenuIcon>
 						</MenuButton>
-						<Logo href="/">
-							DEV<LogoAccent>x</LogoAccent>
-						</Logo>
+						<Brand href="/" aria-label="DEVx" onMouseEnter={replaySit} onFocus={replaySit}>
+							<BrandMark />
+						</Brand>
 					</NavStart>
 					<NavCenter>
 						<MenuList>
@@ -122,8 +126,13 @@ const NavLinks = ({ onNavigate }: { onNavigate: () => void }) => {
 			</MenuItem>
 			<MenuItem>
 				<MenuAnchor href={links.discord} target="_blank" rel="noopener noreferrer">
-					Join Our Discord
+					Discord
 				</MenuAnchor>
+			</MenuItem>
+			<MenuItem>
+				<Button href="/speak" size="small" onClick={onNavigate}>
+					Speak at an Event
+				</Button>
 			</MenuItem>
 		</>
 	)
@@ -151,6 +160,7 @@ const Nav = styled.nav`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	position: relative;
 	width: min(var(--column), calc(100% - 2.5rem));
 	margin: 0 auto;
 	padding: 0.85rem 0;
@@ -162,17 +172,39 @@ const NavStart = styled.div`
 	gap: 0.75rem;
 `
 
-const Logo = styled(Link)`
-	font-family: "Chivo", sans-serif;
-	font-size: 1.45rem;
-	font-weight: 900;
-	letter-spacing: -0.04em;
-	color: var(--foreground);
+const Brand = styled(Link)`
+	display: flex;
+	align-items: center;
+	line-height: 0;
 	text-decoration: none;
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+
+	@media (min-width: 768px) {
+		position: static;
+		left: auto;
+		transform: none;
+	}
 `
 
-const LogoAccent = styled.span`
-	color: var(--accent-display);
+const BrandMark = styled(DevxWordmark)`
+	display: block;
+	height: 1.85rem;
+	width: auto;
+	overflow: visible;
+
+	.x-all {
+		transform-box: fill-box;
+		transform-origin: 50% 0%;
+		animation: ${headerSitJump} 1.4s forwards;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.x-all {
+			animation: none;
+		}
+	}
 `
 
 const MenuButton = styled.button`
@@ -184,7 +216,7 @@ const MenuButton = styled.button`
 	cursor: pointer;
 	padding: 0.5rem;
 	margin-left: -0.5rem;
-	color: var(--foreground);
+	color: var(--chrome-ink);
 
 	&:hover {
 		opacity: 0.8;
@@ -254,7 +286,7 @@ const CloseButton = styled.button`
 	border: none;
 	cursor: pointer;
 	padding: 0.5rem;
-	color: var(--foreground);
+	color: var(--chrome-ink);
 
 	&:hover {
 		opacity: 0.8;
@@ -297,7 +329,7 @@ const MenuItem = styled.li`
 const linkStyles = `
 	display: block;
 	padding: 0.75rem 1rem;
-	color: var(--foreground);
+	color: var(--chrome-ink);
 	text-decoration: none;
 	font-size: 1.1rem;
 	font-weight: 500;
@@ -305,7 +337,7 @@ const linkStyles = `
 	transition: color 0.2s ease;
 
 	&:hover {
-		color: var(--accent);
+		color: var(--chrome-accent);
 	}
 
 	@media (min-width: 768px) {
@@ -321,3 +353,18 @@ const MenuLink = styled(Link)`
 const MenuAnchor = styled.a`
 	${linkStyles}
 `
+
+//
+// Functions
+//
+
+const replaySit = (event: MouseEvent<HTMLAnchorElement> | FocusEvent<HTMLAnchorElement>) => {
+	if (event.type === "focus" && !event.currentTarget.matches(":focus-visible")) return
+	if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+
+	const x = event.currentTarget.querySelector(".x-all")
+	if (!(x instanceof SVGElement)) return
+	x.style.animation = "none"
+	void x.getBoundingClientRect()
+	x.style.animation = ""
+}

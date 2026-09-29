@@ -1,5 +1,6 @@
 "use client"
 import { styled } from "styled-components"
+import { Link } from "./Link"
 import { links } from "../siteConfig"
 
 // Components //
@@ -9,10 +10,10 @@ export const Footer = () => {
 		<FooterContainer>
 			<FooterContent>
 				<Copyright>
-					<CopyrightText>
-						A San Diego developer community. © {new Date().getFullYear()} DEVx
-					</CopyrightText>
+					<Mark src="/images/logo/x.svg" alt="" />
+					<CopyrightText>San Diego, laptops open. © {new Date().getFullYear()} DEVx</CopyrightText>
 				</Copyright>
+				<BrandLink href="/brand">Brand</BrandLink>
 				<SocialNav>
 					<SocialLink href={links.x} aria-label="X" target="_blank">
 						<svg
@@ -115,6 +116,13 @@ const FooterContent = styled.div`
 const Copyright = styled.aside`
 	display: flex;
 	align-items: center;
+	gap: 0.7rem;
+`
+
+const Mark = styled.img`
+	display: block;
+	height: 1.7rem;
+	width: auto;
 `
 
 const CopyrightText = styled.p`
@@ -122,6 +130,16 @@ const CopyrightText = styled.p`
 	align-items: center;
 	margin: 0;
 	font-size: 0.875rem;
+`
+
+const BrandLink = styled(Link)`
+	color: inherit;
+	font-size: 0.875rem;
+	text-decoration: none;
+
+	&:hover {
+		color: var(--accent);
+	}
 `
 
 const SocialNav = styled.nav`

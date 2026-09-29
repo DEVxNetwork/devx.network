@@ -1,3 +1,5 @@
+import { gatheringKind } from "./community"
+
 //
 // Types
 //
@@ -24,6 +26,14 @@ export type GatheringWhen = {
 //
 
 const PACIFIC = "America/Los_Angeles"
+
+const genericPlaces = new Set([
+	"",
+	"san diego",
+	"san diego, ca",
+	"san diego, california",
+	"california"
+])
 
 //
 // Functions
@@ -72,7 +82,23 @@ export function gatheringOpensNewTab(gathering: PublicGathering): boolean {
 }
 
 export function gatheringPlace(gathering: PublicGathering): string {
-	return gathering.location || gathering.address || "San Diego"
+	const location = gathering.location.trim()
+	const address = gathering.address.trim()
+	if (location && !genericPlaces.has(location.toLowerCase())) return location
+	if (address) return address
+	return location || "San Diego"
+}
+
+export function nextMonthlyGathering(
+	gatherings: PublicGathering[],
+	now = new Date()
+): PublicGathering | null {
+	return (
+		gatherings.find(
+			(gathering) =>
+				gatheringKind(gathering.name) === "function" && !isGatheringPast(gathering, now)
+		) ?? null
+	)
 }
 
 export function isGatheringPast(gathering: PublicGathering, now = new Date()): boolean {

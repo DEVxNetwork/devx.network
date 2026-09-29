@@ -7,6 +7,6 @@ import { getAllSlides } from "@/app/slides/slidesData"
 const slides = getAllSlides()
 ---
 
-<Base title={`Slides | ${siteConfig.title}`} description="Slides from talks at DEVx.">
+<Base title={`Slides | ${siteConfig.title}`} description="Decks from the Saturday talks.">
 	<SlidesListClient client:load slides={slides} />
 </Base>

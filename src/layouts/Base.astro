@@ -1,7 +1,10 @@
 ---
 import "../styles/global.css"
+import { AnnouncementBar } from "@/app/components/AnnouncementBar"
 import { Header } from "@/app/components/Header"
 import { Footer } from "@/app/components/Footer"
+import { nextMonthlyGathering } from "@/app/content/gatherings"
+import { listUpcomingGatherings } from "@/app/services/notion/gatherings"
 import { siteConfig } from "@/app/siteConfig"
 
 interface Props {
@@ -17,6 +20,8 @@ const {
 	ogUrl = siteConfig.url,
 	ogType = "website"
 } = Astro.props
+
+const monthly = nextMonthlyGathering(await listUpcomingGatherings())
 ---
 
 <!doctype html>
@@ -26,7 +31,8 @@ const {
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>{title}</title>
 		<meta name="description" content={description} />
-		<link rel="icon" href="/images/favicon.png" />
+		<link rel="icon" href="/images/logo/x.svg" type="image/svg+xml" />
+		<link rel="icon" href="/images/logo/favicon.png" type="image/png" />
 		<meta property="og:type" content={ogType} />
 		<meta property="og:url" content={ogUrl} />
 		<meta property="og:title" content={title} />
@@ -48,7 +54,8 @@ const {
 			gtag("config", "G-L0X5333Q2X")
 		</script>
 	</head>
-	<body>
+	<body class={monthly ? "has-announce" : undefined}>
+		{monthly ? <AnnouncementBar client:load gathering={monthly} /> : null}
 		<Header client:load />
 		<slot />
 		<Footer client:load />

@@ -18,11 +18,9 @@ export default function EventTerms() {
 			<Main>
 				<TermsSection>
 					<header>
-						<Title>DEVx Event Terms and Conditions</Title>
+						<Title>House rules</Title>
 						<IntroText>
-							Thank you for your interest in attending a DEVx event. Before completing your
-							registration, please read these terms to understand the nature of the event and
-							expectations for all participants. We look forward to seeing you at our next meetup.
+							Come on in. The rules below come with the seat. Read them before you register.
 						</IntroText>
 					</header>
 

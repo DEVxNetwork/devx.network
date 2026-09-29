@@ -1,0 +1,12 @@
+---
+import Base from "../layouts/Base.astro"
+import { LogoLabPage } from "@/app/logo-lab/LogoLabPage"
+import { siteConfig } from "@/app/siteConfig"
+---
+
+<Base
+	title={`Logo lab | ${siteConfig.title}`}
+	description="Hover tests for the X in the header mark."
+>
+	<LogoLabPage client:load />
+</Base>

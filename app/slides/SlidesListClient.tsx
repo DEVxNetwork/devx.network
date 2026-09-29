@@ -16,15 +16,13 @@ export default function SlidesListClient({ slides }: SlidesListClientProps) {
 	return (
 		<Main>
 			<ContentSection>
-				<Eyebrow>From the seats</Eyebrow>
 				<SectionTitle>Slides from the room.</SectionTitle>
 				<Lead>
-					Decks members have given at Weekend Function. The recordings live on{" "}
-					<Link href="/watch">Watch</Link>.
+					Decks from Saturday. The videos live on <Link href="/watch">Watch</Link>.
 				</Lead>
 
 				{slides.length === 0 ? (
-					<EmptyState>No slides available yet.</EmptyState>
+					<EmptyState>No decks yet.</EmptyState>
 				) : (
 					<SlidesList>
 						{slides.map((slide) => (
@@ -59,22 +57,13 @@ const ContentSection = styled.section`
 	gap: 0.8rem;
 `
 
-const Eyebrow = styled.p`
-	margin: 0;
-	font-family: "Chivo", sans-serif;
-	font-size: 0.78rem;
-	font-weight: 700;
-	letter-spacing: 0.16em;
-	text-transform: uppercase;
-	color: var(--accent);
-`
-
 const SectionTitle = styled.h1`
+	max-width: 12ch;
 	font-family: "Fraunces", "Iowan Old Style", Palatino, serif;
-	font-size: clamp(1.9rem, 3.5vw, 2.9rem);
+	font-size: clamp(3rem, 7vw, 5.4rem);
 	font-weight: 560;
-	letter-spacing: -0.03em;
-	line-height: 1.18;
+	letter-spacing: -0.04em;
+	line-height: 0.92;
 	margin: 0;
 `
 

@@ -31,7 +31,7 @@ export default function SlideDetailClient({ slideData }: SlideDetailClientProps)
 				<MetadataSection>
 					<SectionTitle>{metadata.title}</SectionTitle>
 					<MetaInfo>
-						<Author>Presented by {metadata.author}</Author>
+						<Author>by {metadata.author}</Author>
 						<DateText>{formattedDate}</DateText>
 					</MetaInfo>
 					<Description>{metadata.description}</Description>
@@ -42,7 +42,7 @@ export default function SlideDetailClient({ slideData }: SlideDetailClientProps)
 							Share
 						</Button>
 						<Button href="/slides" variant="secondary" size="default">
-							All Slides
+							All the decks
 						</Button>
 					</ButtonRow>
 				</MetadataSection>

@@ -4,7 +4,7 @@ import type { LumaEvent } from "../services/luma"
 // Types
 //
 
-export type GatheringKind = "function" | "coroutine" | "founders" | "gathering"
+export type GatheringKind = "function" | "coroutine" | "paper" | "founders" | "gathering"
 
 export type StoryBeat = {
 	time: string
@@ -23,6 +23,8 @@ export type GatheringFormat = {
 	cadence: string
 	copy: string
 	where: string
+	photo?: string
+	photoPosition?: string
 }
 
 export type GatheringWhen = {
@@ -38,42 +40,47 @@ export type GatheringWhen = {
 // Saturday, and the short blurbs for each kind of gathering.
 
 export const missionLead =
-	"DEVx is a San Diego community of developers at every skill level. We get together to eat, to hear someone from the room explain a thing they just learned, and to open laptops beside each other."
+	"San Diego developers, every skill level, at one table. We eat, someone from the seats explains a thing they just learned, and then the laptops come out."
 
 export const afternoon: StoryBeat[] = [
 	{
-		time: "12:00",
+		time: "12pm",
 		title: "Lunch",
-		copy: "You sit down with someone you don't know yet. Food and drinks are on us. The introductions happen at the table, not on a slide."
+		copy: "You sit down with someone you don't know yet."
 	},
 	{
-		time: "1:00",
-		title: "Talks from the seats",
-		copy: "Usually three. They come from members, not a circuit of imported experts. Something you figured out last month is already enough of a talk."
+		time: "1:30pm",
+		title: "Presentation",
+		copy: "Talks from the seats, not a speaker circuit."
 	},
 	{
-		time: "2:15",
-		title: "Laptops open",
-		copy: "Show the project. Ask the stuck question. Organizers will sit with you, and so will strangers. We stay until four."
+		time: "2:30pm",
+		title: "Free-form",
+		copy: "Laptops open. Bring the stuck question."
+	},
+	{
+		time: "4pm",
+		title: "Close",
+		copy: "We wander out."
 	}
 ]
 
 export const beliefs: Belief[] = [
 	{
 		title: "The door is not a skill check.",
-		copy: "A first year and a twentieth year share a table. We ask one thing of everyone who walks in: be courteous with other people's time."
+		copy: "A first year and a twentieth year share a table."
 	},
 	{
 		title: "The teachers are already seated.",
-		copy: "If you are excited about it, the room wants to hear it. We livestream every talk. Within a week you get the recording and a transcript."
+		copy: "If you're excited about it, the room wants to hear it."
 	},
 	{
-		title: "Help is an ordinary part of the afternoon.",
-		copy: "Bring the bug you are stuck on. Someone nearby has already hit it, or wants to learn it with you. That is why the laptops come out."
+		title: "Bring the bug.",
+		copy: "Someone nearby has already hit it, or wants to learn it with you."
 	},
 	{
-		title: "Hospitality is the program.",
-		copy: "The calendar is free to attend. Lunch is complimentary. You bring a laptop if you want to share, and whatever you are excited about."
+		title: "Lunch is on us.",
+		copy: "The calendar is free. You bring whatever you're excited about."
 	}
 ]
 
@@ -83,30 +90,48 @@ export const formats: GatheringFormat[] = [
 		name: "Weekend Function()",
 		cadence: "One Saturday a month",
 		where: "Edge Offices, Little Italy",
-		copy: "The big room. Networking lunch, member talks, community announcements, then an open hang until four. Downtown, a block from the trolley and the Coaster."
+		copy: "Lunch, talks from the seats, laptops open until four.",
+		photo: "/images/weekend-function-talk.webp",
+		photoPosition: "center 62%"
 	},
 	{
 		kind: "coroutine",
 		name: 'co routine("place")',
 		cadence: "Friday coworking",
 		where: "San Diego and Oceanside",
-		copy: "A smaller table that moves. Laptops, coffee, and other people's half-finished ideas. Lately that has meant Moniker in San Diego and Communal in Oceanside."
+		copy: "A café, a laptop, and someone else's half-finished idea.",
+		photo: "/images/slides/slide4.webp",
+		photoPosition: "center 45%"
+	},
+	{
+		kind: "paper",
+		name: "Paper Club",
+		cadence: "Now and then",
+		where: "San Diego",
+		copy: "Someone brings a paper. The rest of us show up ready to argue.",
+		photo: "/images/paper-club.webp",
+		photoPosition: "center 62%"
 	}
 ]
 
 const KIND_LABEL: Record<GatheringKind, string> = {
 	function: "Weekend Function",
 	coroutine: "co routine",
+	paper: "Paper Club",
 	founders: "Indie founders",
 	gathering: "Gathering"
 }
 
 const KIND_BLURB: Record<GatheringKind, string> = {
-	function: "The monthly Saturday. Lunch, talks from the room, then laptops open until four.",
-	coroutine: "A Friday at a café. Bring a laptop, a question, and room for coffee.",
-	founders: "Indie founders, laptops open, building at the same table.",
-	gathering: "A DEVx gathering. Come as you are."
+	function: "Lunch, talks from the seats, laptops open until four.",
+	coroutine: "A café, a laptop, and someone else's half-finished idea.",
+	paper: "Someone brings a paper. The rest of us show up ready to argue.",
+	founders: "Indie founders, laptops open, at the same table.",
+	gathering: "Come as you are."
 }
+
+const seriesTitle = /weekend function|devx monthly/i
+const dateStamp = /^\d{1,2}\/\d{1,2}\/\d{2,4}$/
 
 const PACIFIC = "America/Los_Angeles"
 
@@ -116,8 +141,10 @@ const PACIFIC = "America/Los_Angeles"
 
 export function gatheringKind(name: string): GatheringKind {
 	const normalized = name.toLowerCase()
-	if (normalized.includes("weekend function")) return "function"
+	if (normalized.includes("weekend function") || normalized.includes("devx monthly"))
+		return "function"
 	if (normalized.includes("co routine") || normalized.includes("coroutine")) return "coroutine"
+	if (normalized.includes("paper club")) return "paper"
 	if (normalized.includes("indie") || normalized.includes("founder")) return "founders"
 	return "gathering"
 }
@@ -135,17 +162,12 @@ export function gatheringFormatName(name: string): string {
 	return formats.find((format) => format.kind === kind)?.name ?? gatheringLabel(name)
 }
 
-export function whyWeShowUp(name: string): string {
-	const kind = gatheringKind(name)
-	if (kind === "function") return sentenceAt(beliefs[1].copy, 0)
-	if (kind === "coroutine") return sentenceAt(beliefs[2].copy, 1)
-	if (kind === "founders") return sentenceAt(KIND_BLURB.founders, 0)
-	return sentenceAt(missionLead, 1)
-}
-
-function sentenceAt(copy: string, index: number): string {
-	const sentences = copy.match(/[^.!?]+[.!?]/g)?.map((sentence) => sentence.trim()) ?? [copy]
-	return sentences[index] ?? sentences[0]
+export function monthlyHeadline(name: string): string {
+	const topic = name
+		.split(/\s+[—–]\s+|\s+-\s+/)
+		.map((part) => part.trim())
+		.find((part) => part.length > 0 && !seriesTitle.test(part) && !dateStamp.test(part))
+	return topic ?? "Weekend Function()"
 }
 
 export function formatGatheringWhen(iso: string): GatheringWhen {

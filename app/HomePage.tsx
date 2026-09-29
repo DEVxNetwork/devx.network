@@ -1,14 +1,11 @@
 "use client"
-import { styled } from "styled-components"
-import { organizerEmeritus, organizers } from "./info/organizers"
+import { keyframes, styled } from "styled-components"
 import { Button } from "./components/Button"
-import { gatheringBlurb, gatheringLabel } from "./content/community"
-import {
-	formatPublicWhen,
-	gatheringOpensNewTab,
-	gatheringPlace,
-	type PublicGathering
-} from "./content/gatherings"
+import { GatheringShowcase } from "./components/GatheringShowcase"
+import { HomeHero } from "./components/HomeHero"
+import type { PublicGathering } from "./content/gatherings"
+import { gatheringOpensNewTab } from "./content/gatherings"
+import { organizers } from "./info/organizers"
 
 //
 // Types
@@ -18,768 +15,765 @@ type HomePageProps = {
 	gatherings: PublicGathering[]
 }
 
-type StoryBeat = {
-	time: string
-	title: string
-	copy: string
+type Portrait = {
+	src: string
+	size: number
+	x: number
+	y: number
+	z: number
+	mobileSize: number
+	mobileX: number
+	mobileY: number
 }
 
-type RoomFormat = {
-	cadence: string
-	name: string
-	where: string
-	copy: string
-	tone: "orange" | "teal"
-}
-
-type Belief = {
-	title: string
-	copy: string
+type AvatarHoverMotion = {
+	duration: number
+	delay: number
+	driftX: number
+	driftY: number
 }
 
 //
 // Constants
 //
 
-const ROOM_PHOTO = "/images/slides/slide1.webp"
-const UPCOMING_LIMIT = 4
+const wordmarkFont = `"Chivo", sans-serif`
 
-const beats: StoryBeat[] = [
+// Harbor elevation: convention sails, the Hyatt pair, Emerald's crystal crown,
+// Symphony Towers, and the pyramid top of One America Plaza.
+const skylinePath = `
+	M0 260
+	V216 H40 V202 H78 V218 H112
+	C148 218 162 184 184 154
+	C198 136 214 176 232 206
+	C268 216 292 164 324 128
+	C344 108 368 156 392 198
+	H454 V216
+	H498 V184 H540 V202 H586 V156 H632 V216
+	H676 V108 H734 V216
+	H746 V120 H802 V216
+	H848 V146 H872 L900 118 L928 146 H956 V216
+	H1004 V96 H1056 V80 H1108 V96 H1168 V216
+	H1224 V86
+	L1256 34
+	L1288 86
+	V216
+	H1336 V140 H1384 V216
+	H1416 V168 H1462 V216
+	H1496 V192 H1540 V216
+	H1600 V260 Z
+`
+
+const portraits: Portrait[] = [
 	{
-		time: "12:00",
-		title: "Lunch",
-		copy: "Sit down with someone new. Food and drinks are on us."
+		src: "/images/community/portrait-01.jpg",
+		size: 6.2,
+		x: 2,
+		y: 0,
+		z: 4,
+		mobileSize: 4.2,
+		mobileX: 0,
+		mobileY: 0
 	},
 	{
-		time: "1:00",
-		title: "Talks from the seats",
-		copy: "Usually three, from members. What you learned last month is enough."
+		src: "/images/community/portrait-02.jpg",
+		size: 4.4,
+		x: 40,
+		y: 2,
+		z: 4,
+		mobileSize: 3.4,
+		mobileX: 16,
+		mobileY: 2
 	},
 	{
-		time: "2:15",
-		title: "Laptops open",
-		copy: "Show a project or ask the stuck question. We stay until four."
+		src: "/images/community/portrait-03.jpg",
+		size: 3.6,
+		x: 70,
+		y: 0,
+		z: 3,
+		mobileSize: 4,
+		mobileX: 32,
+		mobileY: 0
+	},
+	{
+		src: "/images/community/portrait-04.jpg",
+		size: 5,
+		x: 16,
+		y: 24,
+		z: 5,
+		mobileSize: 3.3,
+		mobileX: 50,
+		mobileY: 4
+	},
+	{
+		src: "/images/community/portrait-05.jpg",
+		size: 4.2,
+		x: 52,
+		y: 22,
+		z: 4,
+		mobileSize: 4.1,
+		mobileX: 64,
+		mobileY: 0
+	},
+	{
+		src: "/images/community/portrait-06.jpg",
+		size: 3.4,
+		x: 72,
+		y: 20,
+		z: 5,
+		mobileSize: 3.5,
+		mobileX: 78,
+		mobileY: 3
+	},
+	{
+		src: "/images/community/portrait-07.jpg",
+		size: 5.6,
+		x: 0,
+		y: 48,
+		z: 4,
+		mobileSize: 3.4,
+		mobileX: 6,
+		mobileY: 24
+	},
+	{
+		src: "/images/community/portrait-08.jpg",
+		size: 4.5,
+		x: 34,
+		y: 46,
+		z: 5,
+		mobileSize: 4.2,
+		mobileX: 20,
+		mobileY: 22
+	},
+	{
+		src: "/images/community/portrait-09.jpg",
+		size: 3.8,
+		x: 66,
+		y: 50,
+		z: 4,
+		mobileSize: 3.3,
+		mobileX: 40,
+		mobileY: 26
+	},
+	{
+		src: "/images/community/portrait-10.jpg",
+		size: 5.2,
+		x: 6,
+		y: 72,
+		z: 5,
+		mobileSize: 4,
+		mobileX: 54,
+		mobileY: 22
+	},
+	{
+		src: "/images/community/portrait-11.jpg",
+		size: 4,
+		x: 44,
+		y: 74,
+		z: 4,
+		mobileSize: 3.5,
+		mobileX: 70,
+		mobileY: 24
+	},
+	{
+		src: "/images/community/portrait-12.jpg",
+		size: 3.5,
+		x: 74,
+		y: 72,
+		z: 3,
+		mobileSize: 3.2,
+		mobileX: 82,
+		mobileY: 26
+	},
+	{
+		src: "/images/community/portrait-13.jpg",
+		size: 3.2,
+		x: 28,
+		y: 2,
+		z: 1,
+		mobileSize: 4,
+		mobileX: 0,
+		mobileY: 46
+	},
+	{
+		src: "/images/community/portrait-14.jpg",
+		size: 3.3,
+		x: 56,
+		y: 0,
+		z: 1,
+		mobileSize: 3.4,
+		mobileX: 16,
+		mobileY: 48
+	},
+	{
+		src: "/images/community/portrait-15.jpg",
+		size: 2.8,
+		x: 82,
+		y: 6,
+		z: 1,
+		mobileSize: 4.2,
+		mobileX: 32,
+		mobileY: 44
+	},
+	{
+		src: "/images/community/portrait-16.jpg",
+		size: 3.2,
+		x: 0,
+		y: 28,
+		z: 1,
+		mobileSize: 3.3,
+		mobileX: 52,
+		mobileY: 48
+	},
+	{
+		src: "/images/community/portrait-17.jpg",
+		size: 3.6,
+		x: 36,
+		y: 28,
+		z: 1,
+		mobileSize: 3.8,
+		mobileX: 66,
+		mobileY: 46
+	},
+	{
+		src: "/images/community/portrait-18.jpg",
+		size: 3,
+		x: 78,
+		y: 32,
+		z: 1,
+		mobileSize: 3.5,
+		mobileX: 80,
+		mobileY: 48
+	},
+	{
+		src: "/images/community/portrait-19.jpg",
+		size: 3.1,
+		x: 20,
+		y: 50,
+		z: 1,
+		mobileSize: 3.6,
+		mobileX: 4,
+		mobileY: 68
+	},
+	{
+		src: "/images/community/portrait-20.jpg",
+		size: 3,
+		x: 52,
+		y: 46,
+		z: 1,
+		mobileSize: 4.1,
+		mobileX: 20,
+		mobileY: 66
+	},
+	{
+		src: "/images/community/portrait-21.jpg",
+		size: 3.2,
+		x: 30,
+		y: 62,
+		z: 1,
+		mobileSize: 3.4,
+		mobileX: 40,
+		mobileY: 70
+	},
+	{
+		src: "/images/community/portrait-22.jpg",
+		size: 3,
+		x: 60,
+		y: 64,
+		z: 1,
+		mobileSize: 4,
+		mobileX: 54,
+		mobileY: 66
+	},
+	{
+		src: "/images/community/portrait-23.jpg",
+		size: 3.1,
+		x: 36,
+		y: 84,
+		z: 1,
+		mobileSize: 3.5,
+		mobileX: 70,
+		mobileY: 68
+	},
+	{
+		src: "/images/community/portrait-24.jpg",
+		size: 3.2,
+		x: 80,
+		y: 78,
+		z: 1,
+		mobileSize: 3.2,
+		mobileX: 82,
+		mobileY: 70
 	}
 ]
 
-const rooms: RoomFormat[] = [
-	{
-		cadence: "One Saturday a month",
-		name: "Weekend Function()",
-		where: "Edge Offices, Little Italy",
-		copy: "Lunch, member talks, then an open hang until four, near the trolley.",
-		tone: "orange"
-	},
-	{
-		cadence: "Friday coworking",
-		name: 'co routine("place")',
-		where: "San Diego and Oceanside",
-		copy: "A smaller table that moves. Laptops and coffee, lately at Moniker and Communal.",
-		tone: "teal"
+const avatarHover = keyframes`
+	from {
+		transform: translate(0, 0);
 	}
-]
-
-const beliefs: Belief[] = [
-	{
-		title: "The door is not a skill check.",
-		copy: "A first year and a twentieth year share a table."
-	},
-	{
-		title: "The teachers are already seated.",
-		copy: "If you are excited about it, the room wants to hear it."
-	},
-	{
-		title: "Help is part of the afternoon.",
-		copy: "Bring the bug. Someone nearby has already hit it."
-	},
-	{
-		title: "Hospitality is the program.",
-		copy: "Free to attend. Lunch is on us."
+	to {
+		transform: translate(var(--drift-x), var(--drift-y));
 	}
-]
+`
 
 //
 // Components
 //
 
 export function HomePage({ gatherings }: HomePageProps) {
-	const upcoming = gatherings.slice(0, UPCOMING_LIMIT)
-	const nextEvent = upcoming[0]
-	const nextWhen = nextEvent ? formatPublicWhen(nextEvent) : null
-	const nextHref = nextEvent ? nextEvent.href : "/events"
+	const nextEvent = gatherings[0]
+	const nextEventLink = nextEvent ? nextEvent.href : "/events"
 	const nextExternal = nextEvent ? gatheringOpensNewTab(nextEvent) : false
 
 	return (
-		<Main>
-			<Hero>
-				<HeroCopy>
-					<Eyebrow>San Diego · a developer community</Eyebrow>
-					<Headline>
-						We get together
-						<br />
-						so we can learn
-						<br />
-						<Emphasis>from each other.</Emphasis>
-					</Headline>
-					<Lead>
-						Developers at every level, in the same room. Eat, hear a talk from the seats, then build
-						beside each other.
-					</Lead>
-					<HeroActions>
-						<Button
-							href={nextHref}
-							target={nextExternal ? "_blank" : undefined}
-							rel={nextExternal ? "noopener noreferrer" : undefined}
-							variant="primary"
-							size="default"
-						>
-							Join the next gathering
-						</Button>
-					</HeroActions>
-				</HeroCopy>
-				<HeroVisual>
-					<RoomPhoto src={ROOM_PHOTO} alt="DEVx members seated for a talk" />
-					<NextCard>
-						<NextKicker>{nextEvent ? "Next up" : "Calendar"}</NextKicker>
-						{nextEvent && nextWhen ? (
-							<>
-								<NextKind>{gatheringLabel(nextEvent.name)}</NextKind>
-								<NextName>{nextEvent.name}</NextName>
-								<NextMeta>
-									{nextWhen.day}
-									{nextWhen.time ? (
-										<>
-											<MetaDot aria-hidden="true">·</MetaDot>
-											{nextWhen.time}
-										</>
-									) : null}
-								</NextMeta>
-								<NextPlace>{gatheringPlace(nextEvent)}</NextPlace>
-								<NextBlurb>{gatheringBlurb(nextEvent.name)}</NextBlurb>
-							</>
-						) : (
-							<NextBlurb>The next date is going on the calendar. Check back shortly.</NextBlurb>
-						)}
-						<Button
-							href={nextHref}
-							target={nextExternal ? "_blank" : undefined}
-							rel={nextExternal ? "noopener noreferrer" : undefined}
-							variant="primary"
-							size="small"
-						>
-							Save a seat
-						</Button>
-					</NextCard>
-				</HeroVisual>
-			</Hero>
+		<>
+			<Main>
+				<HomeHero nextEventLink={nextEventLink} nextExternal={nextExternal} />
 
-			<Band id="saturday">
-				<SectionIntro>
-					<Eyebrow>The shape of a Saturday</Eyebrow>
-					<SectionTitle>Lunch, then the room teaches itself.</SectionTitle>
-					<SectionCopy>Meet someone before anyone presents. Stay after, and build.</SectionCopy>
-				</SectionIntro>
-				<BeatList>
-					{beats.map((beat) => (
-						<Beat key={beat.time}>
-							<BeatTime>{beat.time}</BeatTime>
-							<BeatTitle>{beat.title}</BeatTitle>
-							<BeatCopy>{beat.copy}</BeatCopy>
-						</Beat>
-					))}
-				</BeatList>
-			</Band>
+				<Statement>
+					<Skyline viewBox="0 0 1600 260" aria-hidden="true">
+						<path d={skylinePath} />
+					</Skyline>
+					<StatementInner>
+						<StatementLead>
+							San Diego
+							<br />
+							is full of <Mark>life.</Mark>
+						</StatementLead>
+						<AvatarField aria-hidden="true">
+							{portraits.map((portrait, index) => {
+								const motion = avatarHoverMotion(index)
+								return (
+									<Avatar
+										key={portrait.src}
+										src={portrait.src}
+										alt=""
+										$size={portrait.size}
+										$x={portrait.x}
+										$y={portrait.y}
+										$z={portrait.z}
+										$mSize={portrait.mobileSize}
+										$mX={portrait.mobileX}
+										$mY={portrait.mobileY}
+										$duration={motion.duration}
+										$delay={motion.delay}
+										$driftX={motion.driftX}
+										$driftY={motion.driftY}
+									/>
+								)
+							})}
+						</AvatarField>
+						<StatementBody>
+							<StatementLine>
+								It's our belief that people from all industries have something to add to the
+								technology conversation. Whether you're simply using Lovable to build your website
+								or developing leading AI harness memory infra,{" "}
+								<Highlight>everyone has something to add to the conversation.</Highlight>
+							</StatementLine>
+						</StatementBody>
+					</StatementInner>
+				</Statement>
 
-			<FormatBand id="formats">
-				{rooms.map((room) => (
-					<FormatPanel key={room.name}>
-						<FormatEyebrow $tone={room.tone}>{room.cadence}</FormatEyebrow>
-						<FormatName>{room.name}</FormatName>
-						<FormatWhere>{room.where}</FormatWhere>
-						<FormatCopy>{room.copy}</FormatCopy>
-					</FormatPanel>
-				))}
-			</FormatBand>
+				<GatheringShowcase />
 
-			<Band id="why">
-				<SectionIntro>
-					<Eyebrow>Why we keep showing up</Eyebrow>
-					<SectionTitle>A room that expects you.</SectionTitle>
-				</SectionIntro>
-				<BeliefGrid>
-					{beliefs.map((belief) => (
-						<BeliefCard key={belief.title}>
-							<BeliefTitle>{belief.title}</BeliefTitle>
-							<BeliefCopy>{belief.copy}</BeliefCopy>
-						</BeliefCard>
-					))}
-				</BeliefGrid>
-			</Band>
-
-			<UpcomingBand id="upcoming">
-				<UpcomingHeader>
-					<div>
-						<Eyebrow>On the calendar</Eyebrow>
-						<SectionTitle>Come sit down.</SectionTitle>
-					</div>
-					<Button href="/events" variant="secondary" size="small">
-						All gatherings
-					</Button>
-				</UpcomingHeader>
-				{upcoming.length === 0 ? (
-					<Empty>No upcoming gatherings are posted yet.</Empty>
-				) : (
-					<UpcomingList>
-						{upcoming.map((gathering) => {
-							const when = formatPublicWhen(gathering)
-							const external = gatheringOpensNewTab(gathering)
-							return (
-								<UpcomingItem
-									key={gathering.id}
-									href={gathering.href}
-									target={external ? "_blank" : undefined}
-									rel={external ? "noopener noreferrer" : undefined}
+				<ContentSection>
+					<SectionTitle $center>The people behind DEVx</SectionTitle>
+					<OrganizerQuote>
+						How many devs does it take to screw in a light bulb? Well, apparently{" "}
+						{organizers.length}&nbsp;volunteers
+					</OrganizerQuote>
+					<OrganizerGrid>
+						{organizers.map((organizer) => (
+							<OrganizerCard
+								key={organizer.name}
+								href={organizer.linkedIn}
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<OrganizerImage src={organizer.imageSrc} alt={organizer.name} />
+								<OrganizerName>{organizer.name}</OrganizerName>
+								<OrganizerRole>{organizer.role}</OrganizerRole>
+								<LinkedInIcon
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 0 24 24"
+									aria-hidden="true"
 								>
-									<UpcomingWhen>
-										<UpcomingDay>{when.day}</UpcomingDay>
-										{when.time ? <UpcomingTime>{when.time}</UpcomingTime> : null}
-									</UpcomingWhen>
-									<UpcomingBody>
-										<UpcomingKind>{gatheringLabel(gathering.name)}</UpcomingKind>
-										<UpcomingName>{gathering.name}</UpcomingName>
-									</UpcomingBody>
-									<UpcomingPlace>{gatheringPlace(gathering)}</UpcomingPlace>
-								</UpcomingItem>
-							)
-						})}
-					</UpcomingList>
-				)}
-			</UpcomingBand>
+									<path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+								</LinkedInIcon>
+							</OrganizerCard>
+						))}
+					</OrganizerGrid>
+				</ContentSection>
 
-			<Band id="people">
-				<SectionIntro>
-					<Eyebrow>Who holds the room</Eyebrow>
-					<SectionTitle>Volunteer organizers, not a company.</SectionTitle>
-					<SectionCopy>The people who set out lunch will sit with your bug afterward.</SectionCopy>
-				</SectionIntro>
-				<PeopleGrid>
-					{organizers.map((organizer) => (
-						<Person
-							key={organizer.name}
-							href={organizer.linkedIn}
-							target="_blank"
-							rel="noopener noreferrer"
-							aria-label={`${organizer.name} on LinkedIn`}
-						>
-							<PersonPhoto src={organizer.imageSrc} alt="" />
-							<PersonName>{organizer.name}</PersonName>
-						</Person>
-					))}
-				</PeopleGrid>
-				<EmeritusLabel>Earlier organizers</EmeritusLabel>
-				<EmeritusRow>
-					{organizerEmeritus.map((organizer) => (
-						<Person
-							key={organizer.name}
-							href={organizer.linkedIn}
-							target="_blank"
-							rel="noopener noreferrer"
-							aria-label={`${organizer.name} on LinkedIn`}
-						>
-							<PersonPhoto src={organizer.imageSrc} alt="" />
-							<PersonName>{organizer.name}</PersonName>
-						</Person>
-					))}
-				</EmeritusRow>
-			</Band>
-		</Main>
+				<JoinSection>
+					<JoinPanel>
+						<SectionTitle $center>Join us at the next event</SectionTitle>
+						<JoinText>
+							Free to attend, open to every skill level. Come meet the San Diego developer
+							community.
+						</JoinText>
+						<JoinActions>
+							<Button
+								href={nextEventLink}
+								target={nextExternal ? "_blank" : undefined}
+								rel={nextExternal ? "noopener noreferrer" : undefined}
+								variant="primary"
+								size="default"
+							>
+								Join the Next Event
+							</Button>
+							<Button href="/speak" variant="secondary" size="default">
+								Speak at an Event
+							</Button>
+						</JoinActions>
+					</JoinPanel>
+				</JoinSection>
+			</Main>
+		</>
 	)
 }
 
-//
-// Styled Components
-//
-
 const Main = styled.main`
+	position: relative;
+	z-index: 1;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	width: 100%;
 `
 
-const Eyebrow = styled.p`
-	margin: 0 0 0.85rem;
-	font-family: "Chivo", sans-serif;
-	font-size: 0.78rem;
-	font-weight: 700;
-	letter-spacing: 0.16em;
-	text-transform: uppercase;
-	color: var(--accent);
-`
-
-const Hero = styled.section`
+const Statement = styled.section`
 	position: relative;
-	width: min(var(--column), calc(100% - 2.5rem));
+	box-sizing: border-box;
+	width: 100%;
+	overflow: hidden;
+	background: var(--wash);
+	border-bottom: 1px solid var(--border);
+`
+
+const Skyline = styled.svg`
+	position: absolute;
+	left: 50%;
+	bottom: 0;
+	z-index: 0;
+	width: 140%;
+	height: auto;
+	transform: translateX(-50%);
+	fill: currentColor;
+	color: var(--foreground);
+	opacity: 0.065;
+	pointer-events: none;
+
+	@media (max-width: 800px) {
+		width: 230%;
+	}
+`
+
+const StatementInner = styled.div`
+	width: min(68rem, calc(100% - 2.5rem));
+	margin: 0 auto;
+	position: relative;
+	z-index: 1;
+	padding: 6.5rem 0 8rem;
 	display: grid;
-	grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-	gap: 3.5rem;
-	align-items: end;
-	padding: 3.5rem 0 4.5rem;
+	grid-template-columns: minmax(0, 1.45fr) minmax(16rem, 0.72fr);
+	grid-template-areas:
+		"lead faces"
+		"body faces";
+	column-gap: 1.25rem;
+	row-gap: 1.35rem;
+	align-items: start;
 
-	&::before {
-		content: "";
-		position: absolute;
-		z-index: -1;
-		right: -6%;
-		top: -8%;
-		width: min(34rem, 70%);
-		height: 78%;
-		background: radial-gradient(
-				circle at 70% 40%,
-				color-mix(in srgb, var(--accent-display) 22%, transparent),
-				transparent 62%
-			),
-			radial-gradient(
-				circle at 20% 80%,
-				color-mix(in srgb, var(--accent-2) 18%, transparent),
-				transparent 58%
-			);
-		pointer-events: none;
-	}
-
-	@media (max-width: 900px) {
+	@media (max-width: 800px) {
 		grid-template-columns: 1fr;
-		gap: 2rem;
-		padding: 2.25rem 0 3rem;
+		grid-template-areas:
+			"lead"
+			"faces"
+			"body";
+		row-gap: 1.25rem;
+		padding: 4.5rem 0 6rem;
 	}
 `
 
-const HeroCopy = styled.div`
-	padding-bottom: 0.5rem;
-`
-
-const Headline = styled.h1`
+const StatementLead = styled.h2`
+	grid-area: lead;
 	margin: 0;
-	font-family: "Fraunces", "Iowan Old Style", Palatino, serif;
+	max-width: 11ch;
+	font-family: var(--font-display);
 	font-weight: 560;
-	font-size: clamp(2.6rem, 5.4vw, 4.6rem);
-	line-height: 0.98;
-	letter-spacing: -0.035em;
+	font-size: clamp(3rem, 7vw, 5.4rem);
+	line-height: 0.92;
+	letter-spacing: -0.04em;
 	color: var(--foreground);
 `
 
-const Emphasis = styled.em`
-	font-style: italic;
-	font-weight: 560;
-	color: var(--accent-display);
+const Mark = styled.span`
+	background-image: linear-gradient(var(--extrusion), var(--extrusion));
+	background-repeat: no-repeat;
+	background-position: 0 92%;
+	background-size: 100% 0.11em;
 `
 
-const Lead = styled.p`
+const Highlight = styled.span`
+	background: var(--accent);
+	color: var(--accent-contrast);
+	padding: 0.08em 0.28em;
+	border-radius: 0.12em;
+	box-decoration-break: clone;
+	-webkit-box-decoration-break: clone;
+`
+
+const StatementLine = styled.p`
 	margin: 1.35rem 0 0;
-	max-width: 34rem;
-	font-size: 1.12rem;
-	line-height: 1.55;
+	font-size: 1.15rem;
+	line-height: 1.4;
 	color: var(--muted-foreground);
 `
 
-const HeroActions = styled.div`
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0.75rem;
-	margin-top: 1.75rem;
+const StatementBody = styled.div`
+	grid-area: body;
+
+	> ${StatementLine} {
+		margin-top: 0;
+	}
 `
 
-const HeroVisual = styled.div`
+const AvatarField = styled.div`
+	grid-area: faces;
 	position: relative;
+	align-self: stretch;
+	min-height: 22rem;
+
+	@media (max-width: 800px) {
+		min-height: 18rem;
+	}
 `
 
-const RoomPhoto = styled.img`
-	display: block;
-	width: 100%;
-	aspect-ratio: 4 / 3;
+const Avatar = styled.img<{
+	$size: number
+	$x: number
+	$y: number
+	$z: number
+	$mSize: number
+	$mX: number
+	$mY: number
+	$duration: number
+	$delay: number
+	$driftX: number
+	$driftY: number
+}>`
+	position: absolute;
+	box-sizing: border-box;
+	width: ${(props) => props.$size}rem;
+	height: ${(props) => props.$size}rem;
+	left: ${(props) => props.$x}%;
+	top: ${(props) => props.$y}%;
+	z-index: ${(props) => props.$z};
 	object-fit: cover;
-	object-position: center 30%;
-	border-radius: 1.25rem;
-	background: var(--surface-solid);
-	box-shadow: 0 18px 40px rgba(27, 18, 12, 0.12);
-`
+	border-radius: 50%;
+	border: 3px solid var(--wash);
+	background: var(--border);
+	box-shadow: ${(props) =>
+		props.$z === 1 ? "0 6px 14px rgba(0, 0, 0, 0.1)" : "0 10px 22px rgba(0, 0, 0, 0.14)"};
+	--drift-x: ${(props) => props.$driftX}rem;
+	--drift-y: ${(props) => props.$driftY}rem;
+	animation: ${avatarHover} ${(props) => props.$duration}s ease-in-out ${(props) => props.$delay}s
+		infinite alternate;
 
-const NextCard = styled.aside`
-	position: relative;
-	margin: -3.25rem 1rem 0;
-	padding: 1.15rem 1.2rem 1.2rem;
-	background: var(--surface-solid);
-	color: var(--foreground);
-	border: 1px solid var(--border);
-	border-radius: 1rem;
-	box-shadow: 0 18px 40px rgba(27, 18, 12, 0.14);
+	@media (prefers-reduced-motion: reduce) {
+		animation: none;
+	}
 
-	@media (max-width: 900px) {
-		margin-top: -2.25rem;
+	@media (max-width: 800px) {
+		display: ${(props) => (props.$mSize === 0 ? "none" : "block")};
+		width: ${(props) => props.$mSize}rem;
+		height: ${(props) => props.$mSize}rem;
+		left: ${(props) => props.$mX}%;
+		top: ${(props) => props.$mY}%;
 	}
 `
 
-const NextKicker = styled.p`
-	margin: 0;
-	font-size: 0.72rem;
-	font-weight: 700;
-	letter-spacing: 0.14em;
-	text-transform: uppercase;
-	color: var(--accent);
-`
-
-const NextKind = styled.p`
-	margin: 0.7rem 0 0;
-	font-size: 0.85rem;
-	color: var(--subtle-foreground);
-`
-
-const NextName = styled.h2`
-	margin: 0.15rem 0 0;
-	font-family: "Fraunces", "Iowan Old Style", Palatino, serif;
-	font-size: 1.45rem;
-	font-weight: 560;
-	letter-spacing: -0.03em;
-	line-height: 1.15;
-`
-
-const NextMeta = styled.p`
-	margin: 0.55rem 0 0;
-	font-size: 0.95rem;
-	color: var(--foreground);
-`
-
-const MetaDot = styled.span`
-	margin: 0 0.4rem;
-	color: var(--subtle-foreground);
-`
-
-const NextPlace = styled.p`
-	margin: 0.15rem 0 0;
-	font-size: 0.95rem;
-	color: var(--muted-foreground);
-`
-
-const NextBlurb = styled.p`
-	margin: 0.7rem 0 0.95rem;
-	font-size: 0.95rem;
-	line-height: 1.5;
-	color: var(--muted-foreground);
-`
-
-const Band = styled.section`
-	width: min(var(--column), calc(100% - 2.5rem));
-	padding: 1rem 0 4.5rem;
-	scroll-margin-top: 4.5rem;
-`
-
-const SectionIntro = styled.div`
-	max-width: 38rem;
-	margin-bottom: 1.75rem;
-`
-
-const SectionTitle = styled.h2`
-	margin: 0;
-	font-family: "Fraunces", "Iowan Old Style", Palatino, serif;
-	font-weight: 560;
-	font-size: clamp(1.9rem, 3.6vw, 2.9rem);
-	line-height: 1.05;
-	letter-spacing: -0.03em;
-`
-
-const SectionCopy = styled.p`
-	margin: 0.75rem 0 0;
-	font-size: 1.05rem;
-	line-height: 1.55;
-	color: var(--muted-foreground);
-`
-
-const BeatList = styled.ol`
-	list-style: none;
-	margin: 0;
+const OrganizerQuote = styled.blockquote`
+	margin: -0.75rem auto 0.5rem;
 	padding: 0;
-	display: grid;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
-	gap: 1.25rem;
-
-	@media (max-width: 800px) {
-		grid-template-columns: 1fr;
-	}
-`
-
-const Beat = styled.li`
-	padding: 1.15rem 1rem 0.2rem;
-	border-top: 3px solid var(--accent-display);
-	background: linear-gradient(180deg, var(--wash), transparent 72%);
-`
-
-const BeatTime = styled.p`
-	margin: 0;
-	font-family: "Fraunces", "Iowan Old Style", Palatino, serif;
-	font-size: 1.7rem;
-	font-weight: 560;
-	letter-spacing: -0.03em;
-	color: var(--accent);
-`
-
-const BeatTitle = styled.h3`
-	margin: 0.3rem 0 0;
-	font-family: "Fraunces", "Iowan Old Style", Palatino, serif;
-	font-size: 1.35rem;
-	font-weight: 560;
-	letter-spacing: -0.02em;
-`
-
-const BeatCopy = styled.p`
-	margin: 0.5rem 0 0;
-	color: var(--muted-foreground);
+	max-width: 48rem;
+	font-size: 1.05rem;
+	font-style: italic;
 	line-height: 1.5;
+	text-align: center;
+	color: var(--muted-foreground);
 `
 
-const FormatBand = styled.section`
-	width: 100%;
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	border-top: 1px solid var(--border);
-	border-bottom: 1px solid var(--border);
-	background: var(--surface-solid);
-
-	@media (max-width: 800px) {
-		grid-template-columns: 1fr;
-	}
-`
-
-const FormatPanel = styled.article`
-	padding: 2.5rem clamp(1.25rem, 4vw, 3.5rem);
-
-	&:first-child {
-		background: linear-gradient(160deg, var(--wash), var(--surface-solid) 70%);
-	}
-
-	& + & {
-		border-left: 1px solid var(--border);
-	}
-
-	@media (max-width: 800px) {
-		& + & {
-			border-left: none;
-			border-top: 1px solid var(--border);
-		}
-	}
-`
-
-const FormatEyebrow = styled(Eyebrow)<{ $tone: "orange" | "teal" }>`
-	color: ${(props) => (props.$tone === "teal" ? "var(--accent-2)" : "var(--accent)")};
-`
-
-const FormatName = styled.h2`
-	margin: 0;
-	font-family: "Fraunces", "Iowan Old Style", Palatino, serif;
-	font-weight: 560;
-	font-size: clamp(1.7rem, 3vw, 2.45rem);
-	letter-spacing: -0.03em;
-	line-height: 1.05;
-`
-
-const FormatWhere = styled.p`
-	margin: 0.65rem 0 0;
-	font-weight: 650;
+const SectionTitle = styled.h2<{ $center?: boolean }>`
+	font-family: ${wordmarkFont};
+	font-size: clamp(1.75rem, 4vw, 2.75rem);
+	font-weight: 800;
+	margin: 0 0 1.5rem 0;
 	color: var(--foreground);
+	text-align: ${(props) => (props.$center ? "center" : "left")};
+	max-width: 720px;
+	${(props) => props.$center && "margin-left: auto; margin-right: auto;"}
 `
 
-const FormatCopy = styled.p`
-	margin: 0.65rem 0 0;
-	max-width: 34rem;
-	color: var(--muted-foreground);
-	line-height: 1.55;
-`
-
-const BeliefGrid = styled.div`
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 1.25rem 2rem;
-
-	@media (max-width: 800px) {
-		grid-template-columns: 1fr;
-	}
-`
-
-const BeliefCard = styled.article`
-	padding-top: 0.9rem;
-	border-top: 1px solid var(--border);
-`
-
-const BeliefTitle = styled.h3`
-	margin: 0;
-	font-family: "Fraunces", "Iowan Old Style", Palatino, serif;
-	font-size: 1.3rem;
-	font-weight: 560;
-	letter-spacing: -0.02em;
-	line-height: 1.2;
-`
-
-const BeliefCopy = styled.p`
-	margin: 0.45rem 0 0;
-	color: var(--muted-foreground);
-	line-height: 1.5;
-`
-
-const UpcomingBand = styled.section`
-	width: min(var(--column), calc(100% - 2.5rem));
-	padding: 0.5rem 0 4.5rem;
-	scroll-margin-top: 4.5rem;
-`
-
-const UpcomingHeader = styled.div`
-	display: flex;
-	justify-content: space-between;
-	align-items: flex-end;
-	gap: 1.5rem;
-	margin-bottom: 1.25rem;
-
-	@media (max-width: 700px) {
-		flex-direction: column;
-		align-items: flex-start;
-	}
-`
-
-const UpcomingList = styled.div`
+const ContentSection = styled.section`
+	box-sizing: border-box;
+	width: 100%;
+	max-width: 1200px;
+	padding: 3rem 1.5rem 5rem;
 	display: flex;
 	flex-direction: column;
-	border-top: 1px solid var(--border);
-`
-
-const UpcomingName = styled.p`
-	margin: 0.15rem 0 0;
-	font-family: "Fraunces", "Iowan Old Style", Palatino, serif;
-	font-size: 1.2rem;
-	font-weight: 560;
-	letter-spacing: -0.02em;
-	line-height: 1.25;
-`
-
-const UpcomingItem = styled.a`
-	display: grid;
-	grid-template-columns: minmax(11rem, 16rem) minmax(0, 1fr) minmax(10rem, 16rem);
-	gap: 1rem;
 	align-items: center;
-	padding: 1.1rem 0.2rem;
-	border-bottom: 1px solid var(--border);
-	text-decoration: none;
-	color: inherit;
 
-	&:hover ${UpcomingName} {
-		color: var(--accent);
-	}
-
-	@media (max-width: 800px) {
-		grid-template-columns: 1fr;
-		gap: 0.25rem;
-		padding: 1rem 0;
+	@media (max-width: 768px) {
+		padding: 2rem 1.5rem 3rem;
 	}
 `
 
-const UpcomingWhen = styled.div`
-	display: flex;
-	flex-direction: column;
-`
-
-const UpcomingDay = styled.span`
-	font-weight: 650;
-`
-
-const UpcomingTime = styled.span`
-	color: var(--subtle-foreground);
-	font-size: 0.92rem;
-`
-
-const UpcomingBody = styled.div`
-	min-width: 0;
-`
-
-const UpcomingKind = styled.p`
-	margin: 0;
-	font-size: 0.75rem;
-	font-weight: 700;
-	letter-spacing: 0.12em;
-	text-transform: uppercase;
-	color: var(--accent-2);
-`
-
-const UpcomingPlace = styled.p`
-	margin: 0;
-	text-align: right;
-	color: var(--muted-foreground);
-
-	@media (max-width: 800px) {
-		text-align: left;
-	}
-`
-
-const Empty = styled.p`
-	margin: 0;
-	color: var(--muted-foreground);
-`
-
-const PeopleGrid = styled.div`
+const OrganizerGrid = styled.div`
 	display: grid;
-	grid-template-columns: repeat(4, minmax(0, 1fr));
-	gap: 1.25rem 1rem;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 1.5rem;
+	width: 100%;
+	margin-top: 1rem;
 
-	@media (max-width: 900px) {
+	@media (max-width: 768px) {
 		grid-template-columns: repeat(3, minmax(0, 1fr));
-	}
-
-	@media (max-width: 640px) {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.65rem;
 	}
 `
 
-const Person = styled.a`
+const OrganizerCard = styled.a`
+	background-color: var(--surface-solid);
+	border: 1px solid var(--border);
+	padding: 2.5rem 1.5rem;
+	border-radius: 1rem;
+	text-align: left;
 	display: flex;
 	flex-direction: column;
-	gap: 0.55rem;
+	align-items: flex-start;
+	justify-content: flex-start;
 	text-decoration: none;
 	color: inherit;
+	cursor: pointer;
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease;
 
 	&:hover {
-		color: var(--accent);
+		transform: translateY(-4px);
+		box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+	}
+
+	@media (max-width: 768px) {
+		padding: 0.85rem 0.55rem;
+		border-radius: 0.75rem;
 	}
 `
 
-const PersonPhoto = styled.img`
+const OrganizerImage = styled.img`
+	box-sizing: border-box;
 	width: 100%;
 	aspect-ratio: 1;
 	object-fit: cover;
-	border-radius: 0.9rem;
-	background: var(--surface-solid);
+	border-radius: 50%;
+	margin: 0 0 1rem;
+	border: 3px solid var(--border);
+
+	@media (max-width: 768px) {
+		margin-bottom: 0.55rem;
+		border-width: 2px;
+	}
 `
 
-const PersonName = styled.span`
-	font-size: 0.95rem;
-	font-weight: 600;
-	line-height: 1.3;
-`
-
-const EmeritusLabel = styled.p`
-	margin: 2rem 0 0.8rem;
-	font-size: 0.78rem;
+const OrganizerName = styled.h3`
+	font-family: ${wordmarkFont};
+	font-size: 1.1rem;
 	font-weight: 700;
-	letter-spacing: 0.14em;
-	text-transform: uppercase;
-	color: var(--subtle-foreground);
-`
+	line-height: 1.25;
+	margin: 0;
+	color: var(--foreground);
 
-const EmeritusRow = styled.div`
-	display: grid;
-	grid-template-columns: repeat(4, minmax(0, 1fr));
-	gap: 1.25rem 1rem;
-
-	@media (max-width: 900px) {
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-	}
-
-	@media (max-width: 640px) {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
+	@media (max-width: 768px) {
+		font-size: 0.8rem;
 	}
 `
+
+const OrganizerRole = styled.p`
+	margin: 0.4rem 0 0;
+	max-width: 16rem;
+	font-size: 0.85rem;
+	line-height: 1.35;
+	color: var(--muted-foreground);
+
+	@media (max-width: 768px) {
+		margin-top: 0.25rem;
+		font-size: 0.68rem;
+		line-height: 1.3;
+	}
+`
+
+const LinkedInIcon = styled.svg`
+	height: 1.5rem;
+	width: 1.5rem;
+	fill: var(--subtle-foreground);
+	margin-top: auto;
+	padding-top: 0.75rem;
+
+	@media (max-width: 768px) {
+		width: 1.05rem;
+		height: 1.05rem;
+		padding-top: 0.45rem;
+	}
+`
+
+const JoinSection = styled.section`
+	box-sizing: border-box;
+	width: 100%;
+	max-width: 1200px;
+	padding: 1rem 1.5rem 6rem;
+`
+
+const JoinPanel = styled.div`
+	background-color: var(--surface-solid);
+	border: 1px solid var(--border);
+	border-radius: 1.5rem;
+	padding: 4.5rem 2rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+
+	@media (max-width: 768px) {
+		padding: 3rem 1.5rem;
+	}
+`
+
+const JoinText = styled.p`
+	font-size: 1.1rem;
+	color: var(--muted-foreground);
+	max-width: 480px;
+	margin: 0 0 2rem 0;
+`
+
+const JoinActions = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+	justify-content: center;
+`
+
+//
+// Functions
+//
+
+// Periods stay out of step so neighboring bubbles never lift on the same beat.
+function avatarHoverMotion(index: number): AvatarHoverMotion {
+	const duration = round2(3.8 + ((index * 5) % 11) * 0.26)
+	const delay = round2(-((index * 1.37) % duration))
+	const driftX = round2(((index % 7) - 3) * 0.045)
+	const driftY = round2(-(0.32 + (index % 5) * 0.08))
+	return { duration, delay, driftX, driftY }
+}
+
+function round2(value: number): number {
+	return Math.round(value * 100) / 100
+}
