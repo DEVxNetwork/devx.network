@@ -12,6 +12,9 @@ export type PublicGathering = {
 	location: string
 	address: string
 	lumaUrl: string | null
+	meetupUrl: string | null
+	eventshipUrl: string | null
+	eventbriteUrl: string | null
 	status: string
 	href: string
 }
@@ -21,11 +24,23 @@ export type GatheringWhen = {
 	time: string | null
 }
 
+export type GatheringRegistration = {
+	href: string
+	label: string
+}
+
 //
 // Constants
 //
 
 const PACIFIC = "America/Los_Angeles"
+
+const registrationPlatforms = [
+	{ key: "lumaUrl", label: "RSVP On Luma" },
+	{ key: "meetupUrl", label: "RSVP On Meetup" },
+	{ key: "eventshipUrl", label: "RSVP On Eventship" },
+	{ key: "eventbriteUrl", label: "RSVP On Eventbrite" }
+] as const satisfies readonly { key: keyof PublicGathering; label: string }[]
 
 const genericPlaces = new Set([
 	"",
@@ -79,6 +94,14 @@ export function formatPublicLine(gathering: PublicGathering): string {
 
 export function gatheringOpensNewTab(gathering: PublicGathering): boolean {
 	return gathering.href.startsWith("http")
+}
+
+export function gatheringRegistration(gathering: PublicGathering): GatheringRegistration | null {
+	for (const platform of registrationPlatforms) {
+		const href = gathering[platform.key]?.trim()
+		if (href) return { href, label: platform.label }
+	}
+	return null
 }
 
 export function gatheringPlace(gathering: PublicGathering): string {

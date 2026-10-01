@@ -12,13 +12,15 @@ interface Props {
 	description?: string
 	ogUrl?: string
 	ogType?: "website" | "article"
+	bodyClass?: string
 }
 
 const {
 	title = siteConfig.title,
 	description = siteConfig.description,
 	ogUrl = siteConfig.url,
-	ogType = "website"
+	ogType = "website",
+	bodyClass
 } = Astro.props
 
 const monthly = nextMonthlyGathering(await listUpcomingGatherings())
@@ -54,7 +56,7 @@ const monthly = nextMonthlyGathering(await listUpcomingGatherings())
 			gtag("config", "G-L0X5333Q2X")
 		</script>
 	</head>
-	<body class={monthly ? "has-announce" : undefined}>
+	<body class:list={[monthly && "has-announce", bodyClass]}>
 		{monthly ? <AnnouncementBar client:load gathering={monthly} /> : null}
 		<Header client:load />
 		<slot />

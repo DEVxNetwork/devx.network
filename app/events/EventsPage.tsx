@@ -1,273 +1,223 @@
 "use client"
-import { useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { styled } from "styled-components"
 import { Button } from "../components/Button"
-import { formats, gatheringKind } from "../content/community"
-import {
-	formatPublicLine,
-	gatheringOpensNewTab,
-	gatheringPlace,
-	type PublicGathering
-} from "../content/gatherings"
+import { isGatheringPast, type PublicGathering } from "../content/gatherings"
+import { EventMap } from "./EventMap"
+import type { EventPlace } from "./eventPlace"
+import { GatheringList } from "./GatheringList"
 
 //
 // Types
 //
 
-type EventFilter = "upcoming" | "past"
+type EventScope = "upcoming" | "all"
 
 type EventsPageProps = {
 	upcoming: PublicGathering[]
 	past: PublicGathering[]
+	places: Record<string, EventPlace>
+	covers: Record<string, string>
 }
 
 //
 // Components
 //
 
-export function EventsPage({ upcoming, past }: EventsPageProps) {
-	const [filter, setFilter] = useState<EventFilter>("upcoming")
-	const list = filter === "upcoming" ? upcoming : past
-	const feature = filter === "upcoming" ? list[0] : undefined
-	const rest = feature ? list.slice(1) : list
+export function EventsPage({ upcoming, past, places, covers }: EventsPageProps) {
+	const gatherings = useMemo(() => mergeGatherings(upcoming, past), [upcoming, past])
+	const [scope, setScope] = useState<EventScope>("upcoming")
+	const visible = useMemo(() => eventsForScope(gatherings, scope), [gatherings, scope])
+	const [selectedId, setSelectedId] = useState<string | null>(null)
+	const activeId = visible.some((gathering) => gathering.id === selectedId)
+		? selectedId
+		: (visible[0]?.id ?? null)
+
+	const skipScroll = useRef(true)
+	useEffect(() => {
+		if (skipScroll.current) {
+			skipScroll.current = false
+			return
+		}
+		if (!activeId) return
+		const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+		document.getElementById(`gathering-${activeId}`)?.scrollIntoView({
+			behavior: reduce ? "auto" : "smooth",
+			block: "nearest"
+		})
+	}, [activeId])
 
 	return (
-		<Main>
-			<EventSection>
-				<Title>Come sit down.</Title>
-				<Lead>Saturdays downtown. Fridays at a café.</Lead>
-
-				<FilterToggle>
-					<Button
-						variant={filter === "upcoming" ? "primary" : "secondary"}
-						onClick={() => setFilter("upcoming")}
-					>
-						Upcoming
+		<Explore>
+			<ListPane>
+				<ListHead>
+					<Title>Our Events</Title>
+					<Filters role="group" aria-label="Which events">
+						<Filter
+							type="button"
+							$on={scope === "all"}
+							aria-pressed={scope === "all"}
+							onClick={() => setScope("all")}
+						>
+							All events
+						</Filter>
+						<Filter
+							type="button"
+							$on={scope === "upcoming"}
+							aria-pressed={scope === "upcoming"}
+							onClick={() => setScope("upcoming")}
+						>
+							Upcoming
+						</Filter>
+					</Filters>
+				</ListHead>
+				<GatheringList
+					gatherings={visible}
+					covers={covers}
+					selectedId={activeId}
+					onSelect={setSelectedId}
+				/>
+				<Speak>
+					<Button href="/speak" variant="secondary" size="default">
+						Add to the conversation
 					</Button>
-					<Button
-						variant={filter === "past" ? "primary" : "secondary"}
-						onClick={() => setFilter("past")}
-					>
-						Past
-					</Button>
-				</FilterToggle>
-
-				{list.length === 0 ? (
-					<Empty>
-						{filter === "upcoming"
-							? "Nothing dated yet. The next one will land here."
-							: "The old ones aren't written down yet."}
-					</Empty>
-				) : (
-					<>
-						{feature ? <FeatureCard gathering={feature} /> : null}
-						{rest.length > 0 ? (
-							<List>
-								{rest.map((gathering) => (
-									<GatheringRow key={gathering.id} gathering={gathering} />
-								))}
-							</List>
-						) : null}
-					</>
-				)}
-
-				<ButtonSection>
-					<Button href="/speak" variant="secondary">
-						Speak at an Event
-					</Button>
-					<Button href="https://lu.ma/DEVxNetwork" target="_blank" rel="noopener noreferrer">
-						Every date, on Luma
-					</Button>
-				</ButtonSection>
-			</EventSection>
-		</Main>
+				</Speak>
+			</ListPane>
+			<MapPane>
+				<EventMap
+					gatherings={visible}
+					places={places}
+					selectedId={activeId}
+					onSelect={setSelectedId}
+				/>
+			</MapPane>
+		</Explore>
 	)
 }
 
-function FeatureCard({ gathering }: { gathering: PublicGathering }) {
-	const format = formats.find((item) => item.kind === gatheringKind(gathering.name))
-	const detailsExternal = gatheringOpensNewTab(gathering)
-	const seat = gathering.lumaUrl || gathering.href
-	const seatExternal = seat.startsWith("http")
+const Explore = styled.div`
+	--events-canvas: #f5f5f5;
+	--events-selected: #eaeaea;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	background: var(--events-canvas);
 
-	return (
-		<Feature>
-			{format?.photo ? (
-				<FeaturePhoto src={format.photo} alt="" $position={format.photoPosition ?? "center"} />
-			) : null}
-			<FeatureName
-				href={gathering.href}
-				target={detailsExternal ? "_blank" : undefined}
-				rel={detailsExternal ? "noopener noreferrer" : undefined}
-			>
-				{gathering.name}
-			</FeatureName>
-			{format ? <FeatureCopy>{format.copy}</FeatureCopy> : null}
-			<FeatureMeta>
-				{formatPublicLine(gathering)}
-				{" · "}
-				{gatheringPlace(gathering)}
-			</FeatureMeta>
-			<Button
-				href={seat}
-				target={seatExternal ? "_blank" : undefined}
-				rel={seatExternal ? "noopener noreferrer" : undefined}
-				variant="primary"
-				size="default"
-			>
-				Save a seat
-			</Button>
-		</Feature>
-	)
-}
+	@media (prefers-color-scheme: dark) {
+		--events-canvas: #222222;
+		--events-selected: #2a2a2a;
+	}
 
-function GatheringRow({ gathering }: { gathering: PublicGathering }) {
-	const external = gatheringOpensNewTab(gathering)
-	return (
-		<Row
-			href={gathering.href}
-			target={external ? "_blank" : undefined}
-			rel={external ? "noopener noreferrer" : undefined}
-		>
-			<RowName>{gathering.name}</RowName>
-			<RowMeta>
-				{formatPublicLine(gathering)}
-				{" · "}
-				{gatheringPlace(gathering)}
-			</RowMeta>
-		</Row>
-	)
-}
-
-const Main = styled.main`
-	position: relative;
+	@media (min-width: 960px) {
+		flex-direction: row;
+		align-items: stretch;
+		height: calc(100svh - var(--announce-offset) - 4rem);
+		min-height: 32rem;
+		background: var(--background);
+	}
 `
 
-const EventSection = styled.section`
-	width: min(var(--column), calc(100% - 2.5rem));
-	margin: 0 auto;
-	padding: 3.25rem 0 3rem;
+const ListPane = styled.section`
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	min-width: 0;
+	padding: 1.25rem 1rem 2.5rem;
+
+	@media (min-width: 960px) {
+		flex: 0 0 28rem;
+		width: min(28rem, 42%);
+		overflow: auto;
+		border-right: 1px solid var(--border);
+		background: var(--events-canvas);
+		padding: 1.15rem 1rem 1.5rem;
+	}
+`
+
+const ListHead = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 0.85rem;
 `
 
 const Title = styled.h1`
-	font-family: "Fraunces", "Iowan Old Style", Palatino, serif;
-	font-size: clamp(2.4rem, 6vw, 4.4rem);
-	font-weight: 560;
-	letter-spacing: -0.04em;
-	line-height: 0.95;
 	margin: 0;
-	max-width: 12ch;
-	color: var(--foreground);
-`
-
-const Lead = styled.p`
-	margin: 0.85rem 0 0;
-	max-width: 28rem;
-	font-size: 1.15rem;
-	line-height: 1.45;
-	color: var(--muted-foreground);
-`
-
-const FilterToggle = styled.div`
-	display: flex;
-	justify-content: flex-start;
-	gap: 0.75rem;
-	margin: 1.5rem 0 1.25rem;
-`
-
-const Empty = styled.p`
-	margin: 1.5rem 0 0;
-	color: var(--muted-foreground);
-	font-size: 1.125rem;
-`
-
-const Feature = styled.article`
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	background: var(--surface-solid);
-	border: 1px solid var(--border);
-	border-top: 3px solid var(--extrusion);
-	border-radius: 1.5rem;
-	padding: 0.85rem 0.85rem 1.35rem;
-`
-
-const FeaturePhoto = styled.img<{ $position: string }>`
-	display: block;
-	width: 100%;
-	aspect-ratio: 16 / 9;
-	object-fit: cover;
-	object-position: ${(props) => props.$position};
-	border-radius: 0.9rem;
-	margin-bottom: 1rem;
-	background: var(--wash);
-`
-
-const FeatureName = styled.a`
 	font-family: "Fraunces", "Iowan Old Style", Palatino, serif;
-	font-size: clamp(1.6rem, 3vw, 2.2rem);
+	font-size: clamp(2rem, 4vw, 2.4rem);
 	font-weight: 560;
 	letter-spacing: -0.03em;
-	line-height: 1.15;
-	color: inherit;
-	text-decoration: none;
-
-	&:hover {
-		color: var(--accent);
-	}
+	line-height: 1;
 `
 
-const FeatureCopy = styled.p`
-	margin: 0.45rem 0 0;
-	max-width: 36rem;
-	color: var(--muted-foreground);
-	line-height: 1.45;
-`
-
-const FeatureMeta = styled.p`
-	margin: 0.45rem 0 0.95rem;
-	font-weight: 600;
-`
-
-const List = styled.div`
-	display: flex;
-	flex-direction: column;
-	margin-top: 1.75rem;
-	border-top: 1px solid var(--border);
-`
-
-const Row = styled.a`
-	display: flex;
-	flex-direction: column;
-	gap: 0.2rem;
-	padding: 0.95rem 0.1rem;
-	border-bottom: 1px solid var(--border);
-	text-decoration: none;
-	color: inherit;
-
-	&:hover h3 {
-		color: var(--accent);
-	}
-`
-
-const RowName = styled.h3`
-	margin: 0;
-	font-family: "Fraunces", "Iowan Old Style", Palatino, serif;
-	font-size: 1.35rem;
-	font-weight: 560;
-	letter-spacing: -0.02em;
-	line-height: 1.25;
-`
-
-const RowMeta = styled.p`
-	margin: 0;
-	color: var(--muted-foreground);
-`
-
-const ButtonSection = styled.div`
-	margin-top: 2.5rem;
+const Filters = styled.div`
 	display: flex;
 	flex-wrap: wrap;
-	gap: 0.75rem;
-	justify-content: flex-start;
+	gap: 0.5rem;
 `
+
+const Filter = styled.button<{ $on: boolean }>`
+	appearance: none;
+	margin: 0;
+	padding: 0.4rem 0.85rem;
+	border: 0;
+	border-radius: 999px;
+	background: ${(props) => (props.$on ? "var(--surface-solid)" : "transparent")};
+	box-shadow: ${(props) => (props.$on ? "0 1px 2px rgba(24, 24, 24, 0.08)" : "none")};
+	color: ${(props) => (props.$on ? "var(--foreground)" : "var(--muted-foreground)")};
+	font: inherit;
+	font-size: 0.95rem;
+	font-weight: 600;
+	line-height: 1.2;
+	cursor: pointer;
+
+	&:hover {
+		color: var(--foreground);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--extrusion);
+		outline-offset: 2px;
+	}
+`
+
+const Speak = styled.div`
+	margin-top: 0.5rem;
+`
+
+const MapPane = styled.div`
+	display: none;
+	min-width: 0;
+
+	@media (min-width: 960px) {
+		display: block;
+		flex: 1 1 auto;
+		height: 100%;
+		min-height: 0;
+		overflow: hidden;
+	}
+`
+
+//
+// Functions
+//
+
+function mergeGatherings(upcoming: PublicGathering[], past: PublicGathering[]): PublicGathering[] {
+	const seen = new Set<string>()
+	const merged: PublicGathering[] = []
+	for (const gathering of [...upcoming, ...past]) {
+		if (seen.has(gathering.id)) continue
+		seen.add(gathering.id)
+		merged.push(gathering)
+	}
+	return merged
+}
+
+function eventsForScope(gatherings: PublicGathering[], scope: EventScope): PublicGathering[] {
+	const source =
+		scope === "upcoming"
+			? gatherings.filter((gathering) => !isGatheringPast(gathering))
+			: gatherings
+	const sorted = [...source].sort((a, b) => a.start.localeCompare(b.start))
+	if (scope === "all") sorted.reverse()
+	return sorted
+}

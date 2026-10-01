@@ -1,20 +1,12 @@
 ---
 import Base from "../layouts/Base.astro"
-import { formatPublicLine } from "@/app/content/gatherings"
 import { SpeakPage } from "@/app/speak/SpeakPage"
-import { listUpcomingGatherings } from "@/app/services/notion/gatherings"
 import { siteConfig } from "@/app/siteConfig"
-
-const events = (await listUpcomingGatherings()).map((gathering) => ({
-	id: gathering.id,
-	name: gathering.name,
-	when: formatPublicLine(gathering)
-}))
 ---
 
 <Base
 	title={`Speak at an event | ${siteConfig.title}`}
 	description="Offer a talk from the seats at a DEVx Saturday."
 >
-	<SpeakPage client:load events={events} />
+	<SpeakPage client:load />
 </Base>

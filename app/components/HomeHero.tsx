@@ -1,5 +1,5 @@
 "use client"
-import type { ReactNode } from "react"
+import { useEffect, useState, type ReactNode } from "react"
 import { styled } from "styled-components"
 import { Button } from "./Button"
 import { links } from "../siteConfig"
@@ -7,11 +7,6 @@ import { links } from "../siteConfig"
 //
 // Types
 //
-
-type HomeHeroProps = {
-	nextEventLink: string
-	nextExternal: boolean
-}
 
 type SocialLink = {
 	label: string
@@ -25,8 +20,20 @@ type SocialLink = {
 
 const mobileStackGap = "1rem"
 
+// The old band filled the viewport under the header. Two thirds drops the ceiling.
+const heroBandHeight = "calc((100svh - 9.5rem - var(--announce-offset, 0px)) * 2 / 3)"
+const heroBandHeightWide = `calc(${heroBandHeight} * 1.2)`
+
+const mobileSlides = [
+	{ src: "/images/hero/mobile-table.webp", position: "center" },
+	{ src: "/images/hero/mobile-talk.webp", position: "center" },
+	{ src: "/images/hero/mobile-crowd.webp", position: "center" }
+]
+
+const mobileSlideMs = 4500
+
 const tagline =
-	"A San Diego community for software developers at every stage who're eager to connect, exchange ideas, and grow with each other."
+	"DEVx is San Diego's developer community for makers who care about craft, side projects, and showing up for each other."
 
 const socialLinks: SocialLink[] = [
 	{
@@ -98,59 +105,66 @@ const socialLinks: SocialLink[] = [
 // Components
 //
 
-function HeroButtons({
-	nextEventLink,
-	nextExternal,
-	size
-}: HomeHeroProps & { size: "small" | "default" }) {
+function MobileSlides() {
+	const [index, setIndex] = useState(0)
+
+	useEffect(() => {
+		const media = window.matchMedia("(prefers-reduced-motion: reduce)")
+		if (media.matches) return
+		const id = window.setInterval(() => {
+			setIndex((current) => (current + 1) % mobileSlides.length)
+		}, mobileSlideMs)
+		return () => window.clearInterval(id)
+	}, [])
+
 	return (
-		<>
-			<Button
-				href={nextEventLink}
-				target={nextExternal ? "_blank" : undefined}
-				rel={nextExternal ? "noopener noreferrer" : undefined}
-				variant="primary"
-				size={size}
-			>
-				Join the Next Event
-			</Button>
-			<Button href="/watch" variant="secondary" size={size}>
-				Watch Past Talks
-			</Button>
-			<Button href="/speak" variant="secondary" size={size}>
-				Speak at an Event
-			</Button>
-		</>
+		<MobileReel aria-hidden="true">
+			{mobileSlides.map((slide, slideIndex) => (
+				<MobileSlide
+					key={slide.src}
+					src={slide.src}
+					alt=""
+					$on={slideIndex === index}
+					$position={slide.position}
+				/>
+			))}
+		</MobileReel>
 	)
 }
 
-export function HomeHero({ nextEventLink, nextExternal }: HomeHeroProps) {
+function HeroButtons({ size }: { size: "small" | "default" }) {
+	return (
+		<Button href={links.lumaUrl} target="_self" variant="primary" size={size}>
+			Our Event Calendar
+		</Button>
+	)
+}
+
+export function HomeHero() {
 	return (
 		<Stage>
-			<HeroMedia aria-hidden="true">
-				<source media="(min-width: 800px)" srcSet="/images/hero/room-wide.webp" />
-				<img src="/images/hero/room-tall.webp" alt="" />
-			</HeroMedia>
-			<Panel>
-				<Copy>
+			<Band>
+				<HeroMedia aria-hidden="true">
+					<img src="/images/hero/room-wide.webp" alt="" />
+				</HeroMedia>
+				<MobileSlides />
+				<LogoLockup>
 					<Title>DEVx San Diego</Title>
 					<Logo src="/images/logo/devxsd-white-thick.svg" alt="" />
 					<LogoDesktop src="/images/logo/devxsd-white.svg" alt="" />
+				</LogoLockup>
+			</Band>
+			<Panel>
+				<Copy>
 					<Tagline>{tagline}</Tagline>
 				</Copy>
 				<Actions>
-					<ButtonRow>
-						<DesktopButtons>
-							<HeroButtons
-								nextEventLink={nextEventLink}
-								nextExternal={nextExternal}
-								size="default"
-							/>
-						</DesktopButtons>
-						<MobileButtons>
-							<HeroButtons nextEventLink={nextEventLink} nextExternal={nextExternal} size="small" />
-						</MobileButtons>
-					</ButtonRow>
+					<DesktopButtons>
+						<HeroButtons size="default" />
+					</DesktopButtons>
+					<MobileButtons>
+						<HeroButtons size="small" />
+					</MobileButtons>
 					<SocialRow>
 						{socialLinks.map((item) => (
 							<SocialIcon
@@ -174,10 +188,21 @@ const Stage = styled.section`
 	position: relative;
 	isolation: isolate;
 	width: 100%;
-	height: calc(100svh - 9.5rem - var(--announce-offset, 0px));
-	min-height: min(22rem, calc(100svh - 9.5rem - var(--announce-offset, 0px)));
+	background-color: var(--background);
+`
+
+const Band = styled.div`
+	position: relative;
+	width: 100%;
+	height: ${heroBandHeight};
+	min-height: min(15rem, ${heroBandHeight});
 	overflow: hidden;
 	background-color: #181818;
+
+	@media (min-width: 1500px) {
+		height: ${heroBandHeightWide};
+		min-height: min(18rem, ${heroBandHeightWide});
+	}
 `
 
 const HeroMedia = styled.picture`
@@ -185,34 +210,78 @@ const HeroMedia = styled.picture`
 	inset: 0;
 	z-index: 0;
 
+	@media (max-width: 799px) {
+		display: none;
+	}
+
 	img {
+		position: absolute;
+		bottom: 0;
+		left: 0;
 		display: block;
 		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		object-position: center 35%;
+		height: auto;
+	}
+`
+
+const MobileReel = styled.div`
+	display: none;
+
+	@media (max-width: 799px) {
+		display: block;
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+	}
+`
+
+const MobileSlide = styled.img<{ $on: boolean; $position: string }>`
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: ${(props) => props.$position};
+	opacity: ${(props) => (props.$on ? 1 : 0)};
+	transition: opacity 0.55s ease;
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+	}
+`
+
+const LogoLockup = styled.div`
+	position: absolute;
+	z-index: 1;
+	right: 0;
+	bottom: 1.35rem;
+	left: 0;
+	width: min(2000px, calc(100% - 9rem));
+	margin-inline: auto;
+
+	@media (max-width: 860px) {
+		bottom: 1rem;
+		width: min(2000px, calc(100% - 3.4rem));
 	}
 `
 
 const Panel = styled.div`
-	position: absolute;
+	position: relative;
 	z-index: 1;
-	right: 0;
-	bottom: 3.75rem;
-	left: 0;
 	display: flex;
 	align-items: flex-end;
 	justify-content: space-between;
 	gap: 1.25rem 2rem;
 	width: min(2000px, calc(100% - 9rem));
 	margin-inline: auto;
+	padding: 1.35rem 0 2.25rem;
 
 	@media (max-width: 860px) {
-		bottom: 1.7rem;
 		width: min(2000px, calc(100% - 3.4rem));
 		flex-direction: column;
 		align-items: stretch;
 		gap: ${mobileStackGap};
+		padding: 1.1rem 0 1.75rem;
 	}
 `
 
@@ -221,7 +290,7 @@ const Copy = styled.div`
 	flex: 1 1 18rem;
 	flex-direction: column;
 	align-items: flex-start;
-	gap: 0.4rem;
+	gap: 1rem;
 	min-width: 0;
 
 	@media (max-width: 860px) {
@@ -244,7 +313,7 @@ const Title = styled.h1`
 
 const Logo = styled.img`
 	display: block;
-	height: 3.15rem;
+	height: calc(3.15rem * 1.5);
 	width: auto;
 	max-width: 100%;
 
@@ -271,8 +340,7 @@ const Tagline = styled.p`
 	font-size: 1rem;
 	line-height: 1.45;
 	text-wrap: balance;
-	color: #ffffff;
-	text-shadow: 0 1px 2px rgba(24, 24, 24, 0.9);
+	color: var(--foreground);
 
 	@media (min-width: 861px) {
 		max-width: 36rem;
@@ -287,7 +355,7 @@ const Actions = styled.div`
 	flex-direction: column;
 	align-items: flex-end;
 	justify-content: center;
-	gap: 0.7rem;
+	gap: 1rem;
 
 	@media (max-width: 860px) {
 		align-items: flex-start;
@@ -296,17 +364,10 @@ const Actions = styled.div`
 	}
 `
 
-const ButtonRow = styled.div`
-	--foreground: #ffffff;
-	--foreground-rgb: 255, 255, 255;
-	--background: #181818;
-	--background-rgb: 24, 24, 24;
-`
-
 const DesktopButtons = styled.div`
 	display: flex;
 	flex-wrap: wrap;
-	gap: 0.65rem;
+	gap: 1rem;
 	justify-content: flex-end;
 
 	@media (max-width: 860px) {
@@ -320,7 +381,7 @@ const MobileButtons = styled.div`
 	@media (max-width: 860px) {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.45rem;
+		gap: 1rem;
 		justify-content: flex-start;
 
 		a {
@@ -334,16 +395,15 @@ const MobileButtons = styled.div`
 const SocialRow = styled.div`
 	display: flex;
 	flex-wrap: wrap;
-	gap: 0.85rem;
+	gap: 1rem;
 	align-items: center;
-	color: #ffffff;
+	color: var(--foreground);
 `
 
 const SocialIcon = styled.a`
 	display: flex;
 	align-items: center;
 	color: inherit;
-	filter: drop-shadow(0 1px 1px rgba(24, 24, 24, 0.85));
 	transition: color 0.2s ease;
 
 	svg {

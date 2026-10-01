@@ -1,16 +1,13 @@
 ---
 import Base from "../../layouts/Base.astro"
-import EventDetailClient from "@/app/events/[eventId]/EventDetailClient"
+import { EventDetail } from "@/app/events/[eventId]/EventDetail"
 import { formatOgDate, sanitizeDescription } from "@/app/events/[eventId]/og-utils"
-import { lumaService } from "@/app/services/luma"
-import { findGatheringByLumaUrl } from "@/app/services/notion/gatherings"
+import { listEventSlugs, loadEventPage } from "@/app/services/notion/eventPages"
 import { siteConfig } from "@/app/siteConfig"
 
 export async function getStaticPaths() {
-	const events = await lumaService.listEvents()
-	return events.map((event) => ({
-		params: { eventId: event.api_id }
-	}))
+	const slugs = await listEventSlugs()
+	return slugs.map((eventId) => ({ params: { eventId } }))
 }
 
 const eventId = Astro.params.eventId
@@ -18,23 +15,28 @@ if (!eventId) {
 	throw new Error("Missing event id")
 }
 
-const event = await lumaService.getEvent(eventId)
-if (!event) {
+const page = await loadEventPage(eventId)
+if (!page) {
 	throw new Error(`Unknown event: ${eventId}`)
 }
 
-const gathering = event.url ? await findGatheringByLumaUrl(event.url) : null
-const dated = gathering?.start ?? event.start_at
+const dated = page.gathering.start
 const date = formatOgDate(dated.includes("T") ? dated : `${dated.slice(0, 10)}T20:00:00.000Z`)
-const title = `${gathering?.name ?? event.name} — ${date} | DEVxSD`
-const description = sanitizeDescription(event.description) || siteConfig.description
+const title = `${page.gathering.name} — ${date} | DEVxSD`
+const description = sanitizeDescription(page.descriptionPlain) || siteConfig.description
 ---
 
 <Base
 	title={title}
 	description={description}
-	ogUrl={`${siteConfig.url}/events/${event.api_id}`}
+	ogUrl={`${siteConfig.url}/events/${eventId}`}
 	ogType="article"
 >
-	<EventDetailClient client:load gathering={gathering} eventId={eventId} />
+	<EventDetail
+		client:load
+		gathering={page.gathering}
+		descriptionHtml={page.descriptionHtml}
+		seatUrl={page.seatUrl}
+		map={page.map}
+	/>
 </Base>

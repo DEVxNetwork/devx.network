@@ -1,0 +1,31 @@
+// The footer x (public/images/logo/x.svg), split so the face can leave its extrusion.
+// %%CLIP%% is replaced with a unique clip id. x-pattern is the stripe fill.
+// The group this markup is placed in flips Y, so a positive translateY on .x-face goes up.
+
+//
+// Constants
+//
+
+export const xDudeMarkup = `<g class="x-shadow"><polygon points="516.87,457.33 387.54,241.33 463.54,109.33 592.87,325.33" fill="#5010a0" stroke="#5010a0" stroke-width="1.6" stroke-linejoin="round"/><polygon points="290.87,142.00 288.20,142.00 364.20,10.00 366.87,10.00" fill="#5010a0" stroke="#5010a0" stroke-width="1.6" stroke-linejoin="round"/><polygon points="288.20,142.00 211.54,0.00 287.54,-132.00 364.20,10.00" fill="#5010a0" stroke="#5010a0" stroke-width="1.6" stroke-linejoin="round"/><polygon points="211.54,0.00 60.87,0.00 136.87,-132.00 287.54,-132.00" fill="#5010a0" stroke="#5010a0" stroke-width="1.6" stroke-linejoin="round"/><polygon points="530.87,0.00 368.20,0.00 444.20,-132.00 606.87,-132.00" fill="#5010a0" stroke="#5010a0" stroke-width="1.6" stroke-linejoin="round"/><path d="M592.87,325.33L463.54,109.33" fill="none" stroke="#181818" stroke-width="15" stroke-linejoin="round" stroke-linecap="round"/><path d="M606.87,-132.00L444.20,-132.00" fill="none" stroke="#181818" stroke-width="15" stroke-linejoin="round" stroke-linecap="round"/><path d="M366.87,10.00L364.20,10.00L287.54,-132.00L136.87,-132.00" fill="none" stroke="#181818" stroke-width="15" stroke-linejoin="round" stroke-linecap="round"/><path d="M516.87,457.33L592.87,325.33" fill="none" stroke="#181818" stroke-width="15" stroke-linejoin="round" stroke-linecap="round"/><path d="M387.54,241.33L463.54,109.33" fill="none" stroke="#181818" stroke-width="15" stroke-linejoin="round" stroke-linecap="round"/><path d="M530.87,0.00L606.87,-132.00" fill="none" stroke="#181818" stroke-width="15" stroke-linejoin="round" stroke-linecap="round"/><path d="M368.20,0.00L444.20,-132.00" fill="none" stroke="#181818" stroke-width="15" stroke-linejoin="round" stroke-linecap="round"/><path d="M290.87,142.00L366.87,10.00" fill="none" stroke="#181818" stroke-width="15" stroke-linejoin="round" stroke-linecap="round"/><path d="M60.87,0.00L136.87,-132.00" fill="none" stroke="#181818" stroke-width="15" stroke-linejoin="round" stroke-linecap="round"/></g><g class="x-face"><g transform="translate(70.87,0) scale(0.6666666666666666)">
+		<clipPath id="%%CLIP%%" clipPathUnits="userSpaceOnUse"><path d="M-15 0L200 363L7 686L250 686L345 511L349 511L444 686L669 686L475 362L690 0L446 0L330 213L326 213L211 0Z"/></clipPath>
+		<g clip-path="url(#%%CLIP%%)"><g class="x-pattern">
+			<rect x="-80" y="-40" width="900" height="820" fill="#2454e6"/>
+			<polygon points="-40,760 420,760 80,-40 -40,-40" fill="#f9e214"/>
+			<polygon points="200,760 520,760 260,-40 40,-40" fill="#f010d7"/>
+			<polygon points="430,760 780,760 560,-40 300,-40" fill="#3ce2c8"/>
+			<polygon points="620,760 860,760 760,-40 540,-40" fill="#ef5b30"/>
+			<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+			<line x1="212" y1="316" x2="452" y2="316" stroke="#ffffff" stroke-width="46"/>
+			<line x1="212" y1="244" x2="452" y2="244" stroke="#ffffff" stroke-width="46"/>
+			<polyline points="429,571 515,506 429,441" stroke="#e52a51" stroke-width="42"/>
+			<line x1="416" y1="128" x2="576" y2="128" stroke="#2454e6" stroke-width="50"/>
+			<line x1="496" y1="48" x2="496" y2="208" stroke="#2454e6" stroke-width="50"/>
+			<line x1="196" y1="592" x2="174" y2="468" stroke="#3ce2c8" stroke-width="40"/>
+			<line x1="258" y1="592" x2="236" y2="468" stroke="#3ce2c8" stroke-width="40"/>
+			<line x1="156" y1="552" x2="292" y2="552" stroke="#3ce2c8" stroke-width="40"/>
+			<line x1="152" y1="500" x2="288" y2="500" stroke="#3ce2c8" stroke-width="40"/>
+			</g>
+			</g>
+		</g>
+		<path d="M-15 0L200 363L7 686L250 686L345 511L349 511L444 686L669 686L475 362L690 0L446 0L330 213L326 213L211 0Z" fill="none" stroke="#181818" stroke-width="22.50" stroke-linejoin="round" stroke-linecap="round"/>
+		</g></g>`

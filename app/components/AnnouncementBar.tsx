@@ -24,19 +24,13 @@ const PACIFIC = "America/Los_Angeles"
 
 export function AnnouncementBar({ gathering }: AnnouncementBarProps) {
 	const href = gathering.lumaUrl || gathering.href
-	const external = href.startsWith("http")
 	const copy = announcementCopy(gathering)
 
 	return (
-		<Bar
-			href={href}
-			target={external ? "_blank" : undefined}
-			rel={external ? "noopener noreferrer" : undefined}
-			aria-label={`${copy.statement} Register Now.`}
-		>
+		<Bar href={href} aria-label={`${copy.statement} RSVP Now.`}>
 			<Statement>{copy.statement}</Statement>
 			<Brief aria-hidden="true">{copy.brief}</Brief>
-			<Cta>Register Now</Cta>
+			<Cta>RSVP Now</Cta>
 		</Bar>
 	)
 }
@@ -56,7 +50,7 @@ const Bar = styled(Link)`
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	gap: 0.85rem;
+	gap: 1rem;
 	width: 100%;
 	height: var(--announce-offset);
 	padding: 0 1.25rem;

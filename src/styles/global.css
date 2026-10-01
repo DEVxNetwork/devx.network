@@ -6,10 +6,10 @@
 	--foreground-rgb: 24, 24, 24;
 	--muted-foreground: #4a4553;
 	--subtle-foreground: #6e6878;
-	/* Sampled from the lockup. The face purple is too light for text on paper, so links use the dark extrusion. */
-	--extrusion: #b888e8;
+	/* #5010a0 is the DEVX purple: the bar, the logo, rules, and highlights. */
+	--extrusion: #5010a0;
 	--accent: #5010a0;
-	--accent-display: #b888e8;
+	--accent-display: #5010a0;
 	--accent-2: #0e7a6c;
 	--accent-hover: #6e28b0;
 	--accent-contrast: #ffffff;
@@ -21,13 +21,13 @@
 	--pop-pink: #e52a51;
 	--surface: rgba(255, 255, 255, 0.92);
 	--surface-solid: #ffffff;
-	--wash: #f6f0fc;
+	--wash: #f4f0f9;
 	--header-background: rgba(255, 255, 255, 0.96);
 	--sidebar-background: #ffffff;
 	--chrome-ink: #181818;
 	--chrome-accent: #5010a0;
 	--footer-background: rgba(255, 255, 255, 0.94);
-	--border: rgba(184, 136, 232, 0.55);
+	--border: rgba(80, 16, 160, 0.28);
 	--error-color: #c43818;
 	--b1: #ffffff;
 	--n: 96% 0.01 300;
@@ -49,19 +49,19 @@ body.has-announce {
 		--foreground-rgb: 255, 255, 255;
 		--muted-foreground: #c8c4d0;
 		--subtle-foreground: #9a94a6;
-		--extrusion: #b888e8;
-		--accent: #b888e8;
-		--accent-display: #b888e8;
+		--extrusion: #5010a0;
+		--accent: #9670c6;
+		--accent-display: #5010a0;
 		--accent-2: #3ce2c8;
-		--accent-hover: #d0aaef;
-		--accent-contrast: #181818;
+		--accent-hover: #b093d4;
+		--accent-contrast: #ffffff;
 		--surface: rgba(36, 32, 44, 0.88);
 		--surface-solid: #242028;
-		--wash: #2a2038;
+		--wash: #241830;
 		--header-background: rgba(255, 255, 255, 0.96);
 		--sidebar-background: #ffffff;
 		--footer-background: rgba(24, 24, 24, 0.94);
-		--border: rgba(184, 136, 232, 0.4);
+		--border: rgba(80, 16, 160, 0.55);
 		--error-color: #ef5b30;
 		--b1: #181818;
 		--n: 18% 0.02 300;
@@ -101,8 +101,8 @@ h6 {
 }
 
 ::selection {
-	background: #b888e8;
-	color: #181818;
+	background: #5010a0;
+	color: #ffffff;
 }
 
 h1 {

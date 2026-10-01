@@ -1,57 +1,42 @@
 "use client"
 import { styled } from "styled-components"
 import { Button } from "../components/Button"
-import { WaysToShowUp } from "../components/WaysToShowUp"
-import { afternoon, beliefs, missionLead } from "../content/community"
-import type { PublicGathering } from "../content/gatherings"
+import { aboutChapters, aboutLead, aboutNow } from "../content/community"
 
 //
 // Components
 //
 
-export function WhoWeAre({ upcoming }: { upcoming: PublicGathering[] }) {
+export function WhoWeAre() {
 	return (
 		<Main>
 			<Story>
 				<Mission>The room teaches itself.</Mission>
-				<Purpose>{missionLead}</Purpose>
-				<RoomPhoto
-					src="/images/weekend-function-talk.webp"
-					alt="A Weekend Function talk, the room facing a speaker"
-				/>
+				<Purpose>{aboutLead}</Purpose>
+				<Frame>
+					<Photo src={aboutNow.src} alt={aboutNow.alt} />
+					<Caption>One of our newer pictures.</Caption>
+				</Frame>
 			</Story>
 
-			<Band>
-				<BeliefGrid>
-					{beliefs.map((belief) => (
-						<Belief key={belief.title}>
-							<BeliefTitle>{belief.title}</BeliefTitle>
-						</Belief>
-					))}
-				</BeliefGrid>
-			</Band>
-
-			<Band>
-				<SectionTitle>A Saturday</SectionTitle>
-				<BeatList>
-					{afternoon.map((beat) => (
-						<Beat key={beat.time}>
-							<BeatTime>{beat.time}</BeatTime>
-							<BeatTitle>{beat.title}</BeatTitle>
-						</Beat>
-					))}
-				</BeatList>
-			</Band>
-
-			<WaysFrame>
-				<WaysToShowUp gatherings={upcoming} />
-			</WaysFrame>
+			{aboutChapters.map((chapter) => (
+				<Chapter key={chapter.kicker}>
+					<Kicker>{chapter.kicker}</Kicker>
+					<Frames $pair={chapter.pictures.length > 1}>
+						{chapter.pictures.map((picture) => (
+							<Photo key={picture.src} src={picture.src} alt={picture.alt} />
+						))}
+					</Frames>
+					<SectionTitle>{chapter.title}</SectionTitle>
+					<Purpose>{chapter.copy}</Purpose>
+				</Chapter>
+			))}
 
 			<Close>
-				<SectionTitle>Come sit down.</SectionTitle>
-				<Purpose>Free to get in. Lunch is on us.</Purpose>
+				<SectionTitle>Join the community.</SectionTitle>
+				<Purpose>A seat at the next one is the way in.</Purpose>
 				<Button href="/events" variant="primary" size="default">
-					See what's next
+					See our events
 				</Button>
 			</Close>
 		</Main>
@@ -93,103 +78,85 @@ const Purpose = styled.p`
 	color: var(--muted-foreground);
 `
 
-const RoomPhoto = styled.img`
+const Frame = styled.figure`
+	margin: 1.75rem 0 0;
+`
+
+const Photo = styled.img`
 	display: block;
 	width: 100%;
-	aspect-ratio: 16 / 9;
-	object-fit: cover;
-	object-position: center 62%;
-	margin-top: 1.75rem;
+	height: auto;
 	border-radius: 1.25rem;
 	background: var(--wash);
 `
 
-const Band = styled.section`
-	width: min(var(--column), calc(100% - 2.5rem));
-	padding: 2.5rem 0 0.5rem;
-`
-
-const SectionTitle = styled.h2`
-	margin: 0;
-	font-family: "Fraunces", "Iowan Old Style", Palatino, serif;
-	font-weight: 560;
-	font-size: clamp(1.45rem, 2.2vw, 1.9rem);
-	line-height: 1.15;
-	letter-spacing: -0.03em;
-`
-
-const BeliefGrid = styled.div`
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 1.15rem 2rem;
-
-	@media (max-width: 800px) {
-		grid-template-columns: 1fr;
-	}
-`
-
-const Belief = styled.article`
-	padding-top: 1rem;
-	border-top: 1px solid var(--border);
-`
-
-const BeliefTitle = styled.h3`
-	margin: 0;
-	font-family: "Fraunces", "Iowan Old Style", Palatino, serif;
-	font-size: 1.2rem;
-	font-weight: 560;
-	letter-spacing: -0.02em;
-	line-height: 1.25;
-`
-
-const BeatList = styled.ol`
-	list-style: none;
-	margin: 1.25rem 0 0;
-	padding: 0;
-	display: grid;
-	grid-template-columns: repeat(4, minmax(0, 1fr));
-	gap: 1.25rem;
-	border-top: 1px solid var(--border);
-
-	@media (max-width: 800px) {
-		grid-template-columns: 1fr 1fr;
-	}
-`
-
-const Beat = styled.li`
-	padding-top: 1.25rem;
-	border-top: 1px solid var(--border);
-	margin-top: -1px;
-`
-
-const BeatTime = styled.p`
-	margin: 0;
-	font-family: "Fraunces", "Iowan Old Style", Palatino, serif;
-	font-size: 1.35rem;
-	font-weight: 560;
-	letter-spacing: -0.03em;
-	color: var(--accent);
-`
-
-const BeatTitle = styled.h3`
-	margin: 0.2rem 0 0;
+const Caption = styled.figcaption`
+	margin-top: 0.75rem;
 	font-family: "Fraunces", "Iowan Old Style", Palatino, serif;
 	font-size: 1.15rem;
 	font-weight: 560;
 	letter-spacing: -0.02em;
 `
 
-const WaysFrame = styled.div`
+const Chapter = styled.section`
 	width: min(var(--column), calc(100% - 2.5rem));
+	padding: 2.75rem 0 0.25rem;
+`
+
+const Kicker = styled.p`
+	margin: 0;
+	font-size: 0.95rem;
+	letter-spacing: 0.04em;
+	color: var(--accent);
+`
+
+const Frames = styled.div<{ $pair: boolean }>`
+	display: grid;
+	grid-template-columns: ${(props) => (props.$pair ? "1fr 1fr" : "1fr")};
+	gap: 1rem;
+	margin-top: 0.85rem;
+
+	${Photo} {
+		aspect-ratio: ${(props) => (props.$pair ? "3 / 2" : "auto")};
+		object-fit: ${(props) => (props.$pair ? "cover" : "fill")};
+		object-position: center;
+	}
+
+	@media (max-width: 800px) {
+		grid-template-columns: 1fr;
+
+		${Photo} {
+			aspect-ratio: auto;
+			object-fit: fill;
+		}
+	}
+`
+
+const SectionTitle = styled.h2`
+	margin: 1.15rem 0 0;
+	max-width: 18ch;
+	font-family: "Fraunces", "Iowan Old Style", Palatino, serif;
+	font-weight: 560;
+	font-size: clamp(1.7rem, 3vw, 2.4rem);
+	line-height: 1.1;
+	letter-spacing: -0.03em;
 `
 
 const Close = styled.section`
 	width: min(var(--column), calc(100% - 2.5rem));
-	padding: 2.5rem 0 3rem;
+	padding: 2.75rem 0 3rem;
 	border-top: 1px solid var(--border);
-	margin-top: 2.5rem;
+	margin-top: 2.75rem;
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	gap: 0.25rem;
+	gap: 1rem;
+
+	${SectionTitle} {
+		margin-top: 0;
+	}
+
+	${Purpose} {
+		margin-top: 0;
+	}
 `

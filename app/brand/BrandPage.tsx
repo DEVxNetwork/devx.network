@@ -28,8 +28,8 @@ type ColorGroup = {
 //
 
 const marks: Mark[] = [
-	{ src: "/images/logo/devx-thick.svg", alt: "DEVx", label: "DEVx", use: "Header" },
-	{ src: "/images/logo/x.svg", alt: "x", label: "x", use: "Favicon and footer" },
+	{ src: "/images/logo/devx-thick.svg", alt: "DEVx", label: "DEVx", use: "Header and footer" },
+	{ src: "/images/logo/x.svg", alt: "x", label: "x", use: "Favicon" },
 	{ src: "/images/logo/devxsd-white.svg", alt: "DEVxSD", label: "DEVxSD", use: "Homepage" }
 ]
 
@@ -39,7 +39,7 @@ const colorGroups: ColorGroup[] = [
 		swatches: [
 			{ name: "Paper", hex: "#ffffff", note: "The page" },
 			{ name: "Ink", hex: "#181818", note: "Type and buttons" },
-			{ name: "Purple", hex: "#b888e8", note: "Behind the letters" }
+			{ name: "Purple", hex: "#5010a0", note: "Behind the letters" }
 		]
 	},
 	{
@@ -65,6 +65,7 @@ export function BrandPage() {
 			<Intro>
 				<Title>Brand</Title>
 				<Lead>The marks, and the colors they came with.</Lead>
+				<Arrive href="/intro">See the new x arrive.</Arrive>
 			</Intro>
 
 			<Section>
@@ -83,7 +84,10 @@ export function BrandPage() {
 						</MarkCard>
 					))}
 				</MarkGrid>
-				<Note>White letters, black edge, so they still show up on a white page.</Note>
+				<Note>
+					White letters, black edge, so they still show up on a white page. The stripes stay. A #, a
+					&gt;, an =, and a + sit on top of them.
+				</Note>
 			</Section>
 
 			<Section>
@@ -103,9 +107,7 @@ export function BrandPage() {
 						</SwatchGrid>
 					</ColorGroupBlock>
 				))}
-				<Note>
-					Purple sits behind the letters. On a white page, links go darker so you can read them.
-				</Note>
+				<Note>Purple sits behind the letters and marks a phrase.</Note>
 			</Section>
 		</Main>
 	)
@@ -139,6 +141,18 @@ const Lead = styled.p`
 	font-size: 1.05rem;
 	line-height: 1.55;
 	color: var(--muted-foreground);
+`
+
+const Arrive = styled.a`
+	display: inline-block;
+	margin-top: 0.9rem;
+	color: var(--accent);
+	font-weight: 700;
+	text-decoration: none;
+
+	&:hover {
+		text-decoration: underline;
+	}
 `
 
 const Section = styled.section`

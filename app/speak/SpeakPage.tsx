@@ -1,198 +1,37 @@
 "use client"
-import { useState } from "react"
-import type { FormEvent } from "react"
 import { styled } from "styled-components"
 import { Button } from "@/app/components/Button"
-import { TextInput } from "@/app/components/TextInput"
-import { parseTalkProposal, talkMailHref, type TalkProposal } from "@/app/speak/proposal"
-
-//
-// Types
-//
-
-export type SpeakEvent = {
-	id: string
-	name: string
-	when: string
-}
-
-type SpeakPageProps = {
-	events: SpeakEvent[]
-}
-
-type FormState = "editing" | "sending" | "saved" | "mailed"
-
-type Draft = {
-	name: string
-	email: string
-	title: string
-	about: string
-	eventId: string
-	company: string
-}
+import { TALK_MAILBOX } from "@/app/speak/proposal"
+import { links } from "@/app/siteConfig"
 
 //
 // Constants
 //
 
-const emptyDraft: Draft = {
-	name: "",
-	email: "",
-	title: "",
-	about: "",
-	eventId: "",
-	company: ""
-}
+const embedSrc = tallyEmbedSrc(links.tallySpeakUrl)
 
 //
 // Components
 //
 
-export function SpeakPage({ events }: SpeakPageProps) {
-	const [draft, setDraft] = useState<Draft>(emptyDraft)
-	const [state, setState] = useState<FormState>("editing")
-	const [error, setError] = useState("")
-
-	const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
-		event.preventDefault()
-		if (state === "sending") return
-
-		const proposal = toProposal(draft, events)
-		const parsed = parseTalkProposal({ ...proposal, company: draft.company })
-		if (parsed.kind === "invalid") {
-			setError(parsed.error)
-			return
-		}
-		if (parsed.kind === "ignore") {
-			setState("saved")
-			return
-		}
-
-		setError("")
-		setState("sending")
-
-		try {
-			const response = await fetch("/api/speak", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ ...parsed.proposal, company: draft.company })
-			})
-
-			if (response.ok) {
-				setState("saved")
-				return
-			}
-
-			if (response.status === 400) {
-				const body = (await response.json().catch(() => null)) as { error?: string } | null
-				setError(body?.error || "Check the form and try again.")
-				setState("editing")
-				return
-			}
-		} catch {
-			// The static site has no save route. Mail is the fallback below.
-		}
-
-		window.location.href = talkMailHref(parsed.proposal)
-		setState("mailed")
-	}
-
-	if (state === "saved" || state === "mailed") {
-		return (
-			<Main>
-				<Title>Got it.</Title>
-				<Lead>
-					{state === "saved"
-						? "We'll write back about a Saturday."
-						: "Your mail app has the note. Send it, and we'll write back about a Saturday."}
-				</Lead>
-				<SubmitRow>
-					<Button href="/events" variant="secondary" size="default">
-						See what's next
-					</Button>
-				</SubmitRow>
-			</Main>
-		)
-	}
-
+export function SpeakPage() {
 	return (
 		<Main>
 			<Title>Speak at an event</Title>
-			<Lead>Talks come from the seats. Send a title and what you want the room to see.</Lead>
-			<Panel onSubmit={onSubmit} noValidate>
-				<HoneyPot
-					tabIndex={-1}
-					autoComplete="off"
-					aria-hidden="true"
-					value={draft.company}
-					onChange={(event) => setDraft({ ...draft, company: event.target.value })}
-				/>
-				<Field>
-					<FieldLabel htmlFor="speaker-name">Your name</FieldLabel>
-					<TextInput
-						id="speaker-name"
-						name="name"
-						size="default"
-						autoComplete="name"
-						value={draft.name}
-						onChange={(event) => setDraft({ ...draft, name: event.target.value })}
-					/>
-				</Field>
-				<Field>
-					<FieldLabel htmlFor="speaker-email">Email</FieldLabel>
-					<TextInput
-						id="speaker-email"
-						name="email"
-						type="email"
-						size="default"
-						autoComplete="email"
-						value={draft.email}
-						onChange={(event) => setDraft({ ...draft, email: event.target.value })}
-					/>
-				</Field>
-				<Field>
-					<FieldLabel htmlFor="talk-title">Talk title</FieldLabel>
-					<TextInput
-						id="talk-title"
-						name="title"
-						size="default"
-						value={draft.title}
-						onChange={(event) => setDraft({ ...draft, title: event.target.value })}
-					/>
-				</Field>
-				<Field>
-					<FieldLabel htmlFor="talk-event">Event</FieldLabel>
-					<EventSelect
-						id="talk-event"
-						name="event"
-						value={draft.eventId}
-						onChange={(event) => setDraft({ ...draft, eventId: event.target.value })}
-					>
-						<option value="">Any upcoming Saturday</option>
-						{events.map((item) => (
-							<option key={item.id} value={item.id}>
-								{item.name} — {item.when}
-							</option>
-						))}
-					</EventSelect>
-				</Field>
-				<Field>
-					<FieldLabel htmlFor="talk-about">What you'll talk about</FieldLabel>
-					<About
-						id="talk-about"
-						name="about"
-						rows={6}
-						value={draft.about}
-						onChange={(event) => setDraft({ ...draft, about: event.target.value })}
-					/>
-				</Field>
-				{error ? <Alert role="alert">{error}</Alert> : null}
-				<SubmitRow>
-					<Button type="submit" variant="primary" size="default" disabled={state === "sending"}>
-						{state === "sending" ? "Sending" : "Send it"}
+			<Lead>
+				{embedSrc
+					? "Talks come from the seats. Send a title and what you want the room to see."
+					: "Talks come from the seats. The form is on its way."}
+			</Lead>
+			{embedSrc ? (
+				<FormFrame src={embedSrc} title="Speak at a DEVx Saturday" loading="lazy" />
+			) : (
+				<MailRow>
+					<Button href={`mailto:${TALK_MAILBOX}?subject=A talk for a Saturday`} variant="primary">
+						Write us
 					</Button>
-				</SubmitRow>
-			</Panel>
+				</MailRow>
+			)}
 		</Main>
 	)
 }
@@ -221,92 +60,40 @@ const Lead = styled.p`
 	line-height: 1.45;
 `
 
-const Panel = styled.form`
-	display: flex;
-	flex-direction: column;
-	gap: 1.15rem;
-	width: min(36rem, 100%);
-	margin-top: 2rem;
-	background: var(--surface-solid);
+const FormFrame = styled.iframe`
+	display: block;
+	width: min(40rem, 100%);
+	height: 48rem;
+	margin-top: 1.75rem;
 	border: 1px solid var(--border);
-	border-top: 3px solid var(--extrusion);
 	border-radius: 1.5rem;
-	padding: 1.35rem 1.25rem 1.5rem;
+	background: var(--surface-solid);
 `
 
-const Field = styled.div`
-	display: flex;
-	flex-direction: column;
-`
-
-const FieldLabel = styled.label`
-	margin-bottom: 0.4rem;
-	font-weight: 600;
-`
-
-const fieldChrome = `
-	padding: 0.75rem 1.5rem;
-	border-radius: 0.25rem;
-	font-weight: 600;
-	font-size: 1.1rem;
-	font-family: inherit;
-	line-height: 1.5;
-	width: 100%;
-	box-sizing: border-box;
-	background-color: transparent;
-	color: var(--foreground);
-	border: 1px solid rgba(var(--foreground-rgb), 0.3);
-
-	&:focus {
-		outline: none;
-		border-color: var(--foreground);
-		background-color: rgba(var(--foreground-rgb), 0.05);
-	}
-`
-
-const EventSelect = styled.select`
-	${fieldChrome}
-`
-
-const About = styled.textarea`
-	${fieldChrome}
-	resize: vertical;
-	min-height: 9rem;
-`
-
-const HoneyPot = styled.input`
-	position: absolute;
-	left: -10000px;
-	width: 1px;
-	height: 1px;
-	overflow: hidden;
-`
-
-const Alert = styled.p`
-	margin: 0;
-	color: var(--error-color);
-	font-weight: 600;
-`
-
-const SubmitRow = styled.div`
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0.75rem;
-	margin-top: 0.25rem;
+const MailRow = styled.div`
+	margin-top: 1.75rem;
 `
 
 //
 // Functions
 //
 
-function toProposal(draft: Draft, events: SpeakEvent[]): TalkProposal {
-	const event = events.find((item) => item.id === draft.eventId)
-	return {
-		name: draft.name,
-		email: draft.email,
-		title: draft.title,
-		about: draft.about,
-		eventId: draft.eventId,
-		eventName: event ? `${event.name} — ${event.when}` : ""
+function tallyEmbedSrc(url: string): string | null {
+	const trimmed = url.trim()
+	if (!trimmed) return null
+	try {
+		const parsed = new URL(trimmed)
+		if (parsed.hostname !== "tally.so" && parsed.hostname !== "www.tally.so") return null
+		const id = parsed.pathname.split("/").filter(Boolean).pop()
+		if (!id || id === "embed" || id === "r") return null
+		const params = new URLSearchParams({
+			alignLeft: "1",
+			hideTitle: "1",
+			transparentBackground: "1",
+			dynamicHeight: "1"
+		})
+		return `https://tally.so/embed/${id}?${params.toString()}`
+	} catch {
+		return null
 	}
 }

@@ -1,0 +1,22 @@
+---
+import Base from "../layouts/Base.astro"
+import { XIntro } from "@/app/intro/XIntro"
+import { siteConfig } from "@/app/siteConfig"
+---
+
+<Base
+	title={`The new x | ${siteConfig.title}`}
+	description="The new x takes the old mark's place."
+	bodyClass="x-intro-open"
+>
+	<style is:global>
+		body.x-intro-open {
+			overflow: hidden;
+		}
+
+		body.x-intro-open footer {
+			display: none;
+		}
+	</style>
+	<XIntro client:load />
+</Base>

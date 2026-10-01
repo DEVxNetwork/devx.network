@@ -1,7 +1,6 @@
 "use client"
 import { useState, useEffect } from "react"
 import type { FocusEvent, MouseEvent } from "react"
-import { Button } from "./Button"
 import { Link } from "./Link"
 import { styled } from "styled-components"
 import { links } from "../siteConfig"
@@ -110,8 +109,8 @@ const NavLinks = ({ onNavigate }: { onNavigate: () => void }) => {
 				</MenuLink>
 			</MenuItem>
 			<MenuItem>
-				<MenuLink href="/who-we-are" onClick={onNavigate}>
-					Who we are
+				<MenuLink href="/about" onClick={onNavigate}>
+					Our Story
 				</MenuLink>
 			</MenuItem>
 			<MenuItem>
@@ -128,11 +127,6 @@ const NavLinks = ({ onNavigate }: { onNavigate: () => void }) => {
 				<MenuAnchor href={links.discord} target="_blank" rel="noopener noreferrer">
 					Discord
 				</MenuAnchor>
-			</MenuItem>
-			<MenuItem>
-				<Button href="/speak" size="small" onClick={onNavigate}>
-					Speak at an Event
-				</Button>
 			</MenuItem>
 		</>
 	)
@@ -169,7 +163,7 @@ const Nav = styled.nav`
 const NavStart = styled.div`
 	display: flex;
 	align-items: center;
-	gap: 0.75rem;
+	gap: 1rem;
 `
 
 const Brand = styled(Link)`
@@ -319,7 +313,7 @@ const MenuList = styled.ul`
 `
 
 const MenuItem = styled.li`
-	margin: 0.75rem 0;
+	margin: 1rem 0;
 
 	@media (min-width: 768px) {
 		margin: 0;

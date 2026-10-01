@@ -1,0 +1,10 @@
+---
+import Base from "../layouts/Base.astro"
+import { aboutDescription } from "@/app/content/community"
+import { siteConfig } from "@/app/siteConfig"
+import { WhoWeAre } from "@/app/who-we-are/WhoWeAre"
+---
+
+<Base title={`Our Story | ${siteConfig.title}`} description={aboutDescription}>
+	<WhoWeAre client:load />
+</Base>

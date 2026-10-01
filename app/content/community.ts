@@ -6,15 +6,16 @@ import type { LumaEvent } from "../services/luma"
 
 export type GatheringKind = "function" | "coroutine" | "paper" | "founders" | "gathering"
 
-export type StoryBeat = {
-	time: string
-	title: string
-	copy: string
+export type AboutPicture = {
+	src: string
+	alt: string
 }
 
-export type Belief = {
+export type AboutChapter = {
+	kicker: string
 	title: string
 	copy: string
+	pictures: AboutPicture[]
 }
 
 export type GatheringFormat = {
@@ -36,51 +37,67 @@ export type GatheringWhen = {
 // Constants
 //
 
-// Editorial copy Notion does not hold: why the room exists, the shape of a
-// Saturday, and the short blurbs for each kind of gathering.
+// Editorial copy Notion does not hold: why the room exists, and the short
+// blurbs for each kind of gathering.
 
-export const missionLead =
-	"San Diego developers, every skill level, at one table. We eat, someone from the seats explains a thing they just learned, and then the laptops come out."
+export const aboutLead = "The room did not start here."
 
-export const afternoon: StoryBeat[] = [
-	{
-		time: "12pm",
-		title: "Lunch",
-		copy: "You sit down with someone you don't know yet."
-	},
-	{
-		time: "1:30pm",
-		title: "Presentation",
-		copy: "Talks from the seats, not a speaker circuit."
-	},
-	{
-		time: "2:30pm",
-		title: "Free-form",
-		copy: "Laptops open. Bring the stuck question."
-	},
-	{
-		time: "4pm",
-		title: "Close",
-		copy: "We wander out."
-	}
-]
+export const aboutDescription =
+	"DEVx started in the back of a coffee shop, coming out of COVID. Edge gave the room a home. It grew from there."
 
-export const beliefs: Belief[] = [
+export const aboutNow: AboutPicture = {
+	src: "/images/weekend-function-talk.webp",
+	alt: "A full room at a recent Saturday, facing someone from the seats"
+}
+
+export const aboutChapters: AboutChapter[] = [
 	{
-		title: "The door is not a skill check.",
-		copy: "A first year and a twentieth year share a table."
+		kicker: "2023",
+		title: "The back of a coffee shop.",
+		copy: "Coming out of COVID, we wanted people in the same room again. The first meetup was a handful of laptops in the back of a café.",
+		pictures: [
+			{
+				src: "/images/about/coffee-2023.webp",
+				alt: "A handful of people with laptops around a table in the back of a café, December 2023"
+			}
+		]
 	},
 	{
-		title: "The teachers are already seated.",
-		copy: "If you're excited about it, the room wants to hear it."
+		kicker: "2024",
+		title: "Then we partnered with Edge.",
+		copy: "Edge had a room and hosted us. A banner, a projector, and enough chairs for the people who came back.",
+		pictures: [
+			{
+				src: "/images/about/edge-2024.webp",
+				alt: "March 2024, a small room with an Edge banner and someone talking at the front"
+			}
+		]
 	},
 	{
-		title: "Bring the bug.",
-		copy: "Someone nearby has already hit it, or wants to learn it with you."
+		kicker: "2025",
+		title: "Then we had the space.",
+		copy: "The office became the place we return to. Same partnership, a room that could hold the crowd.",
+		pictures: [
+			{
+				src: "/images/about/space-2025.webp",
+				alt: "A packed room at the Edge office in 2025, the Edge banner beside the screen"
+			}
+		]
 	},
 	{
-		title: "Lunch is on us.",
-		copy: "The calendar is free. You bring whatever you're excited about."
+		kicker: "Now",
+		title: "It grew from there.",
+		copy: "Saturdays fill the office. Fridays move through the cafés. Paper Club happens when someone brings a paper. One table turned into a lot of ways to show up.",
+		pictures: [
+			{
+				src: "/images/about/friday.webp",
+				alt: "Friday coworking at a long café table, laptops open"
+			},
+			{
+				src: "/images/about/paper-club.webp",
+				alt: "Paper Club, a smaller room gathered around a paper"
+			}
+		]
 	}
 ]
 
@@ -168,6 +185,15 @@ export function monthlyHeadline(name: string): string {
 		.map((part) => part.trim())
 		.find((part) => part.length > 0 && !seriesTitle.test(part) && !dateStamp.test(part))
 	return topic ?? "Weekend Function()"
+}
+
+// Notion titles end with an em dash and a date. The calendar already shows the day.
+export function gatheringTitle(name: string): string {
+	const parts = name.split(/\s*—\s*/)
+	if (parts.length < 2) return name.trim()
+	const last = parts[parts.length - 1]?.trim() ?? ""
+	if (!dateStamp.test(last)) return name.trim()
+	return parts.slice(0, -1).join(" — ").trim()
 }
 
 export function formatGatheringWhen(iso: string): GatheringWhen {

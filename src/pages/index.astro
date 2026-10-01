@@ -1,11 +1,8 @@
 ---
 import Base from "../layouts/Base.astro"
 import { HomePage } from "@/app/HomePage"
-import { listUpcomingGatherings } from "@/app/services/notion/gatherings"
-
-const gatherings = await listUpcomingGatherings()
 ---
 
 <Base>
-	<HomePage client:load gatherings={gatherings} />
+	<HomePage client:load />
 </Base>

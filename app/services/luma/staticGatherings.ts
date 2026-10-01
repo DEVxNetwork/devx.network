@@ -16,6 +16,9 @@ export function gatheringFromEvent(event: LumaEvent): PublicGathering {
 		location: placeLine(event),
 		address: event.location?.address ?? "",
 		lumaUrl: event.url,
+		meetupUrl: null,
+		eventshipUrl: null,
+		eventbriteUrl: null,
 		status: "",
 		href: `/events/${event.api_id}`
 	}

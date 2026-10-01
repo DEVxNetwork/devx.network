@@ -14,6 +14,8 @@ interface ButtonProps {
 	rel?: string
 	type?: "button" | "submit" | "reset"
 	disabled?: boolean
+	ariaPressed?: boolean
+	ariaLabel?: string
 	onClick?: (e?: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => void
 }
 
@@ -29,6 +31,8 @@ export const Button = ({
 	rel,
 	type,
 	disabled,
+	ariaPressed,
+	ariaLabel,
 	onClick
 }: ButtonProps) => {
 	const commonProps = {
@@ -36,7 +40,9 @@ export const Button = ({
 		disabled,
 		onClick,
 		$variant: variant,
-		$size: size
+		$size: size,
+		"aria-pressed": ariaPressed,
+		"aria-label": ariaLabel
 	}
 
 	if (href) {

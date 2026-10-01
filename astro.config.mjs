@@ -108,6 +108,9 @@ function readBody(req, max) {
 
 export default defineConfig({
 	output: "static",
+	redirects: {
+		"/who-we-are": "/about"
+	},
 	server: {
 		port: 3000
 	},

@@ -257,7 +257,7 @@ const CollageGrid = styled.div`
 	display: grid;
 	grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.95fr);
 	grid-template-rows: minmax(0, 1.05fr) minmax(0, 0.9fr);
-	gap: 0.85rem;
+	gap: 1rem;
 	width: min(100% - 6rem, 70rem);
 	height: clamp(32rem, 68vh, 40rem);
 	margin: 0 auto;

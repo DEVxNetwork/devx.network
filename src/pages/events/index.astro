@@ -4,6 +4,8 @@ import { EventsPage } from "@/app/events/EventsPage"
 import type { PublicGathering } from "@/app/content/gatherings"
 import { gatheringFromEvent } from "@/app/services/luma/staticGatherings"
 import { listPastEvents } from "@/app/services/luma/pastEvents"
+import { coversForGatherings } from "@/app/services/luma/covers"
+import { placesForGatherings } from "@/app/services/luma/places"
 import { listPastGatherings, listUpcomingGatherings } from "@/app/services/notion/gatherings"
 import { siteConfig } from "@/app/siteConfig"
 
@@ -17,11 +19,15 @@ function archiveGatherings(notionPast: PublicGathering[]): PublicGathering[] {
 }
 
 const [upcoming, notionPast] = await Promise.all([listUpcomingGatherings(), listPastGatherings()])
+const past = archiveGatherings(notionPast)
+const listed = [...upcoming, ...past]
+const places = placesForGatherings(listed)
+const covers = coversForGatherings(listed)
 ---
 
 <Base
-	title={`Events | ${siteConfig.title}`}
-	description="Saturdays downtown, Fridays at a café. Come sit down."
+	title={`Our Events | ${siteConfig.title}`}
+	description="Every DEVx gathering, listed beside a map of where it happens."
 >
-	<EventsPage client:load upcoming={upcoming} past={archiveGatherings(notionPast)} />
+	<EventsPage client:load upcoming={upcoming} past={past} places={places} covers={covers} />
 </Base>

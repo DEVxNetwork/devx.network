@@ -1,43 +1,38 @@
 "use client"
 import { useMemo } from "react"
 import { styled } from "styled-components"
-import { talks } from "../info/talks"
 import { Card, CardContent, CardTitle, CardText } from "../components/Card"
 import { Button } from "../components/Button"
+import type { WatchTalk } from "../services/notion/talks"
 
+//
 // Types
+//
 
-interface Talk {
-	videoId: string
-	speaker: string
-	title: string
-	date: string
-	year: number
-	startTime: string
-	endTime: string
+type WatchPageProps = {
+	talks: WatchTalk[]
 }
 
+//
 // Components
+//
 
-export default function Watch() {
-	// Memoize video processing: sort by date, partition featured vs archive
+export function WatchPage({ talks }: WatchPageProps) {
 	const { featuredTalks, talksByYear, years } = useMemo(() => {
 		const sorted = [...talks].sort(
 			(a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
 		)
 
-		// Show 3 most recent talks in hero
 		const featured = sorted.slice(0, 3)
 		const remaining = sorted.slice(3)
 
-		// Group remaining talks by year (excludes featured)
 		const grouped = remaining.reduce(
-			(acc: Record<number, Talk[]>, talk) => {
+			(acc: Record<number, WatchTalk[]>, talk) => {
 				if (!acc[talk.year]) acc[talk.year] = []
 				acc[talk.year].push(talk)
 				return acc
 			},
-			{} as Record<number, Talk[]>
+			{} as Record<number, WatchTalk[]>
 		)
 
 		const sortedYears = Object.keys(grouped)
@@ -49,7 +44,7 @@ export default function Watch() {
 			talksByYear: grouped,
 			years: sortedYears
 		}
-	}, [])
+	}, [talks])
 
 	return (
 		<>
@@ -94,7 +89,7 @@ export default function Watch() {
 
 								{/* Render all talks in grid */}
 								<LivestreamGrid>
-									{yearTalks.map((talk: Talk) => (
+									{yearTalks.map((talk: WatchTalk) => (
 										<Card
 											key={`${talk.videoId}-${talk.speaker}`}
 											image={getYouTubeThumbnail(talk.videoId)}
@@ -167,7 +162,7 @@ const ButtonSection = styled.div`
 	margin-top: 2rem;
 	display: flex;
 	flex-wrap: wrap;
-	gap: 0.75rem;
+	gap: 1rem;
 `
 
 const HeroSection = styled.section`

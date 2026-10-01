@@ -1,9 +1,12 @@
 ---
 import Base from "../layouts/Base.astro"
+import { listWatchTalks } from "@/app/services/notion/talks"
 import { siteConfig } from "@/app/siteConfig"
-import WatchPage from "@/app/watch/WatchPage"
+import { WatchPage } from "@/app/watch/WatchPage"
+
+const talks = await listWatchTalks()
 ---
 
 <Base title={`Watch | ${siteConfig.title}`} description="Saturday talks, filmed from the seats.">
-	<WatchPage client:load />
+	<WatchPage client:load talks={talks} />
 </Base>

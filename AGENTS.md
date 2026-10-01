@@ -33,3 +33,4 @@
 
 - **[docs/conventions/file-conventions.md](./docs/conventions/file-conventions.md)** - When to read: Before creating or refactoring any code files. Summary: Four-section file structure (types, constants, components, functions) with exports-first ordering, clean comment headers, and utils separation.
 - **[docs/conventions/styling-guidelines.md](./docs/conventions/styling-guidelines.md)** - When to read: When working with styles. Summary: Styled-components usage and naming conventions.
+- **[SOUL.md](./SOUL.md)** - When to read: Before writing copy, calls to action, or a new page section. Summary: Mission, the order a visitor wants things, and the design principles (clean, fun, minimal).

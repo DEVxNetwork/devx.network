@@ -3,17 +3,12 @@ import { keyframes, styled } from "styled-components"
 import { Button } from "./components/Button"
 import { GatheringShowcase } from "./components/GatheringShowcase"
 import { HomeHero } from "./components/HomeHero"
-import type { PublicGathering } from "./content/gatherings"
-import { gatheringOpensNewTab } from "./content/gatherings"
 import { organizers } from "./info/organizers"
+import { links } from "./siteConfig"
 
 //
 // Types
 //
-
-type HomePageProps = {
-	gatherings: PublicGathering[]
-}
 
 type Portrait = {
 	src: string
@@ -320,15 +315,11 @@ const avatarHover = keyframes`
 // Components
 //
 
-export function HomePage({ gatherings }: HomePageProps) {
-	const nextEvent = gatherings[0]
-	const nextEventLink = nextEvent ? nextEvent.href : "/events"
-	const nextExternal = nextEvent ? gatheringOpensNewTab(nextEvent) : false
-
+export function HomePage() {
 	return (
 		<>
 			<Main>
-				<HomeHero nextEventLink={nextEventLink} nextExternal={nextExternal} />
+				<HomeHero />
 
 				<Statement>
 					<Skyline viewBox="0 0 1600 260" aria-hidden="true">
@@ -413,17 +404,11 @@ export function HomePage({ gatherings }: HomePageProps) {
 							community.
 						</JoinText>
 						<JoinActions>
-							<Button
-								href={nextEventLink}
-								target={nextExternal ? "_blank" : undefined}
-								rel={nextExternal ? "noopener noreferrer" : undefined}
-								variant="primary"
-								size="default"
-							>
-								Join the Next Event
+							<Button href={links.lumaUrl} target="_self" variant="primary" size="default">
+								Our Event Calendar
 							</Button>
 							<Button href="/speak" variant="secondary" size="default">
-								Speak at an Event
+								Add to the conversation
 							</Button>
 						</JoinActions>
 					</JoinPanel>
@@ -514,8 +499,8 @@ const Mark = styled.span`
 `
 
 const Highlight = styled.span`
-	background: var(--accent);
-	color: var(--accent-contrast);
+	background: var(--extrusion);
+	color: #ffffff;
 	padding: 0.08em 0.28em;
 	border-radius: 0.12em;
 	box-decoration-break: clone;
@@ -637,7 +622,7 @@ const OrganizerGrid = styled.div`
 
 	@media (max-width: 768px) {
 		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: 0.65rem;
+		gap: 1rem;
 	}
 `
 
@@ -757,7 +742,7 @@ const JoinText = styled.p`
 const JoinActions = styled.div`
 	display: flex;
 	flex-wrap: wrap;
-	gap: 0.75rem;
+	gap: 1rem;
 	justify-content: center;
 `
 
