@@ -168,7 +168,7 @@ export function ProfileList() {
 }
 
 const BackgroundContainer = styled.section`
-	background-color: #0a0a0a;
+	background-color: var(--background);
 	position: fixed;
 	height: 100vh;
 	width: 100vw;
@@ -195,7 +195,7 @@ const ContentWrapper = styled.div`
 `
 
 const Title = styled.h1`
-	color: white;
+	color: var(--foreground);
 	font-size: 2.5rem;
 	font-weight: 700;
 	margin: 0;
@@ -203,7 +203,7 @@ const Title = styled.h1`
 `
 
 const EmptyState = styled.div`
-	color: rgba(255, 255, 255, 0.7);
+	color: rgba(var(--foreground-rgb), 0.7);
 	font-size: 1.25rem;
 	text-align: center;
 	padding: 4rem 0;
@@ -226,12 +226,12 @@ const ProfileListItem = styled.div`
 `
 
 const LoadingText = styled.div`
-	color: white;
+	color: var(--foreground);
 	font-size: 1.2rem;
 `
 
 const LoadingMoreText = styled.div`
-	color: rgba(255, 255, 255, 0.7);
+	color: rgba(var(--foreground-rgb), 0.7);
 	font-size: 1rem;
 	text-align: center;
 	padding: 2rem 0;

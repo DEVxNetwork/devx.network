@@ -90,7 +90,7 @@ const FooterContainer = styled.footer`
 	align-items: center;
 	justify-content: center;
 	width: 100%;
-	background-color: rgba(0, 0, 0, 0.1);
+	background-color: var(--footer-background);
 	backdrop-filter: blur(64px);
 	margin-top: auto;
 `
@@ -101,7 +101,7 @@ const FooterContent = styled.div`
 	align-items: center;
 	justify-content: space-between;
 	padding: 1.5rem 1rem;
-	color: #a3a3a3;
+	color: var(--subtle-foreground);
 	max-width: 1200px;
 	width: 100%;
 	gap: 1rem;

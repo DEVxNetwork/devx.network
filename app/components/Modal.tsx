@@ -66,8 +66,8 @@ const Backdrop = styled.div`
 `
 
 const ModalContent = styled.div`
-	background-color: rgba(20, 20, 20, 0.95);
-	border: 1px solid rgba(255, 255, 255, 0.2);
+	background-color: var(--surface-solid);
+	border: 1px solid var(--border);
 	border-radius: 0.5rem;
 	padding: 2rem;
 	max-width: 500px;
@@ -82,7 +82,7 @@ const CloseButton = styled.button`
 	right: 1rem;
 	background: transparent;
 	border: none;
-	color: white;
+	color: var(--foreground);
 	font-size: 1.5rem;
 	cursor: pointer;
 	padding: 0.25rem;

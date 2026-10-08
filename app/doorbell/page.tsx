@@ -113,7 +113,9 @@ export default function Doorbell() {
 		<>
 			<BackgroundContainer>
 				<ErrorBoundary
-					fallback={<div style={{ backgroundColor: "black", width: "100%", height: "100%" }} />}
+					fallback={
+						<div style={{ backgroundColor: "var(--background)", width: "100%", height: "100%" }} />
+					}
 				>
 					<PotionBackground />
 				</ErrorBoundary>
@@ -182,7 +184,7 @@ export default function Doorbell() {
 // Styled Components //
 
 const Main = styled.main`
-	color: white;
+	color: var(--foreground);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -190,7 +192,7 @@ const Main = styled.main`
 `
 
 const BackgroundContainer = styled.section`
-	background-color: #0a0a0a;
+	background-color: var(--background);
 	position: fixed;
 	height: 100vh;
 	width: 100vw;
@@ -249,7 +251,7 @@ const TermsMessage = styled.p`
 	text-align: center;
 	max-width: 420px;
 	margin: 0;
-	color: rgba(255, 255, 255, 0.7);
+	color: rgba(var(--foreground-rgb), 0.7);
 `
 
 const ButtonSection = styled.section`
@@ -275,7 +277,7 @@ const DoorbellMessage = styled.p`
 	text-align: center;
 	max-width: 420px;
 	margin: 0;
-	color: rgba(255, 255, 255, 0.7);
+	color: rgba(var(--foreground-rgb), 0.7);
 `
 
 const AnimatedButtonContent = styled(motion.span)`
@@ -297,11 +299,11 @@ const CallMessage = styled.p`
 	font-size: 1.25rem;
 	text-align: center;
 	margin: 0;
-	color: white;
+	color: var(--foreground);
 `
 
 const TermsLink = styled(Link)`
-	color: white;
+	color: var(--foreground);
 	text-decoration: underline;
 	transition: opacity 0.2s ease;
 

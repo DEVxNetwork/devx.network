@@ -557,7 +557,7 @@ export default function SubmitTalk() {
 }
 
 const BackgroundContainer = styled.section`
-	background-color: #0a0a0a;
+	background-color: var(--background);
 	position: fixed;
 	height: 100vh;
 	width: 100vw;
@@ -577,13 +577,13 @@ const Container = styled.main`
 const Title = styled.h1`
 	font-size: 2rem;
 	font-weight: 700;
-	color: white;
+	color: var(--foreground);
 	margin: 0;
 	text-align: center;
 `
 
 const Subtitle = styled.p`
-	color: rgba(255, 255, 255, 0.7);
+	color: rgba(var(--foreground-rgb), 0.7);
 	margin: -1rem 0 0 0;
 	text-align: center;
 `
@@ -599,7 +599,7 @@ const FormSection = styled.div`
 	flex-direction: column;
 	gap: 1rem;
 	padding-top: 1rem;
-	border-top: 1px solid rgba(255, 255, 255, 0.1);
+	border-top: 1px solid var(--border);
 
 	&:first-of-type {
 		border-top: none;
@@ -610,7 +610,7 @@ const FormSection = styled.div`
 const SectionTitle = styled.h2`
 	font-size: 1.25rem;
 	font-weight: 600;
-	color: white;
+	color: var(--foreground);
 	margin: 0;
 `
 
@@ -626,21 +626,21 @@ const Field = styled.div`
 `
 
 const InfoValue = styled.div`
-	color: rgba(255, 255, 255, 0.9);
+	color: rgba(var(--foreground-rgb), 0.9);
 	font-size: 0.9375rem;
 	margin: 0;
 `
 
 const InfoNote = styled.p`
 	margin: 0.5rem 0 0 0;
-	color: rgba(255, 255, 255, 0.6);
+	color: rgba(var(--foreground-rgb), 0.6);
 	font-size: 0.875rem;
 	line-height: 1.5;
 `
 
 const HookNote = styled.p`
 	margin: 0;
-	color: rgba(255, 255, 255, 0.5);
+	color: rgba(var(--foreground-rgb), 0.5);
 	font-size: 0.8125rem;
 	line-height: 1.4;
 `
@@ -663,15 +663,15 @@ const ThumbnailPreviewWrap = styled.div`
 const Label = styled.label`
 	font-size: 0.875rem;
 	font-weight: 700;
-	color: rgba(255, 255, 255, 0.9);
+	color: rgba(var(--foreground-rgb), 0.9);
 `
 
 const ReadOnlyValue = styled.div`
 	padding: 0.75rem;
-	background-color: rgba(255, 255, 255, 0.05);
-	border: 1px solid rgba(255, 255, 255, 0.1);
+	background-color: rgba(var(--foreground-rgb), 0.05);
+	border: 1px solid var(--border);
 	border-radius: 0.5rem;
-	color: rgba(255, 255, 255, 0.7);
+	color: rgba(var(--foreground-rgb), 0.7);
 	font-size: 1rem;
 `
 
@@ -689,16 +689,16 @@ const RadioOption = styled.div`
 
 const RadioLabel = styled.label`
 	font-size: 0.875rem;
-	color: rgba(255, 255, 255, 0.9);
+	color: rgba(var(--foreground-rgb), 0.9);
 	cursor: pointer;
 `
 
 const FileInput = styled.input`
 	padding: 0.75rem;
-	background-color: rgba(255, 255, 255, 0.1);
-	border: 1px solid rgba(255, 255, 255, 0.2);
+	background-color: rgba(var(--foreground-rgb), 0.1);
+	border: 1px solid rgba(var(--foreground-rgb), 0.2);
 	border-radius: 0.5rem;
-	color: white;
+	color: var(--foreground);
 	font-size: 1rem;
 	cursor: pointer;
 
@@ -708,7 +708,7 @@ const FileInput = styled.input`
 		background-color: rgba(156, 163, 255, 0.2);
 		border: 1px solid rgba(156, 163, 255, 0.4);
 		border-radius: 0.375rem;
-		color: white;
+		color: var(--foreground);
 		cursor: pointer;
 		font-size: 0.875rem;
 		transition: all 0.2s ease;
@@ -722,7 +722,7 @@ const FileInput = styled.input`
 const FileInfo = styled.div`
 	margin-top: 0.5rem;
 	font-size: 0.875rem;
-	color: rgba(255, 255, 255, 0.7);
+	color: rgba(var(--foreground-rgb), 0.7);
 	font-style: italic;
 `
 
@@ -752,7 +752,7 @@ const CancelButton = styled(Button)`
 `
 
 const LoadingText = styled.div`
-	color: white;
+	color: var(--foreground);
 	font-size: 1.25rem;
 	text-align: center;
 `
@@ -763,12 +763,12 @@ const CheckboxField = styled.div`
 	gap: 0.75rem;
 	margin-top: 1rem;
 	padding-top: 1.5rem;
-	border-top: 1px solid rgba(255, 255, 255, 0.1);
+	border-top: 1px solid var(--border);
 `
 
 const CheckboxLabel = styled.label`
 	font-size: 0.875rem;
-	color: rgba(255, 255, 255, 0.9);
+	color: rgba(var(--foreground-rgb), 0.9);
 	cursor: pointer;
 	line-height: 1.5;
 `

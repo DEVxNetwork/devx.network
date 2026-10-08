@@ -39,14 +39,14 @@ const StyledInput = styled.input<{
 	width: 100%;
 	box-sizing: border-box;
 	background-color: ${(props) => (props.$variant === "primary" ? "white" : "transparent")};
-	color: ${(props) => (props.$variant === "primary" ? "black" : "white")};
+	color: ${(props) => (props.$variant === "primary" ? "black" : "var(--foreground)")};
 	border: ${(props) => {
 		if (props.$error) {
 			return "1px solid var(--error-color)"
 		}
 
 		if (props.$variant === "secondary") {
-			return "1px solid rgba(255, 255, 255, 0.3)"
+			return "1px solid rgba(var(--foreground-rgb), 0.3)"
 		}
 
 		return "1px solid rgba(0, 0, 0, 0.2)"
@@ -60,18 +60,18 @@ const StyledInput = styled.input<{
 			}
 
 			if (props.$variant === "secondary") {
-				return "white"
+				return "var(--foreground)"
 			}
 
 			return "rgba(0, 0, 0, 0.4)"
 		}};
 		background-color: ${(props) =>
-			props.$variant === "primary" ? "white" : "rgba(255, 255, 255, 0.05)"};
+			props.$variant === "primary" ? "white" : "rgba(var(--foreground-rgb), 0.05)"};
 	}
 
 	&::placeholder {
 		color: ${(props) =>
-			props.$variant === "primary" ? "rgba(0, 0, 0, 0.5)" : "rgba(255, 255, 255, 0.5)"};
+			props.$variant === "primary" ? "rgba(0, 0, 0, 0.5)" : "rgba(var(--foreground-rgb), 0.5)"};
 	}
 
 	&:disabled {

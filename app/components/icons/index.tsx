@@ -35,7 +35,11 @@ export const CameraIcon = ({ color = "#888" }: { color?: string }) => (
 	</svg>
 )
 
-export const QuestionIcon = ({ color = "rgba(255, 255, 255, 0.6)" }: { color?: string }) => (
+export const QuestionIcon = ({
+	color = "rgba(var(--foreground-rgb), 0.6)"
+}: {
+	color?: string
+}) => (
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		width="16"

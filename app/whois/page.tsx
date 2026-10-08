@@ -263,7 +263,7 @@ export default function Who() {
 }
 
 const BackgroundContainer = styled.section`
-	background-color: #0a0a0a;
+	background-color: var(--background);
 	position: fixed;
 	height: 100vh;
 	width: 100vw;
@@ -282,6 +282,6 @@ const Container = styled.main`
 `
 
 const LoadingText = styled.div`
-	color: white;
+	color: var(--foreground);
 	font-size: 1.2rem;
 `

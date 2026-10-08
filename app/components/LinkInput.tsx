@@ -265,18 +265,18 @@ const LinkPill = styled.div<{ $isDragging?: boolean; $dragOver?: boolean }>`
 	align-items: center;
 	gap: 0.375rem;
 	padding: 0.375rem 0.75rem;
-	background-color: rgba(255, 255, 255, 0.2);
-	border: 1px solid rgba(255, 255, 255, 0.3);
+	background-color: rgba(var(--foreground-rgb), 0.2);
+	border: 1px solid rgba(var(--foreground-rgb), 0.3);
 	border-radius: 9999px;
 	font-size: 0.875rem;
-	color: white;
+	color: var(--foreground);
 	font-weight: 500;
 	transition: all 0.2s ease;
 	cursor: ${(props) => (props.draggable ? "grab" : "pointer")};
 	opacity: ${(props) => (props.$isDragging ? 0.5 : 1)};
 	transform: ${(props) => (props.$isDragging ? "scale(0.95)" : "scale(1)")};
 	border-color: ${(props) =>
-		props.$dragOver ? "rgba(255, 255, 255, 0.6)" : "rgba(255, 255, 255, 0.3)"};
+		props.$dragOver ? "rgba(var(--foreground-rgb), 0.6)" : "rgba(var(--foreground-rgb), 0.3)"};
 
 	&:hover {
 		background-color: rgba(255, 255, 255, 0.25);
@@ -290,7 +290,7 @@ const LinkPill = styled.div<{ $isDragging?: boolean; $dragOver?: boolean }>`
 const RemoveButton = styled.button`
 	background: none;
 	border: none;
-	color: rgba(255, 255, 255, 0.7);
+	color: rgba(var(--foreground-rgb), 0.7);
 	cursor: pointer;
 	font-size: 1.2rem;
 	line-height: 1;
@@ -305,8 +305,8 @@ const RemoveButton = styled.button`
 	transition: all 0.2s ease;
 
 	&:hover {
-		color: white;
-		background-color: rgba(255, 255, 255, 0.2);
+		color: var(--foreground);
+		background-color: rgba(var(--foreground-rgb), 0.2);
 	}
 `
 
@@ -315,19 +315,19 @@ const AddPill = styled.button`
 	align-items: center;
 	gap: 0.375rem;
 	padding: 0.375rem 0.75rem;
-	background-color: rgba(255, 255, 255, 0.1);
-	border: 1px dashed rgba(255, 255, 255, 0.3);
+	background-color: rgba(var(--foreground-rgb), 0.1);
+	border: 1px dashed rgba(var(--foreground-rgb), 0.3);
 	border-radius: 9999px;
 	font-size: 0.875rem;
-	color: rgba(255, 255, 255, 0.7);
+	color: rgba(var(--foreground-rgb), 0.7);
 	font-weight: 500;
 	cursor: pointer;
 	transition: all 0.2s ease;
 
 	&:hover {
-		background-color: rgba(255, 255, 255, 0.15);
-		border-color: rgba(255, 255, 255, 0.5);
-		color: white;
+		background-color: rgba(var(--foreground-rgb), 0.15);
+		border-color: rgba(var(--foreground-rgb), 0.5);
+		color: var(--foreground);
 	}
 `
 
@@ -342,8 +342,8 @@ const InputPill = styled.div`
 	align-items: center;
 	gap: 0.375rem;
 	padding: 0.375rem 0.75rem;
-	background-color: rgba(255, 255, 255, 0.15);
-	border: 1px solid rgba(255, 255, 255, 0.3);
+	background-color: rgba(var(--foreground-rgb), 0.15);
+	border: 1px solid rgba(var(--foreground-rgb), 0.3);
 	border-radius: 9999px;
 	min-width: 120px;
 	position: relative;
@@ -353,7 +353,7 @@ const Input = styled.input`
 	background: transparent;
 	border: none;
 	outline: none;
-	color: white;
+	color: var(--foreground);
 	font-size: 0.875rem;
 	font-weight: 500;
 	font-family: inherit;
@@ -362,7 +362,7 @@ const Input = styled.input`
 	padding: 0;
 
 	&::placeholder {
-		color: rgba(255, 255, 255, 0.5);
+		color: rgba(var(--foreground-rgb), 0.5);
 	}
 
 	&:disabled {

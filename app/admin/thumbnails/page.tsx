@@ -358,7 +358,7 @@ function AdminTalkThumbnailGen() {
 //
 
 const BackgroundContainer = styled.section`
-	background-color: #0a0a0a;
+	background-color: var(--background);
 	position: fixed;
 	height: 100vh;
 	width: 100vw;
@@ -382,13 +382,13 @@ const Container = styled.main`
 const Title = styled.h1`
 	font-size: 2rem;
 	font-weight: 700;
-	color: white;
+	color: var(--foreground);
 	margin: 0;
 	text-align: center;
 `
 
 const Subtitle = styled.p`
-	color: rgba(255, 255, 255, 0.7);
+	color: rgba(var(--foreground-rgb), 0.7);
 	margin: -1rem 0 0 0;
 	text-align: center;
 `
@@ -441,15 +441,15 @@ const Field = styled.div`
 const Label = styled.label`
 	font-size: 0.875rem;
 	font-weight: 700;
-	color: rgba(255, 255, 255, 0.9);
+	color: rgba(var(--foreground-rgb), 0.9);
 `
 
 const FileInput = styled.input`
 	padding: 0.5rem;
-	background-color: rgba(255, 255, 255, 0.1);
-	border: 1px solid rgba(255, 255, 255, 0.2);
+	background-color: rgba(var(--foreground-rgb), 0.1);
+	border: 1px solid rgba(var(--foreground-rgb), 0.2);
 	border-radius: 0.5rem;
-	color: white;
+	color: var(--foreground);
 	font-size: 0.875rem;
 	cursor: pointer;
 
@@ -459,7 +459,7 @@ const FileInput = styled.input`
 		background-color: rgba(156, 163, 255, 0.2);
 		border: 1px solid rgba(156, 163, 255, 0.4);
 		border-radius: 0.375rem;
-		color: white;
+		color: var(--foreground);
 		cursor: pointer;
 		font-size: 0.8125rem;
 		transition: all 0.2s ease;
@@ -481,7 +481,7 @@ const HandleRow = styled.div`
 `
 
 const HandlePrefix = styled.span`
-	color: rgba(255, 255, 255, 0.5);
+	color: rgba(var(--foreground-rgb), 0.5);
 	font-size: 1rem;
 	font-weight: 600;
 	flex-shrink: 0;
@@ -501,7 +501,7 @@ const PhotoStatus = styled.p`
 
 const OrDivider = styled.div`
 	text-align: center;
-	color: rgba(255, 255, 255, 0.4);
+	color: rgba(var(--foreground-rgb), 0.4);
 	font-size: 0.75rem;
 	text-transform: uppercase;
 	letter-spacing: 0.1em;
@@ -522,12 +522,12 @@ const DownloadRow = styled.div`
 const SpecNote = styled.p`
 	margin: -1rem 0 0 0;
 	text-align: center;
-	color: rgba(255, 255, 255, 0.4);
+	color: rgba(var(--foreground-rgb), 0.4);
 	font-size: 0.75rem;
 `
 
 const LoadingText = styled.div`
-	color: white;
+	color: var(--foreground);
 	font-size: 1.25rem;
 	text-align: center;
 	margin-top: 4rem;

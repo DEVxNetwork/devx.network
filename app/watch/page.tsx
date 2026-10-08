@@ -57,7 +57,9 @@ export default function Watch() {
 		<>
 			<BackgroundContainer>
 				<ErrorBoundary
-					fallback={<div style={{ backgroundColor: "black", width: "100%", height: "100%" }} />}
+					fallback={
+						<div style={{ backgroundColor: "var(--background)", width: "100%", height: "100%" }} />
+					}
 				>
 					<PotionBackground />
 				</ErrorBoundary>
@@ -119,10 +121,10 @@ Explore our collection of presentations from the community.`}
 											rel="noopener noreferrer"
 										>
 											<CardContent $padding="1rem 1rem">
-												<CardText $size="0.9rem" $color="#d1d5db" $weight="500">
+												<CardText $size="0.9rem" $color="var(--muted-foreground)" $weight="500">
 													{talk.title}
 												</CardText>
-												<CardText $size="0.85rem" $color="#9ca3af" $weight="600">
+												<CardText $size="0.85rem" $color="var(--subtle-foreground)" $weight="600">
 													{talk.speaker}
 												</CardText>
 											</CardContent>
@@ -150,7 +152,7 @@ Explore our collection of presentations from the community.`}
 // Styles
 
 const BackgroundContainer = styled.section`
-	background-color: #0a0a0a;
+	background-color: var(--background);
 	position: fixed;
 	height: 100vh;
 	width: 100vw;
@@ -222,7 +224,7 @@ const HeroSection = styled.section`
 const HeroBlurb = styled.p`
 	font-size: 1.25rem;
 	line-height: 1.8;
-	color: #d1d5db;
+	color: var(--muted-foreground);
 	text-align: center;
 	max-width: 900px;
 	margin: 0;
@@ -255,8 +257,8 @@ const YearHeader = styled.h2`
 	font-weight: bold;
 	margin-bottom: 2rem;
 	text-align: center;
-	color: white;
-	border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+	color: var(--foreground);
+	border-bottom: 2px solid rgba(var(--foreground-rgb), 0.2);
 	padding-bottom: 1rem;
 `
 

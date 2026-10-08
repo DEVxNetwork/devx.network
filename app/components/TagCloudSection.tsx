@@ -97,12 +97,12 @@ const SectionHeader = styled.div`
 const SectionTitle = styled.h3`
 	font-size: 1.25rem;
 	font-weight: 600;
-	color: white;
+	color: var(--foreground);
 	margin: 0;
 `
 
 const SavingIndicator = styled.span`
 	font-size: 0.875rem;
-	color: rgba(255, 255, 255, 0.6);
+	color: rgba(var(--foreground-rgb), 0.6);
 	font-style: italic;
 `
