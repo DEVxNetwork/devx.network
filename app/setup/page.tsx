@@ -10,7 +10,8 @@ import { TextInput } from "../components/TextInput"
 import { Button } from "../components/Button"
 import { HelpInfoButton } from "../components/HelpInfoButton"
 
-const HANDLE_REGEX = /^(?:[a-z0-9_]|-)+$/
+/** Matches HTML input pattern `(?:[a-z0-9_]|-){3,30}` (full string). */
+const HANDLE_REGEX = /^(?:[a-z0-9_]|-){3,30}$/
 
 type NametagData = {
 	fullName: string
@@ -22,8 +23,7 @@ type NametagData = {
 /** Same rules as the availability effect: empty, format, or not explicitly available. */
 function getHandleHasError(handle: string, handleAvailable: boolean | null): boolean {
 	const trimmed = handle.trim()
-	const formatInvalid =
-		!trimmed || !HANDLE_REGEX.test(handle) || handle.length < 3 || handle.length > 30
+	const formatInvalid = !trimmed || !HANDLE_REGEX.test(handle)
 	return formatInvalid || handleAvailable !== true
 }
 
@@ -133,9 +133,9 @@ export default function Setup() {
 				return
 			}
 
-			// Validate handle format: lowercase alphanumeric with underscores/hyphens, 3-30 chars
-			if (!HANDLE_REGEX.test(handle) || handle.length < 3 || handle.length > 30) {
-				setHandleAvailable(false)
+			// Invalid format: do not query DB or set "taken" — keep null so UI is not "Unavailable"
+			if (!HANDLE_REGEX.test(handle)) {
+				setHandleAvailable(null)
 				return
 			}
 
@@ -323,7 +323,7 @@ export default function Setup() {
 		}
 	}
 
-	const isHandleFormatValid = HANDLE_REGEX.test(handle) && handle.length >= 3 && handle.length <= 30
+	const isHandleFormatValid = HANDLE_REGEX.test(handle)
 	const isHandleUnavailable = isHandleFormatValid && handleAvailable === false && !!handle.trim()
 
 	if (loading) {
@@ -374,7 +374,9 @@ export default function Setup() {
 								</HandleInputRow>
 								{handle && (
 									<HandleStatus>
-										{checkingHandle ? (
+										{!isHandleFormatValid ? (
+											<StatusText $color="var(--error-color)">Invalid handle</StatusText>
+										) : checkingHandle ? (
 											<StatusText $color="rgba(255, 255, 255, 0.5)">Checking...</StatusText>
 										) : handleAvailable === true ? (
 											<StatusText $color="#4ade80">✓ Available</StatusText>
@@ -384,7 +386,7 @@ export default function Setup() {
 									</HandleStatus>
 								)}
 							</HandleInputWrapper>
-							{hasAttemptedSubmit && validationErrors.handle && !isHandleUnavailable && (
+							{hasAttemptedSubmit && validationErrors.handle && !handle.trim() && (
 								<FieldError>Please choose a valid handle</FieldError>
 							)}
 							<HelpText>
