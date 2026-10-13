@@ -120,6 +120,30 @@
 		"timezone": "America/Los_Angeles"
 	},
 	{
+		"api_id": "evt-EeZ1ZZnWDqHcHAW",
+		"name": "Paper Club #6: Nostalgia is All You Need",
+		"description": "Welcome to DEVx's next AI Paper Club!\n<question hook>\n\nAJ Caldwell will <description>\nPaper: https://arxiv.org/abs/1706.03762\nAll are welcome to come and learn. Questions and curiosity encouraged!\n📍 LOCATION CHANGE\nAI Paper Club will be at a new location this time:\n11988 El Camino Real\nSan Diego, CA 92130\nWe’ll be in the seminar space right off the lobby.\nPlease double-check the address before heading over, especially if you’ve attended a previous Paper Club at our old location. See you there!",
+		"description_md": "Welcome to DEVx's next AI Paper Club!\n\n<question hook>  \n  \nAJ Caldwell will <description>\n\nPaper: [https://arxiv.org/abs/1706.03762](https://arxiv.org/abs/1706.03762)\n\nAll are welcome to come and learn. Questions and curiosity encouraged!\n\n📍 LOCATION CHANGE\n\nAI Paper Club will be at a new location this time:\n\n11988 El Camino Real  \nSan Diego, CA 92130\n\nWe’ll be in the **seminar space right off the lobby**.\n\nPlease double-check the address before heading over, especially if you’ve attended a previous Paper Club at our old location. See you there!",
+		"description_html": "<p>Welcome to DEVx&#39;s next AI Paper Club!</p>\n<question hook>  \n  \n<p>AJ Caldwell will <description></p>\n<p>Paper: <a href=\"https://arxiv.org/abs/1706.03762\">https://arxiv.org/abs/1706.03762</a></p>\n<p>All are welcome to come and learn. Questions and curiosity encouraged!</p>\n<p>📍 LOCATION CHANGE</p>\n<p>AI Paper Club will be at a new location this time:</p>\n<p>11988 El Camino Real<br>San Diego, CA 92130</p>\n<p>We’ll be in the <strong>seminar space right off the lobby</strong>.</p>\n<p>Please double-check the address before heading over, especially if you’ve attended a previous Paper Club at our old location. See you there!</p>\n",
+		"start_at": "2026-10-23T02:00:00.000Z",
+		"end_at": "2026-10-23T04:00:00.000Z",
+		"location": {
+			"type": "physical",
+			"address": "11988 El Camino Real, San Diego, CA 92130, USA",
+			"city": "San Diego",
+			"state": "California",
+			"coordinates": {
+				"lat": "32.9361532",
+				"lng": "-117.23969090000001"
+			}
+		},
+		"cover_url": "https://images.lumacdn.com/event-covers/9i/d179e163-e7b9-45a1-ab0b-164dd48dd42c.png",
+		"url": "https://luma.com/devx-paper-club-oct-22-2026",
+		"guest_count": -1,
+		"visibility": "private",
+		"timezone": "America/Los_Angeles"
+	},
+	{
 		"api_id": "evt-fPtg6d3jGLAeMsM",
 		"name": "Game Jam! — Weekend Function() { Software Developer Meetup } — 10/17/26",
 		"description": "What to Expect\nThis Weekend Function is a four-hour game jam. Brandon Jack opens by demonstrating his game-making flow. You then build, in a team of up to 3, with a collaborator, or solo, following that flow and scope. The last hour is judging across categories.\nBring a laptop.\nSchedule\n12:00–4:00pm PT\n12:00–1:00 — Demo\nBrandon Jack demonstrates his game-making flow: how he takes an idea, scopes it, and builds it.\n1:00–3:00 — Build\nFollow that same flow and that scope, and make something.\nForm a team of up to 3, collaborate, or work solo\nAgree on who does what before you start, so the pieces can come together in time\n3:00–4:00 — Judging\nProjects are judged across categories.\nReminders\nPlease be courteous and respectful to others.\nLaptops are essential. You will be building.\nFeel free to ask our organizers for help on some code you're struggling with. We're happy to help where we can.\nCommuting\nSuggested Car Parking\nStreet ($0)\nSan Diego County Waterfront Garage ($20)\nFashion Valley Mall ($5)take the green line from Fashion Valley Transit Center to County Center/Little Italy Station\ncosts $2.50 each way\nSuggested Bike Parking\nWaterfront Park\nSuggested Rails\nGreen and Blue Trolley Linesstop at County Center/Little Italy Station\nCoasterstop at Santa Fe Depot\nLive Stream\nWe'll be streaming the event live on YouTube for those who cannot attend in-person. Click here to view the scheduled live stream.\nOur Community\nYou can find more information about our community at devx.network.\nAlso, join our Discord community to ask what others are interested in learning in the #event-talk channel: https://discord.gg/hyf9KSaKtv",
