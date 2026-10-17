@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import styled from "styled-components"
 import type { LumaEvent } from "@/app/services/luma"
 import { lumaService } from "@/app/services/luma"
@@ -7,15 +8,20 @@ import { PotionBackground } from "../components/PotionBackground"
 import { ErrorBoundary } from "../components/ErrorBoundary"
 import { Card, CardContent, CardTitle, CardText } from "../components/Card"
 import { Button } from "../components/Button"
+import { supabaseClient } from "@/lib/supabaseClient"
+import { pruneStaleEventInterests } from "@/lib/eventInterests"
 
 // Types //
 
-type EventFilter = "upcoming" | "past"
+type EventFilter = "upcoming" | "past" | "saved"
 
 // Components //
 
 export default function Events() {
+	const router = useRouter()
 	const [events, setEvents] = useState<LumaEvent[]>([])
+	const [interestedIds, setInterestedIds] = useState<Set<string>>(new Set())
+	const [isLoggedIn, setIsLoggedIn] = useState(false)
 	const [filter, setFilter] = useState<EventFilter>("upcoming")
 	const [loading, setLoading] = useState(true)
 
@@ -27,6 +33,20 @@ export default function Events() {
 		try {
 			const allEvents = await lumaService.listEvents()
 			setEvents(allEvents)
+
+			const {
+				data: { user }
+			} = await supabaseClient.auth.getUser()
+
+			if (!user) {
+				setIsLoggedIn(false)
+				setInterestedIds(new Set())
+				return
+			}
+
+			setIsLoggedIn(true)
+			const interests = await pruneStaleEventInterests(allEvents)
+			setInterestedIds(new Set(interests))
 		} catch (error) {
 			console.error("Failed to load events:", error)
 		} finally {
@@ -34,18 +54,57 @@ export default function Events() {
 		}
 	}
 
+	const handleFilterChange = async (nextFilter: EventFilter) => {
+		if (nextFilter === "saved" && !isLoggedIn) {
+			const {
+				data: { user }
+			} = await supabaseClient.auth.getUser()
+
+			if (!user) {
+				router.push(`/login?redirect=${encodeURIComponent("/events")}`)
+				return
+			}
+
+			setIsLoggedIn(true)
+		}
+
+		setFilter(nextFilter)
+
+		if (nextFilter === "saved") {
+			try {
+				const interests = await listInterestedEventIds()
+				setInterestedIds(new Set(interests))
+			} catch (error) {
+				console.error("Failed to load saved events:", error)
+			}
+		}
+	}
+
+	const now = new Date()
+	const isUpcoming = (event: LumaEvent) => new Date(event.start_at) >= now
+
 	const filteredEvents = events
 		.filter((event) => {
-			const eventDate = new Date(event.start_at)
-			const now = new Date()
-			return filter === "upcoming" ? eventDate >= now : eventDate < now
+			if (filter === "saved") {
+				// Saved is for deciding/signing up later — only upcoming events belong here
+				return interestedIds.has(event.api_id) && isUpcoming(event)
+			}
+
+			return filter === "upcoming" ? isUpcoming(event) : !isUpcoming(event)
 		})
 		.sort((a, b) => {
 			const dateA = new Date(a.start_at).getTime()
 			const dateB = new Date(b.start_at).getTime()
-			// Ascending for upcoming (oldest first), descending for past (newest first)
-			return filter === "upcoming" ? dateA - dateB : dateB - dateA
+
+			if (filter === "past") {
+				return dateB - dateA
+			}
+
+			// Upcoming and saved: soonest first
+			return dateA - dateB
 		})
+
+	const emptyMessage = getEmptyMessage(filter, isLoggedIn)
 
 	return (
 		<>
@@ -67,22 +126,28 @@ export default function Events() {
 					<FilterToggle>
 						<Button
 							variant={filter === "upcoming" ? "primary" : "secondary"}
-							onClick={() => setFilter("upcoming")}
+							onClick={() => handleFilterChange("upcoming")}
 						>
 							Upcoming
 						</Button>
 						<Button
 							variant={filter === "past" ? "primary" : "secondary"}
-							onClick={() => setFilter("past")}
+							onClick={() => handleFilterChange("past")}
 						>
 							Past Events
+						</Button>
+						<Button
+							variant={filter === "saved" ? "primary" : "secondary"}
+							onClick={() => handleFilterChange("saved")}
+						>
+							Saved
 						</Button>
 					</FilterToggle>
 
 					{loading ? (
 						<LoadingMessage>Loading events...</LoadingMessage>
 					) : filteredEvents.length === 0 ? (
-						<NoEventsMessage>No {filter} events at this time. Check back soon!</NoEventsMessage>
+						<NoEventsMessage>{emptyMessage}</NoEventsMessage>
 					) : (
 						<EventsGrid>
 							{filteredEvents.map((event) => (
@@ -101,6 +166,13 @@ export default function Events() {
 												{event.location.type === "physical"
 													? `${event.location.city}, ${event.location.state}`
 													: "Online Event"}
+											</CardText>
+										)}
+										{filter !== "saved" &&
+											interestedIds.has(event.api_id) &&
+											isUpcoming(event) && (
+											<CardText $color="#8b5cf6" $weight="500">
+												Saved
 											</CardText>
 										)}
 										{event.guest_count !== undefined && event.guest_count !== -1 && (
@@ -126,6 +198,17 @@ export default function Events() {
 }
 
 // Functions //
+
+function getEmptyMessage(filter: EventFilter, isLoggedIn: boolean): string {
+	if (filter === "saved") {
+		if (!isLoggedIn) {
+			return "Log in to view events you've saved."
+		}
+		return "No upcoming saved events. Open an event and tap I'm Interested."
+	}
+
+	return `No ${filter} events at this time. Check back soon!`
+}
 
 function formatEventDate(dateString: string): string {
 	const date = new Date(dateString)
@@ -193,6 +276,7 @@ const EventDescription = styled.p`
 const FilterToggle = styled.div`
 	display: flex;
 	justify-content: center;
+	flex-wrap: wrap;
 	gap: 1rem;
 	margin-bottom: 2rem;
 `
