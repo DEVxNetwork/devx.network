@@ -3,6 +3,7 @@ import styled from "styled-components"
 import { useState } from "react"
 import { supabaseClient } from "../../lib/supabaseClient"
 import { updateProfileCache } from "../../lib/profileCache"
+import { uploadAvatar } from "../../lib/uploadAvatar"
 import { PotionBackground } from "../components/PotionBackground"
 import { Nametag } from "../components/Nametag"
 import { TagCloudSection } from "../components/TagCloudSection"
@@ -61,22 +62,8 @@ export function ProfileDisplay({
 		setUploading(true)
 
 		try {
-			const fileExt = file.name.split(".").pop()
-			const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`
-			const filePath = `${fileName}`
-
-			const { error: uploadError } = await supabaseClient.storage
-				.from("avatars")
-				.upload(filePath, file)
-
-			if (uploadError) throw uploadError
-
-			const {
-				data: { publicUrl }
-			} = supabaseClient.storage.from("avatars").getPublicUrl(filePath)
-
-			return publicUrl
-		} catch (error: any) {
+			return await uploadAvatar(file)
+		} catch (error: unknown) {
 			console.error("Error uploading image:", error)
 			throw error
 		} finally {
