@@ -385,12 +385,12 @@ const TagPill = styled.div<{ $approved: boolean; $isDragging?: boolean; $dragOve
 	gap: 0.375rem;
 	padding: 0.375rem 0.75rem;
 	background-color: ${(props) =>
-		props.$approved ? "rgba(255, 255, 255, 0.2)" : "rgba(255, 243, 205, 0.3)"};
+		props.$approved ? "rgba(var(--foreground-rgb), 0.2)" : "rgba(255, 243, 205, 0.3)"};
 	border: 1px solid
-		${(props) => (props.$approved ? "rgba(255, 255, 255, 0.3)" : "rgba(255, 193, 7, 0.5)")};
+		${(props) => (props.$approved ? "rgba(var(--foreground-rgb), 0.3)" : "rgba(255, 193, 7, 0.5)")};
 	border-radius: 9999px;
 	font-size: 0.875rem;
-	color: white;
+	color: var(--foreground);
 	font-weight: 500;
 	transition: all 0.2s ease;
 	cursor: ${(props) => (props.draggable ? "grab" : "default")};
@@ -399,10 +399,10 @@ const TagPill = styled.div<{ $approved: boolean; $isDragging?: boolean; $dragOve
 	border-color: ${(props) =>
 		props.$dragOver
 			? props.$approved
-				? "rgba(255, 255, 255, 0.6)"
+				? "rgba(var(--foreground-rgb), 0.6)"
 				: "rgba(255, 193, 7, 0.8)"
 			: props.$approved
-				? "rgba(255, 255, 255, 0.3)"
+				? "rgba(var(--foreground-rgb), 0.3)"
 				: "rgba(255, 193, 7, 0.5)"};
 
 	&:hover {
@@ -418,7 +418,7 @@ const TagPill = styled.div<{ $approved: boolean; $isDragging?: boolean; $dragOve
 const RemoveButton = styled.button`
 	background: none;
 	border: none;
-	color: rgba(255, 255, 255, 0.7);
+	color: rgba(var(--foreground-rgb), 0.7);
 	cursor: pointer;
 	font-size: 1.2rem;
 	line-height: 1;
@@ -433,8 +433,8 @@ const RemoveButton = styled.button`
 	transition: all 0.2s ease;
 
 	&:hover {
-		color: white;
-		background-color: rgba(255, 255, 255, 0.2);
+		color: var(--foreground);
+		background-color: rgba(var(--foreground-rgb), 0.2);
 	}
 `
 
@@ -443,19 +443,19 @@ const AddPill = styled.button`
 	align-items: center;
 	gap: 0.375rem;
 	padding: 0.375rem 0.75rem;
-	background-color: rgba(255, 255, 255, 0.1);
-	border: 1px dashed rgba(255, 255, 255, 0.3);
+	background-color: rgba(var(--foreground-rgb), 0.1);
+	border: 1px dashed rgba(var(--foreground-rgb), 0.3);
 	border-radius: 9999px;
 	font-size: 0.875rem;
-	color: rgba(255, 255, 255, 0.7);
+	color: rgba(var(--foreground-rgb), 0.7);
 	font-weight: 500;
 	cursor: pointer;
 	transition: all 0.2s ease;
 
 	&:hover {
-		background-color: rgba(255, 255, 255, 0.15);
-		border-color: rgba(255, 255, 255, 0.5);
-		color: white;
+		background-color: rgba(var(--foreground-rgb), 0.15);
+		border-color: rgba(var(--foreground-rgb), 0.5);
+		color: var(--foreground);
 	}
 `
 
@@ -470,8 +470,8 @@ const InputPill = styled.div`
 	align-items: center;
 	gap: 0.375rem;
 	padding: 0.375rem 0.75rem;
-	background-color: rgba(255, 255, 255, 0.15);
-	border: 1px solid rgba(255, 255, 255, 0.3);
+	background-color: rgba(var(--foreground-rgb), 0.15);
+	border: 1px solid rgba(var(--foreground-rgb), 0.3);
 	border-radius: 9999px;
 	min-width: 120px;
 	position: relative;
@@ -481,7 +481,7 @@ const Input = styled.input`
 	background: transparent;
 	border: none;
 	outline: none;
-	color: white;
+	color: var(--foreground);
 	font-size: 0.875rem;
 	font-weight: 500;
 	font-family: inherit;
@@ -490,7 +490,7 @@ const Input = styled.input`
 	padding: 0;
 
 	&::placeholder {
-		color: rgba(255, 255, 255, 0.5);
+		color: rgba(var(--foreground-rgb), 0.5);
 	}
 
 	&:disabled {
@@ -502,7 +502,7 @@ const Input = styled.input`
 const SearchIndicator = styled.div`
 	position: absolute;
 	right: 0.75rem;
-	color: rgba(255, 255, 255, 0.5);
+	color: rgba(var(--foreground-rgb), 0.5);
 	font-size: 0.875rem;
 `
 
@@ -513,7 +513,7 @@ const SuggestionsList = styled.div`
 	right: 0;
 	background-color: rgba(0, 0, 0, 0.9);
 	backdrop-filter: blur(10px);
-	border: 1px solid rgba(255, 255, 255, 0.2);
+	border: 1px solid rgba(var(--foreground-rgb), 0.2);
 	border-radius: 0.5rem;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 	max-height: 200px;
@@ -525,12 +525,13 @@ const SuggestionItem = styled.div<{ $highlighted: boolean }>`
 	padding: 0.625rem 1rem;
 	cursor: pointer;
 	font-size: 0.875rem;
-	color: white;
-	background-color: ${(props) => (props.$highlighted ? "rgba(255, 255, 255, 0.1)" : "transparent")};
+	color: var(--foreground);
+	background-color: ${(props) =>
+		props.$highlighted ? "rgba(var(--foreground-rgb), 0.1)" : "transparent"};
 	transition: background-color 0.15s ease;
 
 	&:hover {
-		background-color: rgba(255, 255, 255, 0.1);
+		background-color: rgba(var(--foreground-rgb), 0.1);
 	}
 
 	&:first-child {
@@ -545,7 +546,7 @@ const SuggestionItem = styled.div<{ $highlighted: boolean }>`
 `
 
 const CreateItem = styled(SuggestionItem)`
-	color: rgba(255, 255, 255, 0.7);
+	color: rgba(var(--foreground-rgb), 0.7);
 	font-style: italic;
-	border-top: 1px solid rgba(255, 255, 255, 0.1);
+	border-top: 1px solid var(--border);
 `

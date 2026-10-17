@@ -34,7 +34,7 @@ const StyledRadio = styled.input.attrs({ type: "radio" })<{
 	height: ${(props) => (props.$size === "small" ? "1rem" : "1.25rem")};
 	border: 2px solid
 		${(props) =>
-			props.$variant === "secondary" ? "rgba(255, 255, 255, 0.3)" : "rgba(0, 0, 0, 0.3)"};
+			props.$variant === "secondary" ? "rgba(var(--foreground-rgb), 0.3)" : "rgba(0, 0, 0, 0.3)"};
 	border-radius: 50%;
 	background-color: transparent;
 	cursor: pointer;
@@ -45,7 +45,7 @@ const StyledRadio = styled.input.attrs({ type: "radio" })<{
 
 	&:hover {
 		border-color: ${(props) =>
-			props.$variant === "secondary" ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.5)"};
+			props.$variant === "secondary" ? "rgba(var(--foreground-rgb), 0.5)" : "rgba(0, 0, 0, 0.5)"};
 	}
 
 	&:checked {
@@ -64,7 +64,7 @@ const StyledRadio = styled.input.attrs({ type: "radio" })<{
 		width: ${(props) => (props.$size === "small" ? "0.375rem" : "0.5rem")};
 		height: ${(props) => (props.$size === "small" ? "0.375rem" : "0.5rem")};
 		border-radius: 50%;
-		background-color: white;
+		background-color: var(--foreground);
 	}
 
 	&:focus {

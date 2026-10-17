@@ -50,12 +50,12 @@ const HelpIconWrapper = styled.div`
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	color: rgba(255, 255, 255, 0.6);
+	color: rgba(var(--foreground-rgb), 0.6);
 	transition: color 0.2s ease;
 	flex-shrink: 0;
 
 	&:hover {
-		color: rgba(255, 255, 255, 0.9);
+		color: rgba(var(--foreground-rgb), 0.9);
 	}
 `
 
@@ -64,7 +64,7 @@ const Tooltip = styled.div<{ $minWidth?: string; $maxWidth?: string }>`
 	bottom: calc(100% + 8px);
 	right: 0;
 	background: rgba(0, 0, 0, 0.95);
-	color: rgba(255, 255, 255, 0.95);
+	color: rgba(var(--foreground-rgb), 0.95);
 	padding: 0.75rem 1rem;
 	border-radius: 8px;
 	font-size: 0.875rem;
@@ -76,7 +76,7 @@ const Tooltip = styled.div<{ $minWidth?: string; $maxWidth?: string }>`
 	z-index: 1000;
 	box-shadow:
 		0 4px 12px rgba(0, 0, 0, 0.4),
-		0 0 0 1px rgba(255, 255, 255, 0.1);
+		0 0 0 1px rgba(var(--foreground-rgb), 0.1);
 	pointer-events: auto;
 
 	&::after {

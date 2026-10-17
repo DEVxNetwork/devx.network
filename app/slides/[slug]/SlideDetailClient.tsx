@@ -76,7 +76,7 @@ function ShareIcon() {
 // Styled Components //
 
 const Main = styled.main`
-	color: white;
+	color: var(--foreground);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -139,7 +139,7 @@ const MetadataSection = styled.section`
 	max-width: 1200px;
 	width: 100%;
 	padding: 2rem;
-	background: rgba(255, 255, 255, 0.03);
+	background: rgba(var(--foreground-rgb), 0.03);
 	border-radius: 0.5rem;
 	backdrop-filter: blur(8px);
 `
@@ -159,20 +159,20 @@ const MetaInfo = styled.div`
 
 const Author = styled.p`
 	font-size: 1.125rem;
-	color: rgba(255, 255, 255, 0.7);
+	color: rgba(var(--foreground-rgb), 0.7);
 	margin: 0;
 `
 
 const DateText = styled.p`
 	font-size: 1rem;
-	color: rgba(255, 255, 255, 0.5);
+	color: rgba(var(--foreground-rgb), 0.5);
 	margin: 0;
 `
 
 const Description = styled.p`
 	font-size: 1.125rem;
 	line-height: 1.8;
-	color: rgba(255, 255, 255, 0.9);
+	color: rgba(var(--foreground-rgb), 0.9);
 	font-weight: 300;
 	margin: 0.5rem 0;
 

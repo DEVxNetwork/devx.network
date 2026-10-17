@@ -39,7 +39,7 @@ export default function SlidesListClient({ slides }: SlidesListClientProps) {
 // Styled Components //
 
 const Main = styled.main`
-	color: white;
+	color: var(--foreground);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -80,7 +80,7 @@ const SectionTitle = styled.h1`
 
 const EmptyState = styled.p`
 	font-size: 1.125rem;
-	color: rgba(255, 255, 255, 0.7);
+	color: rgba(var(--foreground-rgb), 0.7);
 `
 
 const SlidesList = styled.div`
@@ -94,7 +94,7 @@ const SlideCard = styled(Link)`
 	flex-direction: column;
 	gap: 0.5rem;
 	padding: 1.5rem;
-	background: rgba(255, 255, 255, 0.03);
+	background: rgba(var(--foreground-rgb), 0.03);
 	border-radius: 0.5rem;
 	text-decoration: none;
 	color: inherit;
@@ -113,13 +113,13 @@ const SlideTitle = styled.h2`
 
 const SlideAuthor = styled.p`
 	font-size: 1rem;
-	color: rgba(255, 255, 255, 0.6);
+	color: rgba(var(--foreground-rgb), 0.6);
 	margin: 0;
 `
 
 const SlideDescription = styled.p`
 	font-size: 1rem;
 	line-height: 1.6;
-	color: rgba(255, 255, 255, 0.8);
+	color: rgba(var(--foreground-rgb), 0.8);
 	margin: 0.5rem 0 0;
 `

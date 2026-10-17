@@ -28,7 +28,7 @@ export const PageContainer = ({
 const StyledContainer = styled.div<{
 	$alignItems: "center" | "stretch" | "flex-start" | "flex-end"
 }>`
-	background-color: rgba(21, 21, 28, 0.75);
+	background-color: var(--surface);
 	backdrop-filter: blur(10px);
 	padding: 3rem;
 	border-radius: 1rem;

@@ -19,7 +19,7 @@ export function ProfileNotFound() {
 }
 
 const BackgroundContainer = styled.section`
-	background-color: #0a0a0a;
+	background-color: var(--background);
 	position: fixed;
 	height: 100vh;
 	width: 100vw;
@@ -49,12 +49,12 @@ const NotFoundContent = styled.div`
 const NotFoundTitle = styled.h1`
 	font-size: 6rem;
 	font-weight: 700;
-	color: white;
+	color: var(--foreground);
 	margin: 0;
 `
 
 const NotFoundText = styled.p`
-	color: rgba(255, 255, 255, 0.7);
+	color: rgba(var(--foreground-rgb), 0.7);
 	font-size: 1.25rem;
 	margin: 0;
 `

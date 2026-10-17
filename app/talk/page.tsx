@@ -82,10 +82,10 @@ const FormContainer = styled.form`
 	max-width: 48rem;
 	margin: 0 auto;
 	padding: 2rem;
-	background-color: rgba(255, 255, 255, 0.05);
+	background-color: rgba(var(--foreground-rgb), 0.05);
 	backdrop-filter: blur(10px);
 	border-radius: 0.5rem;
-	border: 1px solid rgba(255, 255, 255, 0.1);
+	border: 1px solid var(--border);
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
@@ -99,8 +99,8 @@ const TextArea = styled.textarea`
 	padding: 0.75rem;
 	border-radius: 0.375rem;
 	background-color: rgba(0, 0, 0, 0.8);
-	color: white;
-	border: 1px solid rgba(255, 255, 255, 0.2);
+	color: var(--foreground);
+	border: 1px solid rgba(var(--foreground-rgb), 0.2);
 	font-size: 1rem;
 	min-height: 8rem;
 	resize: vertical;
@@ -114,7 +114,7 @@ const TextArea = styled.textarea`
 	}
 
 	&::placeholder {
-		color: rgba(255, 255, 255, 0.5);
+		color: rgba(var(--foreground-rgb), 0.5);
 	}
 
 	&:disabled {
@@ -150,7 +150,7 @@ const Button = styled.button`
 
 const SubmitButton = styled(Button)`
 	background: linear-gradient(135deg, rgba(147, 51, 234, 0.8), rgba(99, 102, 241, 0.8));
-	color: white;
+	color: var(--foreground);
 
 	&:hover:not(:disabled) {
 		background: linear-gradient(135deg, rgba(147, 51, 234, 1), rgba(99, 102, 241, 1));
@@ -170,12 +170,12 @@ const ResetButton = styled.input`
 	font-weight: 500;
 	transition: all 0.2s;
 	cursor: pointer;
-	background-color: rgba(255, 255, 255, 0.1);
-	color: white;
-	border: 1px solid rgba(255, 255, 255, 0.2);
+	background-color: rgba(var(--foreground-rgb), 0.1);
+	color: var(--foreground);
+	border: 1px solid rgba(var(--foreground-rgb), 0.2);
 
 	&:hover:not(:disabled) {
-		background-color: rgba(255, 255, 255, 0.15);
+		background-color: rgba(var(--foreground-rgb), 0.15);
 		transform: translateY(-1px);
 	}
 

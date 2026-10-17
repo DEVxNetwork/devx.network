@@ -33,7 +33,7 @@ export default function RootLayout({
 				<link rel="preconnect" href="https://fonts.googleapis.com" />
 				<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 				<link
-					href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;700;900&display=swap"
+					href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;500;600;700;900&display=swap"
 					rel="stylesheet"
 				/>
 				<script async src="https://www.googletagmanager.com/gtag/js?id=G-L0X5333Q2X"></script>

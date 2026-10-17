@@ -29,10 +29,10 @@ const SuccessContainer = styled.div`
 	max-width: 30rem;
 	margin: 0 auto;
 	padding: 3rem;
-	background-color: rgba(255, 255, 255, 0.05);
+	background-color: rgba(var(--foreground-rgb), 0.05);
 	backdrop-filter: blur(10px);
 	border-radius: 0.5rem;
-	border: 1px solid rgba(255, 255, 255, 0.1);
+	border: 1px solid var(--border);
 	text-align: center;
 `
 
@@ -44,7 +44,7 @@ const SuccessTitle = styled.h1`
 `
 
 const SuccessMessage = styled.p`
-	color: #d1d5db;
+	color: var(--muted-foreground);
 	font-size: 1.125rem;
 	margin-bottom: 2rem;
 	line-height: 1.6;
@@ -54,7 +54,7 @@ const BackLink = styled.a`
 	display: inline-block;
 	padding: 0.75rem 1.5rem;
 	background-color: #8b5cf6;
-	color: white;
+	color: var(--foreground);
 	border-radius: 0.375rem;
 	text-decoration: none;
 	font-weight: 500;

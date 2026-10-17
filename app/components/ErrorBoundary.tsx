@@ -33,7 +33,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 			// Render fallback UI, default to black background for WebGL crashes
 			return (
 				this.props.fallback || (
-					<div style={{ backgroundColor: "black", width: "100%", height: "100%" }} />
+					<div style={{ backgroundColor: "var(--background)", width: "100%", height: "100%" }} />
 				)
 			)
 		}

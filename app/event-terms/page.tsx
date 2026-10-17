@@ -8,7 +8,9 @@ export default function EventTerms() {
 		<>
 			<BackgroundContainer>
 				<ErrorBoundary
-					fallback={<div style={{ backgroundColor: "black", width: "100%", height: "100%" }} />}
+					fallback={
+						<div style={{ backgroundColor: "var(--background)", width: "100%", height: "100%" }} />
+					}
 				>
 					<PotionBackground />
 				</ErrorBoundary>
@@ -153,7 +155,7 @@ export default function EventTerms() {
 }
 
 const BackgroundContainer = styled.section`
-	background-color: #0a0a0a;
+	background-color: var(--background);
 	position: fixed;
 	height: 100vh;
 	width: 100vw;
@@ -168,7 +170,7 @@ const BackgroundContainer = styled.section`
 const Main = styled.main`
 	position: relative;
 	z-index: 1;
-	color: white;
+	color: var(--foreground);
 `
 
 const TermsSection = styled.section`
@@ -190,7 +192,7 @@ const Title = styled.h1`
 	font-weight: 700;
 	margin-bottom: 1.5rem;
 	text-align: center;
-	color: white;
+	color: var(--foreground);
 `
 
 const IntroText = styled.p`
@@ -198,7 +200,7 @@ const IntroText = styled.p`
 	line-height: 1.7;
 	text-align: center;
 	margin-bottom: 3rem;
-	color: rgba(255, 255, 255, 0.85);
+	color: rgba(var(--foreground-rgb), 0.85);
 
 	@media (max-width: 768px) {
 		font-size: 1rem;
@@ -214,7 +216,7 @@ const SectionTitle = styled.h2`
 	font-size: 1.5rem;
 	font-weight: 600;
 	margin-bottom: 1rem;
-	color: white;
+	color: var(--foreground);
 
 	@media (max-width: 768px) {
 		font-size: 1.375rem;
@@ -225,7 +227,7 @@ const Paragraph = styled.p`
 	font-size: 1.0625rem;
 	line-height: 1.8;
 	margin-bottom: 1rem;
-	color: rgba(255, 255, 255, 0.8);
+	color: rgba(var(--foreground-rgb), 0.8);
 
 	&:last-child {
 		margin-bottom: 0;
@@ -239,7 +241,7 @@ const Paragraph = styled.p`
 
 const List = styled.ul`
 	margin: 1rem 0 0 1.5rem;
-	color: rgba(255, 255, 255, 0.8);
+	color: rgba(var(--foreground-rgb), 0.8);
 `
 
 const ListItem = styled.li`

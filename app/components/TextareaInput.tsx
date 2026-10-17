@@ -38,22 +38,23 @@ const StyledTextarea = styled.textarea<{
 	box-sizing: border-box;
 	resize: vertical;
 	background-color: ${(props) => (props.$variant === "primary" ? "white" : "transparent")};
-	color: ${(props) => (props.$variant === "primary" ? "black" : "white")};
+	color: ${(props) => (props.$variant === "primary" ? "black" : "var(--foreground)")};
 	border: ${(props) =>
 		props.$variant === "secondary"
-			? "1px solid rgba(255, 255, 255, 0.3)"
+			? "1px solid rgba(var(--foreground-rgb), 0.3)"
 			: "1px solid rgba(0, 0, 0, 0.2)"};
 
 	&:focus {
 		outline: none;
-		border-color: ${(props) => (props.$variant === "secondary" ? "white" : "rgba(0, 0, 0, 0.4)")};
+		border-color: ${(props) =>
+			props.$variant === "secondary" ? "var(--foreground)" : "rgba(0, 0, 0, 0.4)"};
 		background-color: ${(props) =>
-			props.$variant === "primary" ? "white" : "rgba(255, 255, 255, 0.05)"};
+			props.$variant === "primary" ? "white" : "rgba(var(--foreground-rgb), 0.05)"};
 	}
 
 	&::placeholder {
 		color: ${(props) =>
-			props.$variant === "primary" ? "rgba(0, 0, 0, 0.5)" : "rgba(255, 255, 255, 0.5)"};
+			props.$variant === "primary" ? "rgba(0, 0, 0, 0.5)" : "rgba(var(--foreground-rgb), 0.5)"};
 	}
 
 	&:disabled {

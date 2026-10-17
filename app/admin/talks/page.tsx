@@ -403,7 +403,7 @@ export default function AdminTalks() {
 // Styled Components //
 
 const BackgroundContainer = styled.section`
-	background-color: #0a0a0a;
+	background-color: var(--background);
 	position: fixed;
 	height: 100vh;
 	width: 100vw;
@@ -434,12 +434,12 @@ const PageHeader = styled.div`
 const Title = styled.h1`
 	font-size: 2rem;
 	font-weight: 700;
-	color: white;
+	color: var(--foreground);
 	margin: 0;
 `
 
 const Subtitle = styled.p`
-	color: rgba(255, 255, 255, 0.6);
+	color: rgba(var(--foreground-rgb), 0.6);
 	margin: 0.5rem 0 0 0;
 `
 
@@ -450,7 +450,7 @@ const FilterBar = styled.div`
 `
 
 const FilterLabel = styled.span`
-	color: rgba(255, 255, 255, 0.7);
+	color: rgba(var(--foreground-rgb), 0.7);
 	font-size: 0.875rem;
 	font-weight: 600;
 `
@@ -470,10 +470,11 @@ const FilterButton = styled.button<{ $active: boolean; $color?: string }>`
 	transition: all 0.2s ease;
 	text-transform: capitalize;
 	border: 1px solid
-		${(props) => (props.$active ? props.$color || "white" : "rgba(255, 255, 255, 0.2)")};
+		${(props) => (props.$active ? props.$color || "white" : "rgba(var(--foreground-rgb), 0.2)")};
 	background-color: ${(props) =>
 		props.$active ? (props.$color || "white") + "22" : "transparent"};
-	color: ${(props) => (props.$active ? props.$color || "white" : "rgba(255, 255, 255, 0.6)")};
+	color: ${(props) =>
+		props.$active ? props.$color || "white" : "rgba(var(--foreground-rgb), 0.6)"};
 
 	&:hover {
 		border-color: ${(props) => props.$color || "white"};
@@ -488,10 +489,10 @@ const TalkList = styled.div`
 `
 
 const TalkCard = styled.div`
-	background-color: rgba(21, 21, 28, 0.75);
+	background-color: var(--surface);
 	-webkit-backdrop-filter: blur(20px);
 	backdrop-filter: blur(20px);
-	border: 1px solid rgba(255, 255, 255, 0.1);
+	border: 1px solid var(--border);
 	border-radius: 0.75rem;
 	padding: 1.5rem;
 	display: flex;
@@ -509,7 +510,7 @@ const CardHeader = styled.div`
 const TalkTitle = styled.h2`
 	font-size: 1.125rem;
 	font-weight: 600;
-	color: white;
+	color: var(--foreground);
 	margin: 0;
 	flex: 1;
 `
@@ -612,7 +613,7 @@ const StatusPillSelect = styled.select<{ $color: string; $widthCh: number }>`
 
 	option {
 		background-color: #1a1a2e;
-		color: white;
+		color: var(--foreground);
 	}
 `
 
@@ -632,7 +633,7 @@ const MetaRow = styled.div`
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
 	gap: 0.75rem;
-	background-color: rgba(255, 255, 255, 0.03);
+	background-color: rgba(var(--foreground-rgb), 0.03);
 	border-radius: 0.75rem;
 	padding: 0.75rem;
 
@@ -654,14 +655,14 @@ const MetaItem = styled.div`
 const MetaLabel = styled.span`
 	font-size: 0.6875rem;
 	font-weight: 600;
-	color: rgba(255, 255, 255, 0.5);
+	color: rgba(var(--foreground-rgb), 0.5);
 	text-transform: uppercase;
 	letter-spacing: 0.05em;
 `
 
 const MetaValue = styled.span`
 	font-size: 0.875rem;
-	color: rgba(255, 255, 255, 0.9);
+	color: rgba(var(--foreground-rgb), 0.9);
 	display: flex;
 	align-items: center;
 	gap: 0.5rem;
@@ -678,7 +679,7 @@ const HandleLink = styled.a`
 `
 
 const Synopsis = styled.p`
-	color: rgba(255, 255, 255, 0.7);
+	color: rgba(var(--foreground-rgb), 0.7);
 	font-size: 0.875rem;
 	line-height: 1.6;
 	margin: 0;
@@ -687,7 +688,7 @@ const Synopsis = styled.p`
 
 const SlidesInfo = styled.div`
 	font-size: 0.8125rem;
-	color: rgba(255, 255, 255, 0.5);
+	color: rgba(var(--foreground-rgb), 0.5);
 `
 
 const SlidesLink = styled.a`
@@ -732,13 +733,13 @@ const ErrorMessage = styled.div`
 
 const EmptyState = styled.div`
 	text-align: center;
-	color: rgba(255, 255, 255, 0.5);
+	color: rgba(var(--foreground-rgb), 0.5);
 	padding: 3rem;
 	font-size: 1rem;
 `
 
 const LoadingText = styled.div`
-	color: white;
+	color: var(--foreground);
 	font-size: 1.25rem;
 	text-align: center;
 	margin-top: 4rem;

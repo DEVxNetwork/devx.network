@@ -287,7 +287,7 @@ export const PotionBackground = () => {
 }
 
 const BackgroundContainer = styled.div`
-	background-color: black;
+	background-color: var(--background);
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
@@ -305,8 +305,13 @@ const Canvas = styled.canvas<{
 }>`
 	display: block;
 	position: absolute;
-	width: ${(props) => props.$width}px
-	height: ${(props) => props.$height}px
-	top: ${(props) => props.$top}px
-	left: ${(props) => props.$left}px
+	width: ${(props) => props.$width}px;
+	height: ${(props) => props.$height}px;
+	top: ${(props) => props.$top}px;
+	left: ${(props) => props.$left}px;
+	filter: invert(1);
+
+	@media (prefers-color-scheme: dark) {
+		filter: none;
+	}
 `

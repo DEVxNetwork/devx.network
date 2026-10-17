@@ -134,7 +134,11 @@ export default function EventDetailClient() {
 			<>
 				<BackgroundContainer>
 					<ErrorBoundary
-						fallback={<div style={{ backgroundColor: "black", width: "100%", height: "100%" }} />}
+						fallback={
+							<div
+								style={{ backgroundColor: "var(--background)", width: "100%", height: "100%" }}
+							/>
+						}
 					>
 						<PotionBackground />
 					</ErrorBoundary>
@@ -159,7 +163,9 @@ export default function EventDetailClient() {
 		<>
 			<BackgroundContainer>
 				<ErrorBoundary
-					fallback={<div style={{ backgroundColor: "black", width: "100%", height: "100%" }} />}
+					fallback={
+						<div style={{ backgroundColor: "var(--background)", width: "100%", height: "100%" }} />
+					}
 				>
 					<PotionBackground />
 				</ErrorBoundary>
@@ -350,7 +356,7 @@ function formatEventDateTime(startAt: string, endAt: string): string {
 // Styled Components //
 
 const BackgroundContainer = styled.section`
-	background-color: #0a0a0a;
+	background-color: var(--background);
 	position: fixed;
 	height: 100vh;
 	width: 100vw;
@@ -377,7 +383,7 @@ const Container = styled.div`
 	@media (min-width: 1132px) {
 		margin-inline: auto;
 	}
-	background-color: rgba(21, 21, 28, 0.75);
+	background-color: var(--surface);
 	backdrop-filter: blur(10px);
 	border-radius: 0.5rem;
 	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -444,22 +450,22 @@ const Header = styled.header`
 const Title = styled.h1`
 	font-size: 2.25rem;
 	font-weight: bold;
-	color: white;
+	color: var(--foreground);
 	margin-bottom: 0.5rem;
 `
 
 const DateTime = styled.p`
 	font-size: 1.125rem;
-	color: #9ca3af;
+	color: var(--subtle-foreground);
 	margin-bottom: 1rem;
 `
 
 const SectionTitle = styled.h2`
 	font-size: 1.5rem;
 	font-weight: bold;
-	color: white;
+	color: var(--foreground);
 	margin-bottom: 1rem;
-	border-bottom: 1px solid #374151;
+	border-bottom: 1px solid var(--border);
 	padding-bottom: 0.75rem;
 `
 
@@ -469,7 +475,7 @@ const LocationSection = styled.section`
 
 const LocationText = styled.p`
 	font-size: 1rem;
-	color: #d1d5db;
+	color: var(--muted-foreground);
 	margin-bottom: 1rem;
 `
 
@@ -496,7 +502,7 @@ const DescriptionSection = styled.section`
 
 const Description = styled.div`
 	font-size: 1rem;
-	color: #d1d5db;
+	color: var(--muted-foreground);
 	line-height: 1.5;
 	word-break: break-word;
 
@@ -601,7 +607,7 @@ const AttendeeLink = styled.a`
 `
 
 const RegistrationSection = styled.section`
-	background-color: rgba(255, 255, 255, 0.01);
+	background-color: rgba(var(--foreground-rgb), 0.01);
 	backdrop-filter: blur(32px);
 	box-shadow: 4px 8px 8px 0 rgba(0, 0, 0, 0.05);
 	padding: 1.5rem;
@@ -633,18 +639,18 @@ const OneClickRSVPContainer = styled.div`
 
 const StoredInfoDisplay = styled.div`
 	font-size: 0.875rem;
-	color: #d1d5db;
+	color: var(--muted-foreground);
 	text-align: center;
 	line-height: 1.6;
 `
 
 const NameValue = styled.span`
-	color: white;
+	color: var(--foreground);
 	font-weight: 900;
 `
 
 const EmailValue = styled.span`
-	color: #aaa;
+	color: var(--subtle-foreground);
 `
 
 const ClearUserInfoLink = styled.a`
@@ -662,7 +668,7 @@ const ClearUserInfoLink = styled.a`
 
 const LoadingMessage = styled.p`
 	text-align: center;
-	color: #9ca3af;
+	color: var(--subtle-foreground);
 	font-size: 1.125rem;
 	padding: 4rem 2rem;
 `

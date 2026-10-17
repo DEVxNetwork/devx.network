@@ -388,7 +388,7 @@ export default function Login() {
 }
 
 const BackgroundContainer = styled.section`
-	background-color: #0a0a0a;
+	background-color: var(--background);
 	position: fixed;
 	height: 100vh;
 	width: 100vw;
@@ -408,12 +408,12 @@ const Container = styled.main`
 const Title = styled.h1`
 	font-size: 2rem;
 	font-weight: 700;
-	color: white;
+	color: var(--foreground);
 	margin: 0;
 `
 
 const Subtitle = styled.p`
-	color: rgba(255, 255, 255, 0.7);
+	color: rgba(var(--foreground-rgb), 0.7);
 	margin: -1rem 0 0 0;
 	text-align: center;
 `
@@ -469,7 +469,7 @@ const InputGroup = styled.div`
 `
 
 const PasswordHelpText = styled.p`
-	color: rgba(255, 255, 255, 0.5);
+	color: rgba(var(--foreground-rgb), 0.5);
 	font-size: 0.75rem;
 	margin: 0;
 	line-height: 1.4;
@@ -482,7 +482,7 @@ const SuccessContainer = styled.div`
 const BackButton = styled.button`
 	background: none;
 	border: none;
-	color: rgba(255, 255, 255, 0.6);
+	color: rgba(var(--foreground-rgb), 0.6);
 	font-size: 0.875rem;
 	cursor: pointer;
 	padding: 0.5rem;
@@ -491,14 +491,14 @@ const BackButton = styled.button`
 	font-family: inherit;
 
 	&:hover {
-		color: rgba(255, 255, 255, 0.9);
+		color: rgba(var(--foreground-rgb), 0.9);
 	}
 `
 
 const ForgotPasswordButton = styled.button`
 	background: none;
 	border: none;
-	color: rgba(255, 255, 255, 0.6);
+	color: rgba(var(--foreground-rgb), 0.6);
 	cursor: pointer;
 	padding: 0;
 	margin-top: -0.5rem;
@@ -508,7 +508,7 @@ const ForgotPasswordButton = styled.button`
 	text-align: right;
 
 	&:hover:not(:disabled) {
-		color: rgba(255, 255, 255, 0.9);
+		color: rgba(var(--foreground-rgb), 0.9);
 	}
 
 	&:disabled {

@@ -149,7 +149,7 @@ export default function ResetPasswordPage() {
 }
 
 const BackgroundContainer = styled.section`
-	background-color: #0a0a0a;
+	background-color: var(--background);
 	position: fixed;
 	height: 100vh;
 	width: 100vw;
@@ -169,12 +169,12 @@ const Container = styled.main`
 const Title = styled.h1`
 	font-size: 2rem;
 	font-weight: 700;
-	color: white;
+	color: var(--foreground);
 	margin: 0;
 `
 
 const Subtitle = styled.p`
-	color: rgba(255, 255, 255, 0.7);
+	color: rgba(var(--foreground-rgb), 0.7);
 	margin: -1rem 0 0 0;
 	text-align: center;
 `
