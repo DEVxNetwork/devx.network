@@ -45,12 +45,10 @@ const colorGroups: ColorGroup[] = [
 	{
 		title: "From the x",
 		swatches: [
-			{ name: "Blue", hex: "#2454e6", note: "In the x" },
-			{ name: "Yellow", hex: "#f9e214" },
-			{ name: "Magenta", hex: "#f010d7" },
-			{ name: "Cyan", hex: "#3ce2c8" },
-			{ name: "Orange", hex: "#ef5b30" },
-			{ name: "Pink", hex: "#e52a51" }
+			{ name: "Yellow", hex: "#ffe200", note: "Ground of the x" },
+			{ name: "Magenta", hex: "#ff22d0" },
+			{ name: "Cyan", hex: "#2aefd2" },
+			{ name: "Orange", hex: "#ff6b2d" }
 		]
 	}
 ]
@@ -85,8 +83,8 @@ export function BrandPage() {
 					))}
 				</MarkGrid>
 				<Note>
-					White letters, black edge, so they still show up on a white page. The stripes stay. A #, a
-					&gt;, an =, and a + sit on top of them.
+					White letters, black edge, so they still show up on a white page. The x blends yellow,
+					magenta, cyan, and orange.
 				</Note>
 			</Section>
 

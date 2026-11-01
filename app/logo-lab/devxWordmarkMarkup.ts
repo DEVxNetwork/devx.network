@@ -1,6 +1,6 @@
 // The header wordmark (public/images/logo/devx-thick.svg), split so the X can move.
 // letters stay put. x-shadow is the purple extrusion. x-face is the colored X and its outline.
-// x-pattern is the stripe fill. On top of it: # in cyan, > in pink, = in paper, + in blue.
+// x-pattern is the hot glow. Gradient ids share the %%CLIP%% prefix.
 // The outer group flips Y, so a positive local translateY goes up on screen.
 
 //
@@ -21,22 +21,31 @@ export const devxWordmarkMarkup = `
 <clipPath id="%%CLIP%%" clipPathUnits="userSpaceOnUse"><path d="M-15 0L200 363L7 686L250 686L345 511L349 511L444 686L669 686L475 362L690 0L446 0L330 213L326 213L211 0Z"/></clipPath>
 <g clip-path="url(#%%CLIP%%)">
 <g class="x-pattern">
-<rect x="-80" y="-40" width="900" height="820" fill="#2454e6"/>
-<polygon points="-40,760 420,760 80,-40 -40,-40" fill="#f9e214"/>
-<polygon points="200,760 520,760 260,-40 40,-40" fill="#f010d7"/>
-<polygon points="430,760 780,760 560,-40 300,-40" fill="#3ce2c8"/>
-<polygon points="620,760 860,760 760,-40 540,-40" fill="#ef5b30"/>
-<g fill="none" stroke-linecap="round" stroke-linejoin="round">
-<line x1="212" y1="316" x2="452" y2="316" stroke="#ffffff" stroke-width="46"/>
-<line x1="212" y1="244" x2="452" y2="244" stroke="#ffffff" stroke-width="46"/>
-<polyline points="429,571 515,506 429,441" stroke="#e52a51" stroke-width="42"/>
-<line x1="416" y1="128" x2="576" y2="128" stroke="#2454e6" stroke-width="50"/>
-<line x1="496" y1="48" x2="496" y2="208" stroke="#2454e6" stroke-width="50"/>
-<line x1="196" y1="592" x2="174" y2="468" stroke="#3ce2c8" stroke-width="40"/>
-<line x1="258" y1="592" x2="236" y2="468" stroke="#3ce2c8" stroke-width="40"/>
-<line x1="156" y1="552" x2="292" y2="552" stroke="#3ce2c8" stroke-width="40"/>
-<line x1="152" y1="500" x2="288" y2="500" stroke="#3ce2c8" stroke-width="40"/>
-</g>
+<rect x="-180" y="-140" width="1100" height="1040" fill="#ffe200"/>
+<radialGradient id="%%CLIP%%-tr" gradientUnits="userSpaceOnUse" cx="560" cy="600" r="460">
+	<stop offset="0" stop-color="#ff22d0"/>
+	<stop offset="0.38" stop-color="#ff22d0"/>
+	<stop offset="1" stop-color="#ff22d0" stop-opacity="0"/>
+</radialGradient>
+<circle cx="560" cy="600" r="460" fill="url(#%%CLIP%%-tr)"/>
+<radialGradient id="%%CLIP%%-bl" gradientUnits="userSpaceOnUse" cx="110" cy="100" r="450">
+	<stop offset="0" stop-color="#2aefd2"/>
+	<stop offset="0.38" stop-color="#2aefd2"/>
+	<stop offset="1" stop-color="#2aefd2" stop-opacity="0"/>
+</radialGradient>
+<circle cx="110" cy="100" r="450" fill="url(#%%CLIP%%-bl)"/>
+<radialGradient id="%%CLIP%%-br" gradientUnits="userSpaceOnUse" cx="570" cy="100" r="440">
+	<stop offset="0" stop-color="#ff6b2d"/>
+	<stop offset="0.38" stop-color="#ff6b2d"/>
+	<stop offset="1" stop-color="#ff6b2d" stop-opacity="0"/>
+</radialGradient>
+<circle cx="570" cy="100" r="440" fill="url(#%%CLIP%%-br)"/>
+<radialGradient id="%%CLIP%%-tl" gradientUnits="userSpaceOnUse" cx="150" cy="590" r="420">
+	<stop offset="0" stop-color="#ffe200"/>
+	<stop offset="0.38" stop-color="#ffe200"/>
+	<stop offset="1" stop-color="#ffe200" stop-opacity="0"/>
+</radialGradient>
+<circle cx="150" cy="590" r="420" fill="url(#%%CLIP%%-tl)"/>
 </g>
 </g>
 <path class="x-stroke" d="M-15 0L200 363L7 686L250 686L345 511L349 511L444 686L669 686L475 362L690 0L446 0L330 213L326 213L211 0Z" fill="none" stroke="#181818" stroke-width="45" stroke-linejoin="round" stroke-linecap="round"/>

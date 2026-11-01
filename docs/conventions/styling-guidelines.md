@@ -170,7 +170,8 @@ The site uses one palette, sampled from the DEVxSD lockup. Tokens live in `src/s
 - Paper is `--background` (`#ffffff`). Ink is `--foreground` (`#181818`).
 - Primary colors are paper, ink, and the purple `--extrusion` / `--accent` / `--accent-display` (`#5010a0`). Use it for the logo, rules, seams, display, and highlights.
 - `#5010a0` reads on paper, so links on paper use it too. On an ink background, text uses `#9670c6` (the same purple, lifted) and type that sits on the purple is white.
-- The x has its own colors: `--pop-blue` (`#2454e6`), `--pop-yellow` (`#f9e214`), `--pop-magenta` (`#f010d7`), `--pop-cyan` (`#3ce2c8`), `--pop-orange` (`#ef5b30`), and `--pop-pink` (`#e52a51`).
+- Pop colors season events: `--pop-blue` (`#2454e6`), `--pop-yellow` (`#f9e214`), `--pop-magenta` (`#f010d7`), `--pop-cyan` (`#3ce2c8`), `--pop-orange` (`#ef5b30`), and `--pop-pink` (`#e52a51`).
+- The x face is its own four, blended: yellow `#ffe200`, magenta `#ff22d0`, cyan `#2aefd2`, orange `#ff6b2d`.
 - Buttons stay ink and paper.
 - The header and the menu stay on paper in both color schemes. The wordmarks are the white reverse; the black border keeps them readable on paper.
 

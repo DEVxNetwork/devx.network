@@ -1,7 +1,6 @@
 "use client"
 import { styled } from "styled-components"
-import { monthlyHeadline } from "../content/community"
-import { formatPublicWhen, gatheringPlace, type PublicGathering } from "../content/gatherings"
+import { formatPublicWhen, type PublicGathering } from "../content/gatherings"
 import { Link } from "./Link"
 
 //
@@ -17,6 +16,7 @@ export type AnnouncementBarProps = {
 //
 
 const PACIFIC = "America/Los_Angeles"
+const MONTHLY_NAME = "DEVx Monthly"
 
 //
 // Components
@@ -27,7 +27,7 @@ export function AnnouncementBar({ gathering }: AnnouncementBarProps) {
 	const copy = announcementCopy(gathering)
 
 	return (
-		<Bar href={href} aria-label={`${copy.statement} RSVP Now.`}>
+		<Bar href={href} aria-label={`${copy.statement}. RSVP Now.`}>
 			<Statement>{copy.statement}</Statement>
 			<Brief aria-hidden="true">{copy.brief}</Brief>
 			<Cta>RSVP Now</Cta>
@@ -100,12 +100,10 @@ const Brief = styled.span`
 //
 
 function announcementCopy(gathering: PublicGathering): { statement: string; brief: string } {
-	const headline = monthlyHeadline(gathering.name)
 	const when = formatPublicWhen(gathering)
-	const place = gatheringPlace(gathering)
 	return {
-		statement: `${headline} is ${when.day} at ${place}.`,
-		brief: `${headline} is ${shortDay(gathering)}.`
+		statement: `${MONTHLY_NAME} · ${when.day}`,
+		brief: `${MONTHLY_NAME} · ${shortDay(gathering)}`
 	}
 }
 
