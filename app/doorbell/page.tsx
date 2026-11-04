@@ -7,7 +7,9 @@ import Link from "next/link"
 import { PotionBackground } from "../components/PotionBackground"
 import { ErrorBoundary } from "../components/ErrorBoundary"
 import { Button } from "../components/Button"
+import { Modal } from "../components/Modal"
 import { supabaseClient } from "@/lib/supabaseClient"
+import { siteConfig } from "../siteConfig"
 import eventsData from "../data/events.json"
 import type { LumaEvent } from "../services/luma"
 
@@ -15,9 +17,12 @@ import type { LumaEvent } from "../services/luma"
 
 export default function Doorbell() {
 	const [isRinging, setIsRinging] = useState(false)
+	const [isAwaitingAck, setIsAwaitingAck] = useState(false)
 	const [ringCount, setRingCount] = useState(0)
 	const channelRef = useRef<RealtimeChannel | null>(null)
 	const lastRingIdRef = useRef<string | null>(null)
+	const defaultTitleRef = useRef("")
+	const titleIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
 	const nearestEvent = useMemo(() => {
 		const events = eventsData as LumaEvent[]
@@ -34,10 +39,43 @@ export default function Doorbell() {
 		}, null)
 	}, [])
 
+	const stopTitleCycle = useCallback(() => {
+		if (titleIntervalRef.current !== null) {
+			clearInterval(titleIntervalRef.current)
+			titleIntervalRef.current = null
+		}
+
+		if (defaultTitleRef.current) {
+			document.title = defaultTitleRef.current
+		}
+	}, [])
+
+	const acknowledgeRing = useCallback(() => {
+		setIsAwaitingAck(false)
+		stopTitleCycle()
+	}, [stopTitleCycle])
+
+	const startRingAlert = useCallback(() => {
+		if (!defaultTitleRef.current) {
+			defaultTitleRef.current = document.title || siteConfig.title
+		}
+
+		setIsAwaitingAck(true)
+		stopTitleCycle()
+
+		let showAlertTitle = true
+		document.title = RING_ALERT_TITLE
+		titleIntervalRef.current = setInterval(() => {
+			showAlertTitle = !showAlertTitle
+			document.title = showAlertTitle ? RING_ALERT_TITLE : defaultTitleRef.current
+		}, TITLE_CYCLE_MS)
+	}, [stopTitleCycle])
+
 	const triggerLocalRing = useCallback(() => {
 		playDoorbellSound()
 		setIsRinging(true)
-	}, [])
+		startRingAlert()
+	}, [startRingAlert])
 
 	const broadcastRing = useCallback(async (ringId: string) => {
 		if (!channelRef.current) {
@@ -109,6 +147,39 @@ export default function Doorbell() {
 		}
 	}, [isRinging])
 
+	useEffect(() => {
+		if (!isAwaitingAck) {
+			return
+		}
+
+		const handleBackInView = () => {
+			if (document.visibilityState === "visible") {
+				stopTitleCycle()
+			}
+		}
+
+		document.addEventListener("visibilitychange", handleBackInView)
+		window.addEventListener("focus", handleBackInView)
+
+		return () => {
+			document.removeEventListener("visibilitychange", handleBackInView)
+			window.removeEventListener("focus", handleBackInView)
+		}
+	}, [isAwaitingAck, stopTitleCycle])
+
+	useEffect(() => {
+		return () => {
+			if (titleIntervalRef.current !== null) {
+				clearInterval(titleIntervalRef.current)
+				titleIntervalRef.current = null
+			}
+
+			if (defaultTitleRef.current) {
+				document.title = defaultTitleRef.current
+			}
+		}
+	}, [])
+
 	return (
 		<>
 			<BackgroundContainer>
@@ -175,6 +246,15 @@ export default function Doorbell() {
 					)}
 				</Hero>
 			</Main>
+			<Modal isOpen={isAwaitingAck} onClose={acknowledgeRing}>
+				<AlertHeading>Someone rang the doorbell</AlertHeading>
+				<AlertMessage>Someone is at the door and needs to be let in.</AlertMessage>
+				<AlertActions>
+					<Button variant="primary" size="default" onClick={acknowledgeRing}>
+						Got it
+					</Button>
+				</AlertActions>
+			</Modal>
 		</>
 	)
 }
@@ -310,11 +390,32 @@ const TermsLink = styled(Link)`
 	}
 `
 
+const AlertHeading = styled.h2`
+	font-size: 1.5rem;
+	font-weight: 700;
+	margin: 0 2rem 1rem 0;
+	color: white;
+`
+
+const AlertMessage = styled.p`
+	font-size: 1rem;
+	margin: 0 0 1.5rem 0;
+	color: rgba(255, 255, 255, 0.7);
+`
+
+const AlertActions = styled.div`
+	display: flex;
+	justify-content: flex-end;
+`
+
 // Constants //
 
 type RingPayload = {
 	ringId?: string
 }
+
+const RING_ALERT_TITLE = "Someone rang the doorbell"
+const TITLE_CYCLE_MS = 1000
 
 const createRingIdentifier = () => {
 	if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
