@@ -1,7 +1,7 @@
 [
 	{
 		"api_id": "evt-KstV9uVTELGqO0V",
-		"name": "co routine(\"Communal\")",
+		"name": "co routine(\"Camp Coffee\")",
 		"description": "Join other developers for casual co-working. Bring your 💻 laptop, a project, idea, or questions about software, and a thirst for ☕ coffee!\nPlugs might be hard to come by, so make sure you charge your laptop before you come!\nWe host many types of meetups. This one in particular, is great for meeting new faces and picking each others brains for ideas / help on a problem.\nWe welcome people of all ages, backgrounds and skill levels! We just ask you remain respectful and considerate of peoples time.\nYou can find more information about our community at devx.network.",
 		"description_md": "Join other developers for casual co-working. Bring your 💻 laptop, a project, idea, or questions about software, and a thirst for ☕ coffee!\n\nPlugs might be hard to come by, so make sure you charge your laptop before you come!\n\nWe host many types of meetups. This one in particular, is great for meeting new faces and picking each others brains for ideas / help on a problem.\n\nWe welcome people of all ages, backgrounds and skill levels! We just ask you remain respectful and considerate of peoples time.\n\nYou can find more information about our community at [devx.network](https://devx.network).",
 		"description_html": "<p>Join other developers for casual co-working. Bring your 💻 laptop, a project, idea, or questions about software, and a thirst for ☕ coffee!</p>\n<p>Plugs might be hard to come by, so make sure you charge your laptop before you come!</p>\n<p>We host many types of meetups. This one in particular, is great for meeting new faces and picking each others brains for ideas / help on a problem.</p>\n<p>We welcome people of all ages, backgrounds and skill levels! We just ask you remain respectful and considerate of peoples time.</p>\n<p>You can find more information about our community at <a href=\"https://devx.network\">devx.network</a>.</p>\n",
@@ -9,12 +9,12 @@
 		"end_at": "2026-11-28T00:00:00.000Z",
 		"location": {
 			"type": "physical",
-			"address": "Communal, 602 S Tremont St Suite 100, Oceanside, CA 92054, USA",
+			"address": "Camp Coffee Company, 101 N Cleveland St, Oceanside, CA 92054, USA",
 			"city": "Oceanside",
 			"state": "California",
 			"coordinates": {
-				"lat": "33.189116399999996",
-				"lng": "-117.37474739999999"
+				"lat": "33.1942082",
+				"lng": "-117.3806611"
 			}
 		},
 		"cover_url": "https://images.lumacdn.com/event-covers/0u/6adc3b39-3783-49d3-bbec-0034a7fdcc46.jpg",
@@ -69,6 +69,44 @@
 		"url": "https://luma.com/ydz52z5l",
 		"guest_count": -1,
 		"visibility": "private",
+		"timezone": "America/Los_Angeles"
+	},
+	{
+		"api_id": "evt-AQt8mNK5oNqvwZI",
+		"name": "Paper Club #7: Weight-Space Programming",
+		"description": "Welcome to DEVx's next AI Paper Club!\nWhat if an LLM could skip training entirely and just write a neural network’s weights by hand?\n\nMatthew Love will break down new MIT research showing LLMs can read, repair, and write neural network weights directly, with no gradient descent required, and what that could mean for the future of training.\nPaper: https://rikiyat.github.io/blog/weight-space-programming\nAll are welcome to come and learn. Questions and curiosity encouraged!",
+		"description_md": "Welcome to DEVx's next AI Paper Club!\n\nWhat if an LLM could skip training entirely and just write a neural network’s weights by hand?  \n  \n[Matthew Love](https://www.linkedin.com/in/matthew-a-love/) will break down new MIT research showing LLMs can read, repair, and write neural network weights directly, with no gradient descent required, and what that could mean for the future of training.\n\nPaper: [https://rikiyat.github.io/blog/weight-space-programming](https://rikiyat.github.io/blog/weight-space-programming)\n\nAll are welcome to come and learn. Questions and curiosity encouraged!",
+		"description_html": "<p>Welcome to DEVx&#39;s next AI Paper Club!</p>\n<p>What if an LLM could skip training entirely and just write a neural network’s weights by hand?  </p>\n<p><a href=\"https://www.linkedin.com/in/matthew-a-love/\">Matthew Love</a> will break down new MIT research showing LLMs can read, repair, and write neural network weights directly, with no gradient descent required, and what that could mean for the future of training.</p>\n<p>Paper: <a href=\"https://rikiyat.github.io/blog/weight-space-programming\">https://rikiyat.github.io/blog/weight-space-programming</a></p>\n<p>All are welcome to come and learn. Questions and curiosity encouraged!</p>\n",
+		"start_at": "2026-11-20T03:00:00.000Z",
+		"end_at": "2026-11-20T05:00:00.000Z",
+		"location": {
+			"type": "physical",
+			"address": "11988 El Camino Real, San Diego, CA 92130, USA",
+			"city": "San Diego",
+			"state": "California",
+			"coordinates": {
+				"lat": "32.9361532",
+				"lng": "-117.23969090000001"
+			}
+		},
+		"cover_url": "https://images.lumacdn.com/event-covers/9i/d179e163-e7b9-45a1-ab0b-164dd48dd42c.png",
+		"url": "https://luma.com/devx-paper-club-nov-19-2026",
+		"guest_count": -1,
+		"visibility": "public",
+		"timezone": "America/Los_Angeles"
+	},
+	{
+		"api_id": "evt-FF79cvN5ghCH9pz",
+		"name": "Casual Morning Hike — Potato Chip Rock",
+		"description": "Step away from the screen and start your Saturday on the trail with DEVx.\nJoin us for a morning hike to Potato Chip Rock and meet developers, founders, and other people from San Diego’s tech community. Come solo or bring a friend—there’s room for conversations about side projects, life outside work, and whatever comes up along the way.\nWe’ll take the Mount Woodson service road from Highway 67, near the Mount Woodson Gateway lot in Ramona. It’s the short way up: about 4.2 miles round trip, paved, and steep the whole way to the rock. It’s a hard hike, with very little shade. With a group, plan on about 3.5–4 hours, including time at the top.\nWe’ll meet at 8:00am at the Highway 67 trailhead (16310 Highway 67, Ramona), just south of the Cal Fire station. Look for the sign to Potato Chip Rock.\nParking: on the shoulder of Highway 67, the same setup as Cowles, with far fewer spaces. Saturday morning fills up. Come a little early. If the shoulder is full, the county lot next door at 16286 Highway 67 is $5 for the day, open sunrise to sunset, with restrooms.\nBring: at least 2 liters of water, shoes with good grip, and sun protection. November mornings start cool, then the climb warms up.\nWhen: Saturday, November 14, 2026, 8:00am–12:00pm Pacific\nWhere: Mount Woodson service road trailhead, 16310 Highway 67, Ramona\nHosts: Tryston Perry, Katrina Garcia, and DEVx\nWe’re keeping the group to 20 people. RSVP to save your spot. See you on the trail!",
+		"description_md": "Step away from the screen and start your Saturday on the trail with DEVx.\n\nJoin us for a morning hike to Potato Chip Rock and meet developers, founders, and other people from San Diego’s tech community. Come solo or bring a friend—there’s room for conversations about side projects, life outside work, and whatever comes up along the way.\n\nWe’ll take the Mount Woodson service road from Highway 67, near the Mount Woodson Gateway lot in Ramona. It’s the short way up: about 4.2 miles round trip, paved, and steep the whole way to the rock. It’s a hard hike, with very little shade. With a group, plan on about 3.5–4 hours, including time at the top.\n\nWe’ll meet at 8:00am at the Highway 67 trailhead (16310 Highway 67, Ramona), just south of the Cal Fire station. Look for the sign to Potato Chip Rock.\n\n**Parking:** on the shoulder of Highway 67, the same setup as Cowles, with far fewer spaces. Saturday morning fills up. Come a little early. If the shoulder is full, the county lot next door at 16286 Highway 67 is $5 for the day, open sunrise to sunset, with restrooms.\n\n**Bring:** at least 2 liters of water, shoes with good grip, and sun protection. November mornings start cool, then the climb warms up.\n\n**When:** Saturday, November 14, 2026, 8:00am–12:00pm Pacific\n\n**Where:** Mount Woodson service road trailhead, 16310 Highway 67, Ramona\n\n**Hosts:** Tryston Perry, Katrina Garcia, and DEVx\n\nWe’re keeping the group to 20 people. RSVP to save your spot. See you on the trail!",
+		"description_html": "<p>Step away from the screen and start your Saturday on the trail with DEVx.</p>\n<p>Join us for a morning hike to Potato Chip Rock and meet developers, founders, and other people from San Diego’s tech community. Come solo or bring a friend—there’s room for conversations about side projects, life outside work, and whatever comes up along the way.</p>\n<p>We’ll take the Mount Woodson service road from Highway 67, near the Mount Woodson Gateway lot in Ramona. It’s the short way up: about 4.2 miles round trip, paved, and steep the whole way to the rock. It’s a hard hike, with very little shade. With a group, plan on about 3.5–4 hours, including time at the top.</p>\n<p>We’ll meet at 8:00am at the Highway 67 trailhead (16310 Highway 67, Ramona), just south of the Cal Fire station. Look for the sign to Potato Chip Rock.</p>\n<p><strong>Parking:</strong> on the shoulder of Highway 67, the same setup as Cowles, with far fewer spaces. Saturday morning fills up. Come a little early. If the shoulder is full, the county lot next door at 16286 Highway 67 is $5 for the day, open sunrise to sunset, with restrooms.</p>\n<p><strong>Bring:</strong> at least 2 liters of water, shoes with good grip, and sun protection. November mornings start cool, then the climb warms up.</p>\n<p><strong>When:</strong> Saturday, November 14, 2026, 8:00am–12:00pm Pacific</p>\n<p><strong>Where:</strong> Mount Woodson service road trailhead, 16310 Highway 67, Ramona</p>\n<p><strong>Hosts:</strong> Tryston Perry, Katrina Garcia, and DEVx</p>\n<p>We’re keeping the group to 20 people. RSVP to save your spot. See you on the trail!</p>\n",
+		"start_at": "2026-11-14T16:00:00.000Z",
+		"end_at": "2026-11-14T20:00:00.000Z",
+		"cover_url": "https://images.lumacdn.com/api-uploads/ck/baeb193f-df6f-47b5-9bb9-e44bdadc08c9.png",
+		"url": "https://luma.com/w41w2if1",
+		"guest_count": -1,
+		"visibility": "public",
 		"timezone": "America/Los_Angeles"
 	},
 	{
